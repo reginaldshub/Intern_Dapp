@@ -1,0 +1,48 @@
+
+.login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top:200px;
+    }
+    .login>mat-card{
+        width:480px;
+        max-height:400px;
+    }
+    .login mat-form-field{
+        width:450px;
+        height:60px;
+    }
+    mat-card-header{
+        display: flex;
+    }
+    mat-toolbar-row{ 
+    display: flex;
+    align-items:center;
+    justify-content: flex-end;
+    }
+    
+    mat-card-header>.example-header-image {
+        margin-right:280px;
+        background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+        background-size: cover;
+      }
+    
+     #notreg{
+         margin-left:350px;
+        
+         
+     }
+     #red{
+         color:red;
+     }
+    #register{
+        margin-left:270px;
+    }
+     
+    
+    
+      
+      
+      
