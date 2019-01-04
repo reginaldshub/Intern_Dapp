@@ -47,7 +47,7 @@
       <mat-card-actions>
         <strong id="notreg">If not registered <span id="red">*</span></strong>
         <button id="sign" mat-raised-button type="submit" color="primary" [disabled]="proliform.invalid">sign in</button>
-        <button id="register" mat-button type="submit" color="primary"><strong>Register</strong></button>
+        <button id="register" [routerLink]="['/register']" mat-button type="submit" color="primary"><strong>Register</strong></button>
       </mat-card-actions>
     </mat-card>
   </div>

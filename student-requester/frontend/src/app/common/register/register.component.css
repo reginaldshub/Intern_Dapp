@@ -1,0 +1,25 @@
+mat-form-field{
+    padding-left: 20px;
+}
+
+.registration-card{
+    width: auto;
+    
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:50px;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+mat-toolbar-row{ 
+    display: flex;
+    align-items:center;
+    justify-content: flex-end;
+}

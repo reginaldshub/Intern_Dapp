@@ -1,3 +1,85 @@
-<p>
-  register works!
-</p>
+
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>My First App</span>
+    <button mat-button>About</button>
+    <button mat-button>Contact</button>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" >
+      <button mat-menu-item>
+        <mat-icon>dialpad</mat-icon>
+        <span>Redial</span>
+      </button>
+      <button mat-menu-item disabled>
+        <mat-icon>voicemail</mat-icon>
+        <span>Check voicemail</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>notifications_off</mat-icon>
+        <span>Disable alerts</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+<div class="container" >
+  <mat-card class="registration-card">
+<form class="registration-form" [formGroup] = 'myForm' (submit)="abc()">
+  <mat-form-field>
+    <input matInput placeholder="name" formControlName="name">
+    <mat-error>Enter name</mat-error>
+  </mat-form-field>
+  <br/>
+
+  <mat-form-field>
+      <input matInput placeholder="email" formControlName="email">
+      <mat-error>
+          enter valid email
+        </mat-error>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field>
+      <mat-select formControlName="Roles" placeholder="role" >
+        <mat-option *ngFor="let role of roles" [value]="role.value">
+          {{role.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br/>
+
+    <mat-form-field>
+        <input matInput placeholder="phone" formControlName="phone">
+        <mat-error>
+            invalid phone 
+          </mat-error>
+      </mat-form-field>
+      <br/>
+
+    <mat-form-field>
+        <input matInput placeholder="password" formControlName="password"
+        [type]="hide ? 'password':'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        <mat-error>
+            enter valid password
+          </mat-error>
+      </mat-form-field>
+      <br/>
+
+      <mat-form-field>
+          <input matInput placeholder="confirm password" formControlName="cnfpassword"
+          [type]="hide ? 'password':'text'">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          <mat-error>
+            passwords Dont match
+            </mat-error>
+        </mat-form-field>
+        <br/>
+        <div class="wrapper">
+          <button class="submit-button" mat-raised-button type="submit" [disabled]="myForm.invalid" color="primary">Register</button>
+        </div>
+</form>
+</mat-card>
+
+</div>
