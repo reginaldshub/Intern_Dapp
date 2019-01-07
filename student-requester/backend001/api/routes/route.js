@@ -34,7 +34,9 @@ router.post('/login', (req, res) => {
             } else if (user.password !== userData.password) {
                 res.status(401).send({ message: "invalid password" })
             } else {
-                res.send("logged in")
+                console.log(user.Roles);
+                res.json({message:"logged in sucessfully",
+                          role:user.Roles })
             }
         }
     })

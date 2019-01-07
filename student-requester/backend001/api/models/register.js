@@ -11,7 +11,7 @@ const registerSchema = new Schema({
         type: String,
         required: true
     },
-    role: {
+    Roles: {
         type:String,
         required: true
     },

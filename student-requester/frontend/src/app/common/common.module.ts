@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
-
+import { HttpClientModule } from '@angular/common/http';
 
 import { CommonRoutingModule } from './common-routing.module';
 import { LoginComponent } from './login/login.component';
@@ -15,7 +15,8 @@ import { AccountComponent } from './account/account.component';
     CommonModule,
     CommonRoutingModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    HttpClientModule
   ],
   declarations: [LoginComponent, RegisterComponent, AccountComponent]
 })

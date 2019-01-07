@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {passValidator} from './../../custom-validator'
+import { passValidator} from './../../custom-validator'
 import { ServiceService } from "./../service.service";
 import { Router } from "@angular/router";
-import 'rxjs/add/operator/map';
+import swal from 'sweetalert';
+
+// import 'rxjs/add/operator/map';
 
 
 export interface Role {
@@ -60,24 +62,14 @@ export class RegisterComponent implements OnInit {
     })
   }
   abc(){
-    const user = {
-      name: this.myForm.value.name,
-      Roles: this.myForm.value.role,
-      phone: this.myForm.value.phone,
-      email: this.myForm.value.email,
-      password: this.myForm.value.password
-    }
-  
-    this.authService.registerUser(user).subscribe(data => {
-      if(data.success){
-        // this.router.navigate(['/login']);
-        console.log(data)
-      }else{
-        this.router.navigate(['/register'])
+    console.log(this.myForm.value);
+    this.authService.registerUser(this.myForm.value).subscribe(res=>{
+      if((res['message']))
+      {
+      swal("", ""+res['message'], "success");
+      this.router.navigate(['/login'])
       }
     })
-    // this.initialize();
-    }
-
-
+  
+  }
 }

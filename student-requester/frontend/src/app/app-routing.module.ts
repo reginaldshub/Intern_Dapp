@@ -3,7 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   { path: 'abc', redirectTo: 'home', pathMatch: 'full' },
-  { path: '', loadChildren:'./common/common.module#CommonbothModule'}
+  { path: '', loadChildren:'./common/common.module#CommonbothModule'},
+  { path: 'student', loadChildren:'./student/student.module#StudentModule'},
+  { path: 'requester', loadChildren:'./requester/requester.module#RequesterModule'}
 ];
 
 @NgModule({

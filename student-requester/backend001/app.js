@@ -6,11 +6,15 @@ const app = express();
 
 const morgan = require('morgan')
 
+var cors = require('cors')
+
+
 const api = require("./api/routes/route.js")
 
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+app.use(cors())
 
 // routes which handle requests 
 app.use("/products", api)

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ServiceService } from '../service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +10,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: ServiceService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -19,11 +21,18 @@ export class LoginComponent implements OnInit {
   })
 
   onSubmit() {
-    if (this.proliform.valid)
-      console.log(this.proliform.value);
-    this.proliform.reset();
+    console.log(this.proliform.value);
+    this.service.login(this.proliform.value).subscribe((res) => {
+      console.log(res);
+      if (res['role'] == "student") {
+        swal("", "" + res['message'], "success");
+        this.router.navigate(['/student'])
+      }else if(res['role']== "requester"){
+        swal("", "" + res['message'], "success");
+        this.router.navigate(['/requester'])
+      }
+
+    })
+
   }
-
-
-
 }
