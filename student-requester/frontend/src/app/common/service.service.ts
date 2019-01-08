@@ -9,8 +9,8 @@ export class ServiceService {
   constructor(private http: HttpClient) { }
 
   registerUser(user){
-    console.log(user);
-    debugger;
+    // console.log(user);
+    // debugger;
     return this.http.post("http://localhost:3000/products/register",user);
   }
   login(user){

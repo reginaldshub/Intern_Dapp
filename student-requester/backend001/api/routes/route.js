@@ -3,9 +3,10 @@ const express = require('express')
 const router = express.Router();
 
 const  Register = require('../models/register.js')
+const  Profile = require('../models/profile.js')
 
 const mongoose = require('mongoose')
-const db = "mongodb://santhosh123:santhosh123@ds133533.mlab.com:33533/eventsdb"
+const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if (err) {
         console.log("the error" + err)
@@ -66,5 +67,34 @@ router.post('/register', (req, res) => {
         }
     })
 })
+
+
+router.get('/getprofile', (req, res) => {
+console.log(req);
+    // Profile.findOne({ _id: req.id }, (error, profile) => {
+    //     if (error) {
+    //         console.log(error)
+    //     }
+    //     else {
+    //         res.status(200).send({ message: 'profile got' , profile: profile});
+    //     }
+    // })
+})
+
+router.post('/profile', (req, res) => {
+    let profileData = req.body;
+    let profile = new Profile(profileData)
+    
+            profile.save((err, user) => {
+                if (err) {
+                    res.send("not saved")
+                } else {
+                    res.json({
+                        message: "added successfully"
+                    })
+                }
+            })
+        
+    })
 
 module.exports = router;
