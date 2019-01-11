@@ -1,3 +1,41 @@
-<p>
-  account works!
-</p>
+<!-- <mat-toolbar color="primary">
+                    <h1>ACCOUNT DETAILS</h1>
+</mat-toolbar> -->
+<mat-grid-list cols="2" rowHeight="2:1">
+    <mat-grid-tile>
+        <mat-card class="account">
+            <form [formGroup]="Account" (submit)="onSubmit()">
+              <h3>Select Network</h3>
+              <mat-form-field>
+                <mat-select placeholder="select network" formControlName="network">
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let network of networks" [value]="network.value">
+                    {{network.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <h3>Attach Account Address</h3>
+              <mat-form-field>
+                  <input formControlName="accountNumber" matInput placeholder="Account number">
+              </mat-form-field>
+              <button  mat-raised-button type="submit" color="primary" [disabled]="Account.invalid">Save</button>
+            </form>
+          </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <mat-card id="newaccount">
+            <h3>Create New Account (Local Network)</h3>
+            <form [formGroup]="Create" (submit)="onCreate()">
+            <mat-form-field>
+                <input formControlName="password" matInput placeholder="Password">
+                <mat-error>enter password</mat-error>
+            </mat-form-field>
+            <button  mat-raised-button type="submit" color="primary" [disabled]="Create.invalid">Create</button>
+          </form>
+          {{account}}
+        </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+
+
+
