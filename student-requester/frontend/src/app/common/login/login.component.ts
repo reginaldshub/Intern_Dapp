@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ServiceService } from '../service/service.service';
+import { ServiceService } from '../service.service';
 import { Router } from '@angular/router';
-// import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -10,10 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  constructor(private service: ServiceService, 
-              private router: Router,
-              // private cookieService: CookieService
-              ) { }
+
+  constructor(private service: ServiceService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -24,19 +21,19 @@ export class LoginComponent implements OnInit {
   })
 
   onSubmit() {
-    console.log(this.proliform.value);
+    localStorage.setItem('email', this.proliform.value.email);
     this.service.login(this.proliform.value).subscribe((res) => {
-      console.log(res);
       if (res['role'] == "student") {
-        sessionStorage.setItem('_id', res['_id']);
         swal("", "" + res['message'], "success");
+        sessionStorage.setItem('_id', res['_id']);
+        localStorage.setItem('token', res['token']);
         this.router.navigate(['/student'])
-      }else if(res['role']== "requester"){
-        // this.cookieService.set( '_id', res['_id'] );
-        sessionStorage.setItem('_id', res['_id']);
+      } else if (res['role'] == "requester") {
         swal("", "" + res['message'], "success");
+        sessionStorage.setItem('_id', res['_id']);
+        localStorage.setItem('token', res['token']);
         this.router.navigate(['/requester'])
-      }else{
+      } else {
         swal("", "" + res['message'], "error");
       }
 

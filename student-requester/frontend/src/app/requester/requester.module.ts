@@ -9,7 +9,7 @@ import { ReqpermissionComponent } from './reqpermission/reqpermission.component'
 import { ReqdashboardComponent } from './reqdashboard/reqdashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { MaterialModule } from '../material/material.module';
-import { CookieService } from 'ngx-cookie-service';
+import { RequesterComponent } from './requester.component';
 
 @NgModule({
   imports: [
@@ -18,7 +18,6 @@ import { CookieService } from 'ngx-cookie-service';
     MaterialModule,
     ReactiveFormsModule
   ],
-  declarations: [ EdudetailsComponent, ReqpermissionComponent, ReqdashboardComponent, ProfileComponent],
-  providers: [CookieService]
+  declarations: [EdudetailsComponent, ReqpermissionComponent, ReqdashboardComponent, ProfileComponent,RequesterComponent]
 })
 export class RequesterModule { }

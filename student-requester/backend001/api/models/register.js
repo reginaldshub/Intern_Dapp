@@ -12,7 +12,7 @@ const registerSchema = new Schema({
         required: true
     },
     Roles: {
-        type:String,
+        type: String,
         required: true
     },
     phone: {
@@ -23,8 +23,8 @@ const registerSchema = new Schema({
         require: true
     }
 
-    }
+}
 );
 
 
-module.exports=mongoose.model('register',registerSchema,'registers');
+module.exports = mongoose.model('register', registerSchema, 'registers');

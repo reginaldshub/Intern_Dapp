@@ -4,13 +4,20 @@ import { ReqdashboardComponent } from './reqdashboard/reqdashboard.component';
 import { EdudetailsComponent } from './edudetails/edudetails.component';
 import { ReqpermissionComponent } from './reqpermission/reqpermission.component';
 import { ProfileComponent } from './profile/profile.component';
+import { Auth1Guard } from '../auth1.guard';
+import { RequesterComponent } from './requester.component';
 
 const routes: Routes = [
-  { path: '', component: ReqdashboardComponent },
-  { path: 'edudetails', component: EdudetailsComponent },
-  { path: 'reqpermission', component: ReqpermissionComponent },
-  { path: 'profile', component: ProfileComponent }
-];
+  //       {
+  // path:'requester',
+  // component:RequesterComponent,
+  // children:[
+  { path: '', component: EdudetailsComponent, canActivate: [Auth1Guard] },
+  { path: 'edudetails', component: EdudetailsComponent, canActivate: [Auth1Guard] },
+  { path: 'reqpermission', component: ReqpermissionComponent, canActivate: [Auth1Guard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [Auth1Guard] }
+]
+        // }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceService } from "../service/service.service";
 import { Router } from "@angular/router";
 import swal from 'sweetalert';
+import { ServiceService } from '../../common/service.service';
 
 @Component({
   selector: 'app-reqdashboard',
@@ -11,14 +11,19 @@ import swal from 'sweetalert';
 export class ReqdashboardComponent implements OnInit {
   cookieValue;
 
-  constructor( private authService: ServiceService,
+  constructor(private authService: ServiceService,
     private router: Router) { }
 
   ngOnInit() {
   }
-profile(){
-
-  this.router.navigate(['/requester/profile']);
+  navigate() {
+    this.router.navigate(['/account'])
+  }
   
-}
+  profile() {
+
+    this.router.navigate(['/requester/profile']);
+
+  }
+
 }

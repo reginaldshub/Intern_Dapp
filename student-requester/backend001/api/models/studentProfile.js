@@ -11,11 +11,11 @@ const studentProfileSchema = new Schema({
         required: true
     },
     address: {
-        type:String,
+        type: String,
         required: true
     },
     city: {
-        type:String,
+        type: String,
         required: true
     },
     state: {
@@ -31,7 +31,7 @@ const studentProfileSchema = new Schema({
         required: true
     },
     dob: {
-        type:Date,
+        type: Date,
         required: true
     },
     country: {
@@ -43,8 +43,8 @@ const studentProfileSchema = new Schema({
         required: true
     }
 
-    }
+}
 );
 
 
-module.exports=mongoose.model('studentProfile',studentProfileSchema,'studentProfile');
+module.exports = mongoose.model('studentProfile', studentProfileSchema, 'studentProfile');

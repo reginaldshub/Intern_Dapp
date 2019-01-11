@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ServiceService } from "../service/service.service";
 import { Router } from "@angular/router";
 import swal from 'sweetalert';
-// import { CookieService } from 'ngx-cookie-service';
-// import { SessionStorageService} from 'ngx-webstorage';
-// import { analyzeFile } from '@angular/compiler';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export interface Gender {
   value: string;
@@ -21,23 +19,22 @@ export interface Gender {
 export class StudentProfileComponent implements OnInit {
   cookieValue;
   sessionValue;
-  profileHider:boolean;
-  data:any;
+  profileHider: boolean = true;
+  data: any;
   maxDate;
 
   cookie = {
-    userId:String
+    userId: String
   }
 
   session = {
-    userId:String
+    userId: String
   }
 
   profileDetails: FormGroup;
   profileForm: FormGroup;
   hide = true;
   post: any;
-  // ID: string = '';
   userID: string = '';
   name: string = '';
   address: string = '';
@@ -48,116 +45,111 @@ export class StudentProfileComponent implements OnInit {
   dob: Date;
   country: string = '';
   phone: number;
-  
+
   GENDER: Gender[] = [
-    {value: 'male', viewValue: 'Male'},
-    {value: 'female', viewValue: 'Female'}
+    { value: 'male', viewValue: 'Male' },
+    { value: 'female', viewValue: 'Female' }
   ];
 
   constructor(private fb: FormBuilder,
     private authService: ServiceService,
     private router: Router,
-    // private cookieService: CookieService,
-    // private sessionService: SessionStorageService
-    ){
+  ) {
   }
 
   ngOnInit() {
     this.maxDate = new Date();
     this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
     this.getProfile();
-    this.profileDetails = this.fb.group( { 
-      'Id': [{value:'', disabled:true}],
-      'userId': [{value:'', disabled:true}],     
-      'name': ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
+    this.profileDetails = this.fb.group({
+      'Id': [{ value: '', disabled: true }],
+      'userId': [{ value: '', disabled: true }],
+      'name': ['', [Validators.required]],
       'address': ['', [Validators.required]],
-      'city': ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
+      'city': ['', [Validators.required]],
       'state': ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
       'pincode': ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       'gender': ['', [Validators.required]],
       'dob': ['', [Validators.required]],
       'country': ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
-      'phone':['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
+      'phone': ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
     });
 
-    this.profileForm = this.fb.group( {
-      'userId': [this.cookieValue],     
+    this.profileForm = this.fb.group({
+      'userId': [this.cookieValue],
       'name': ['', [Validators.required]],
       'address': ['', [Validators.required]],
       'city': ['', [Validators.required]],
       'state': ['', [Validators.required]],
       'pincode': ['', [Validators.required]],
       'gender': ['', [Validators.required]],
-      'dob': ['', [Validators.required, Validators.pattern('^[1-9]+{31}\/[1-9]+{12}\/[1950-3000]+$')]],
+      'dob': ['', [Validators.required]],
       'country': ['', [Validators.required]],
-      'phone':['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
+      'phone': ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
     });
   }
-  
-  getProfile(){
-    // this.cookieValue = this.cookieService.get('_id');
-    // this.cookie.userId = this.cookieValue;
+
+  getProfile() {
     this.sessionValue = sessionStorage.getItem('_id');
     this.session.userId = this.sessionValue;
-    console.log(this.session.userId)
-    this.authService.getStudentProfile(this.session).subscribe( (res:any) => {
-      console.log(res.message);
-      if(res.hide){
+    this.authService.getStudentProfile(this.session).subscribe((res: any) => {
+      if (res.hide) {
         this.profileHider = true;
-      }else{
+      } else {
         this.profileHider = false;
-      this.data = res;
-       console.log(" treds"+this.data.user._id);
+        this.data = res;
 
-      this.profileDetails.setValue({
-        Id: this.data.user._id,  
-        userId: this.data.user.userId,   
-        name: this.data.user.name,
-        address: this.data.user.address,
-        city : this.data.user.city,
-        state : this.data.user.state,
-        pincode: this.data.user.pincode,
-        gender: this.data.user.gender,
-        dob: this.data.user.dob,
-        country: this.data.user.country,
-        phone: this.data.user.phone
-      })
-      console.log("form"+this.profileDetails.value)
-      // if(this.data.user.hide == true){
-      //     this.profileHider = true;
-      // }else{
-      //   this.profileHider = false;
-      // }
-    }
-    })
-  }
-
-  setProfile(){
-    // console.log(this.profileForm.value);
-    // this.authService.getProfile().subscribe( res => {
-    //   console.log(res);
-    // console.log(this.cookieValue);
-    this.sessionValue = sessionStorage.getItem('_id');
-    // this.profileForm.setValue({ userId: this.cookieValue });
-    this.profileForm.value.userId = this.sessionValue;
-    console.log( this.profileForm.value.userId);
-    // debugger;
-    this.authService.setStudentProfile(this.profileForm.value).subscribe(res=>{
-      if((res['message']))
-      {
-      swal("", ""+res['message'], "success");
+        this.profileDetails.setValue({
+          Id: this.data.user._id,
+          userId: this.data.user.userId,
+          name: this.data.user.name,
+          address: this.data.user.address,
+          city: this.data.user.city,
+          state: this.data.user.state,
+          pincode: this.data.user.pincode,
+          gender: this.data.user.gender,
+          dob: this.data.user.dob,
+          country: this.data.user.country,
+          phone: this.data.user.phone
+        })
+      }
+    }, err => {
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 401) {
+          this.router.navigate(['/login']);
+        }
       }
     })
   }
 
-  updateProfile(){
-  console.log(this.profileDetails.value)
-  this.authService.updateStudentProfile(this.profileDetails.value).subscribe(res=>{
-    if((res['message']))
-    {
-    swal("", ""+res['message'], "success");
-    }
-  })
+  setProfile() {
+    this.sessionValue = sessionStorage.getItem('_id');
+    this.profileForm.value.userId = this.sessionValue;
+    this.authService.setStudentProfile(this.profileForm.value).subscribe(res => {
+      if ((res['message'])) {
+        swal("", "" + res['message'], "success");
+      }
+    }, err => {
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 401) {
+          this.router.navigate(['/login']);
+        }
+      }
+    })
+  }
+
+  updateProfile() {
+    this.authService.updateStudentProfile(this.profileDetails.value).subscribe(res => {
+      if ((res['message'])) {
+        swal("", "" + res['message'], "success");
+      }
+    }, err => {
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 401) {
+          this.router.navigate(['/login']);
+        }
+      }
+    })
   }
 
 }

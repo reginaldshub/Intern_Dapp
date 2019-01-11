@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from '@angular/forms';
-import { passValidator} from './../../custom-validator'
-import { ServiceService } from "../service/service.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { passValidator } from './../../custom-validator'
+import { ServiceService } from "./../service.service";
 import { Router } from "@angular/router";
 import swal from 'sweetalert';
-
-// import 'rxjs/add/operator/map';
-
 
 export interface Role {
   value: string;
@@ -29,29 +26,29 @@ export class RegisterComponent implements OnInit {
   email: string = '';
   password: string = '';
   cnfpassword: string = '';
-  
+
   roles: Role[] = [
-    {value: 'student', viewValue: 'Student'},
-    {value: 'requester', viewValue: 'Requester'}
+    { value: 'student', viewValue: 'Student' },
+    { value: 'requester', viewValue: 'Requester' }
   ];
 
   constructor(private fb: FormBuilder,
     private authService: ServiceService,
-    private router: Router){
+    private router: Router) {
   }
 
   ngOnInit() {
-    this.myForm = this.fb.group( {
+    this.myForm = this.fb.group({
       'name': ['', [Validators.required]],
       'email': ['', [Validators.required, Validators.email]],
       'Roles': [''],
-      'phone':['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      'phone': ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       'password': ['', [Validators.required, passValidator, Validators.pattern('^[0-9]*[a-zA-Z0-9]+[a-zA-Z0-9]+[a-zA-Z0-9]+$')]],
       'cnfpassword': ['', [Validators.required, passValidator]]
     });
   }
 
-  initialize(){
+  initialize() {
     this.myForm.setValue({
       name: '',
       Roles: '',
@@ -61,15 +58,14 @@ export class RegisterComponent implements OnInit {
       cnfpassword: '',
     })
   }
-  abc(){
-    console.log(this.myForm.value);
-    this.authService.registerUser(this.myForm.value).subscribe(res=>{
-      if((res['message']))
-      {
-      swal("", ""+res['message'], "success");
-      this.router.navigate(['/login'])
+  abc() {
+    this.authService.registerUser(this.myForm.value).subscribe(res => {
+      if ((res['message'])) {
+        localStorage.setItem('token', res['token']);
+        swal("", "" + res['message'], "success");
+        this.router.navigate(['/login'])
       }
     })
-  
+
   }
 }

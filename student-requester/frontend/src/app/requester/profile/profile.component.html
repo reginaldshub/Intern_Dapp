@@ -1,154 +1,141 @@
 <mat-toolbar>Profile</mat-toolbar>
 <div *ngIf="profileHider" class="container">
-<mat-card class="Profile-card">
-  <form class="Profile-form" [formGroup]='profileForm' (submit)="setProfile()">
-    <mat-form-field>
-      <input matInput placeholder="Name" formControlName="name">
-      <mat-error>Enter name</mat-error>
-    </mat-form-field>
-    <br />
-
-    <mat-form-field>
-      <input matInput placeholder="Address" formControlName="address">
-      <mat-error>Enter <address></address></mat-error>
-    </mat-form-field>
-    <br />
-
-    <mat-form-field>
-      <input matInput placeholder="City" formControlName="city">
-      <mat-error>Enter city</mat-error>
-    </mat-form-field>
-    <br />
-
-    <mat-form-field>
-      <input matInput placeholder="State" formControlName="state">
-      <mat-error>Enter state</mat-error>
-    </mat-form-field>
-    <br />
-
-    <mat-form-field>
-      <input matInput placeholder="Pincode" formControlName="pincode">
-      <mat-error>Enter pincode</mat-error>
-    </mat-form-field>
-    <br />
-
-    <mat-form-field>
-      <input matInput placeholder="Url" formControlName="url">
-      <mat-error>Enter url</mat-error>
-    </mat-form-field>
-    <br />
-
-    <mat-form-field>
-      <input matInput placeholder="Email" formControlName="email">
-      <mat-error>
-        enter valid email
-      </mat-error>
-    </mat-form-field>
-    <br />
-
-    <mat-form-field>
-      <input matInput placeholder="Country" formControlName="country">
-      <mat-error>Enter country</mat-error>
-    </mat-form-field>
-    <br />
-
-    <mat-form-field>
-      <input matInput placeholder="Phone" formControlName="phone">
-      <mat-error>
-        invalid phone
-      </mat-error>
-    </mat-form-field>
-    <br />
-
-
-    <div class="wrapper">
-      <button class="submit-button" mat-raised-button type="submit" [disabled]="profileForm.invalid" color="primary">Register</button>
-    </div>
-  </form>
-</mat-card>
-</div>
-
-
-
-<div *ngIf="!profileHider" class="container" (submit)="updateProfile()" >
   <mat-card class="Profile-card">
-    <form class="Profile-form" [formGroup]='profileDetails'>
-        <!-- <mat-form-field>
-            <input matInput placeholder="Id" value={{data.user._id}} formControlName="Id">
-            <mat-error>Enter name</mat-error>
-          </mat-form-field>
-          <br />
-
-          <mat-form-field>
-              <input matInput placeholder="userId" value={{data.user.userId}} formControlName="userId">
-              <mat-error>Enter userId</mat-error>
-            </mat-form-field>
-            <br /> -->
-
+    <form class="Profile-form" [formGroup]='profileForm' (submit)="setProfile()">
       <mat-form-field>
-        <input matInput placeholder="Name" value={{data.user.name}} formControlName="name">
+        <input matInput placeholder="Name" formControlName="name">
         <mat-error>Enter name</mat-error>
       </mat-form-field>
       <br />
-  
+
       <mat-form-field>
-        <input matInput placeholder="Address" value = {{data.user.address}} formControlName="address">
+        <input matInput placeholder="Address" formControlName="address">
         <mat-error>Enter <address></address></mat-error>
       </mat-form-field>
       <br />
-  
+
       <mat-form-field>
-        <input matInput placeholder="City" value = {{data.user.city}} formControlName="city">
+        <input matInput placeholder="City" formControlName="city">
         <mat-error>Enter city</mat-error>
       </mat-form-field>
       <br />
-  
+
       <mat-form-field>
-        <input matInput placeholder="State" value = {{data.user.state}} formControlName="state">
+        <input matInput placeholder="State" formControlName="state">
         <mat-error>Enter state</mat-error>
       </mat-form-field>
       <br />
-  
+
       <mat-form-field>
-        <input matInput placeholder="Pincode" value = {{data.user.pincode}} formControlName="pincode">
+        <input matInput placeholder="Pincode" formControlName="pincode">
         <mat-error>Enter pincode</mat-error>
       </mat-form-field>
       <br />
-  
+
       <mat-form-field>
-        <input matInput placeholder="Url" value = {{data.user.url}} formControlName="url">
+        <input matInput placeholder="Url" formControlName="url">
         <mat-error>Enter url</mat-error>
       </mat-form-field>
       <br />
-  
+
       <mat-form-field>
-        <input matInput placeholder="Email" value = {{data.user.email}} formControlName="email">
+        <input matInput placeholder="Email" formControlName="email">
         <mat-error>
           enter valid email
         </mat-error>
       </mat-form-field>
       <br />
-  
+
       <mat-form-field>
-        <input matInput placeholder="Country" value = {{data.user.country}} formControlName="country">
+        <input matInput placeholder="Country" formControlName="country">
         <mat-error>Enter country</mat-error>
       </mat-form-field>
       <br />
-  
+
       <mat-form-field>
-        <input matInput placeholder="Phone" value = {{data.user.phone}} formControlName="phone">
+        <input matInput placeholder="Phone" formControlName="phone">
         <mat-error>
           invalid phone
         </mat-error>
       </mat-form-field>
       <br />
-  
-  
+
+
       <div class="wrapper">
-        <button class="submit-button" mat-raised-button type="submit"  color="primary">Update</button>
+        <button class="submit-button" mat-raised-button type="submit" [disabled]="profileForm.invalid" color="primary">Register</button>
       </div>
     </form>
   </mat-card>
 </div>
 
-<!-- [disabled]="profileDetails.invalid" -->
+
+
+<div *ngIf="!profileHider" class="container" (submit)="updateProfile()">
+  <mat-card class="Profile-card">
+    <form class="Profile-form" [formGroup]='profileDetails'>
+
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name">
+        <mat-error>Enter name</mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Address" formControlName="address">
+        <mat-error>Enter <address></address></mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="City" formControlName="city">
+        <mat-error>Enter city</mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="State" formControlName="state">
+        <mat-error>Enter state</mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Pincode" formControlName="pincode">
+        <mat-error>Enter pincode</mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Url" formControlName="url">
+        <mat-error>Enter url</mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email">
+        <mat-error>
+          enter valid email
+        </mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Country" formControlName="country">
+        <mat-error>Enter country</mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Phone" formControlName="phone">
+        <mat-error>
+          invalid phone
+        </mat-error>
+      </mat-form-field>
+      <br />
+
+
+      <div class="wrapper">
+        <button class="submit-button" mat-raised-button type="submit" color="primary">Update</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

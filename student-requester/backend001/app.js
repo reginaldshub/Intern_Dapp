@@ -1,5 +1,5 @@
 const express = require('express');
-var cookieParser = require('cookie-parser')
+
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -11,9 +11,8 @@ var cors = require('cors')
 
 const api = require("./api/routes/route.js")
 
-app.use(cookieParser());
 app.use(morgan('dev'))
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors())
 
@@ -36,4 +35,4 @@ app.use((error,req,res,next)=>{
 })
 
 
-module.exports =app;
+module.exports = app;

@@ -11,11 +11,11 @@ const profileSchema = new Schema({
         required: true
     },
     address: {
-        type:String,
+        type: String,
         required: true
     },
     city: {
-        type:String,
+        type: String,
         required: true
     },
     state: {
@@ -31,7 +31,7 @@ const profileSchema = new Schema({
         required: true
     },
     email: {
-        type:String,
+        type: String,
         required: true
     },
     country: {
@@ -43,8 +43,8 @@ const profileSchema = new Schema({
         required: true
     }
 
-    }
+}
 );
 
 
-module.exports=mongoose.model('profile',profileSchema,'profile');
+module.exports = mongoose.model('profile', profileSchema, 'profile');

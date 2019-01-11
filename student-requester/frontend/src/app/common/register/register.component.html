@@ -1,66 +1,60 @@
-
 <mat-toolbar color="primary">
-    <span>Stuednt-Requester Registration Page</span>
-    <div style="display: inline-block; text-align: right; width: 100%"><a id="loginLink" [routerLink]="['/login']"><strong>Login</strong></a>
-    </div>
-    </mat-toolbar>
+</mat-toolbar>
 <div class="container">
   <mat-card class="registration-card">
-<form class="registration-form" [formGroup] = 'myForm' (submit)="abc()">
-  <mat-form-field>
-    <input matInput placeholder="Name" formControlName="name">
-    <mat-error>Enter name</mat-error>
-  </mat-form-field>
-  <br/>
-
-  <mat-form-field>
-      <input matInput placeholder="Email" formControlName="email">
-      <mat-error>
-          enter valid email
-        </mat-error>
-    </mat-form-field>
-    <br/>
-
-    <mat-form-field>
-      <mat-select formControlName="Roles" placeholder="Role" >
-        <mat-option *ngFor="let role of roles" [value]="role.value">
-          {{role.viewValue}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <br/>
-
-    <mat-form-field>
-        <input matInput placeholder="Phone" formControlName="phone">
-        <mat-error>
-            invalid phone 
-          </mat-error>
+    <form class="registration-form" [formGroup]='myForm' (submit)="abc()">
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name">
+        <mat-error>Enter name</mat-error>
       </mat-form-field>
-      <br/>
-
-    <mat-form-field>
-        <input matInput placeholder="Password" formControlName="password"
-        [type]="hide ? 'password':'text'">
-        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-        <mat-error>
-            enter valid password
-          </mat-error>
-      </mat-form-field>
-      <br/>
+      <br />
 
       <mat-form-field>
-          <input matInput placeholder="Confirm Password" formControlName="cnfpassword"
-          [type]="hide ? 'password':'text'">
-          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-          <mat-error>
-            passwords Dont match
-            </mat-error>
-        </mat-form-field>
-        <br/>
-        <div class="wrapper">
-          <button class="submit-button" mat-raised-button type="submit" [disabled]="myForm.invalid" color="primary">Register</button>
-        </div>
-</form>
-</mat-card>
+        <input matInput placeholder="Email" formControlName="email">
+        <mat-error>
+          enter valid email
+        </mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <mat-select formControlName="Roles" placeholder="Role">
+          <mat-option *ngFor="let role of roles" [value]="role.value">
+            {{role.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Phone" formControlName="phone">
+        <mat-error>
+          invalid phone
+        </mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password':'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        <mat-error>
+          enter valid password
+        </mat-error>
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Confirm Password" formControlName="cnfpassword" [type]="hide ? 'password':'text'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        <mat-error>
+          passwords Dont match
+        </mat-error>
+      </mat-form-field>
+      <br />
+      <div class="wrapper">
+        <button class="submit-button" mat-raised-button type="submit" [disabled]="myForm.invalid" color="primary">Register</button>
+      </div>
+    </form>
+  </mat-card>
 
 </div>
