@@ -9,6 +9,7 @@ import { CommonRoutingModule } from './common-routing.module';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AccountComponent } from './account/account.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { AccountComponent } from './account/account.component';
     MaterialModule,
     HttpClientModule
   ],
-  declarations: [LoginComponent, RegisterComponent, AccountComponent]
+  declarations: [LoginComponent, RegisterComponent, AccountComponent],
+  providers: [ CookieService ]
 })
 export class CommonbothModule { }

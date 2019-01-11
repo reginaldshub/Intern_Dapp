@@ -1,28 +1,9 @@
 
 <mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span>My First App</span>
-    <button mat-button>About</button>
-    <button mat-button>Contact</button>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu" >
-      <button mat-menu-item>
-        <mat-icon>dialpad</mat-icon>
-        <span>Redial</span>
-      </button>
-      <button mat-menu-item disabled>
-        <mat-icon>voicemail</mat-icon>
-        <span>Check voicemail</span>
-      </button>
-      <button mat-menu-item>
-        <mat-icon>notifications_off</mat-icon>
-        <span>Disable alerts</span>
-      </button>
-    </mat-menu>
-  </mat-toolbar-row>
-</mat-toolbar>
+    <span>Stuednt-Requester Registration Page</span>
+    <div style="display: inline-block; text-align: right; width: 100%"><a id="loginLink" [routerLink]="['/login']"><strong>Login</strong></a>
+    </div>
+    </mat-toolbar>
 <div class="container">
   <mat-card class="registration-card">
 <form class="registration-form" [formGroup] = 'myForm' (submit)="abc()">

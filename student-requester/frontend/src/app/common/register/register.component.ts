@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { passValidator} from './../../custom-validator'
-import { ServiceService } from "./../service.service";
+import { ServiceService } from "../service/service.service";
 import { Router } from "@angular/router";
 import swal from 'sweetalert';
 

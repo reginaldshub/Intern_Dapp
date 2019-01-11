@@ -10,7 +10,7 @@
 
     <mat-form-field>
       <input matInput placeholder="Address" formControlName="address">
-      <mat-error>Enter <address></address></mat-error>
+      <mat-error>Enter address</mat-error>
     </mat-form-field>
     <br />
 
@@ -33,18 +33,21 @@
     <br />
 
     <mat-form-field>
-      <input matInput placeholder="Url" formControlName="url">
-      <mat-error>Enter url</mat-error>
-    </mat-form-field>
-    <br />
+        <mat-select formControlName="gender" placeholder="Gender" >
+          <mat-option *ngFor="let gender of GENDER" [value]="gender.value">
+            {{gender.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br/>
 
-    <mat-form-field>
-      <input matInput placeholder="Email" formControlName="email">
-      <mat-error>
-        enter valid email
-      </mat-error>
-    </mat-form-field>
-    <br />
+      <mat-form-field>
+          <input matInput placeholder="Birth Date" [matDatepicker]="picker"
+           [max]="maxDate" formControlName="dob">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <br/>
 
     <mat-form-field>
       <input matInput placeholder="Country" formControlName="country">
@@ -116,18 +119,21 @@
       <br />
   
       <mat-form-field>
-        <input matInput placeholder="Url" value = {{data.user.url}} formControlName="url">
-        <mat-error>Enter url</mat-error>
-      </mat-form-field>
-      <br />
-  
+          <mat-select formControlName="gender" placeholder={{data.user.gender}} >
+            <mat-option *ngFor="let gender of GENDER" [value]="gender.value">
+              {{gender.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br/>
+
       <mat-form-field>
-        <input matInput placeholder="Email" value = {{data.user.email}} formControlName="email">
-        <mat-error>
-          enter valid email
-        </mat-error>
-      </mat-form-field>
-      <br />
+          <input matInput placeholder="Birth Date" value = {{data.user.dob}} [matDatepicker]="picker"
+           [max]="maxDate" formControlName="dob">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <br/>
   
       <mat-form-field>
         <input matInput placeholder="Country" value = {{data.user.country}} formControlName="country">
@@ -145,7 +151,7 @@
   
   
       <div class="wrapper">
-        <button class="submit-button" mat-raised-button type="submit"  color="primary">Update</button>
+        <button class="submit-button" mat-raised-button type="submit" [disabled]="profileDetails.invalid" color="primary">Update</button>
       </div>
     </form>
   </mat-card>

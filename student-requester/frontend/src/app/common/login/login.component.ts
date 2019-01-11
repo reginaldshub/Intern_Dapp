@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ServiceService } from '../service.service';
+import { ServiceService } from '../service/service.service';
 import { Router } from '@angular/router';
+// import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -9,8 +10,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-
-  constructor(private service: ServiceService, private router: Router) { }
+  constructor(private service: ServiceService, 
+              private router: Router,
+              // private cookieService: CookieService
+              ) { }
 
   ngOnInit() {
   }
@@ -25,11 +28,16 @@ export class LoginComponent implements OnInit {
     this.service.login(this.proliform.value).subscribe((res) => {
       console.log(res);
       if (res['role'] == "student") {
+        sessionStorage.setItem('_id', res['_id']);
         swal("", "" + res['message'], "success");
         this.router.navigate(['/student'])
       }else if(res['role']== "requester"){
+        // this.cookieService.set( '_id', res['_id'] );
+        sessionStorage.setItem('_id', res['_id']);
         swal("", "" + res['message'], "success");
         this.router.navigate(['/requester'])
+      }else{
+        swal("", "" + res['message'], "error");
       }
 
     })

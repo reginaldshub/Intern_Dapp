@@ -52,3 +52,9 @@ mat-form-field{
     justify-content: center;
     margin-top:100px;
 }
+
+#loginLink{
+    color: white;
+    text-decoration-line: none;
+    text-align: right;
+}
