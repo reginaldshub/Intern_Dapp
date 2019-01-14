@@ -12,7 +12,7 @@ const routes: Routes = [
   // path:'requester',
   // component:RequesterComponent,
   // children:[
-  { path: '', component: EdudetailsComponent, canActivate: [Auth1Guard] },
+  { path: '', component: ReqdashboardComponent, canActivate: [Auth1Guard] },
   { path: 'edudetails', component: EdudetailsComponent, canActivate: [Auth1Guard] },
   { path: 'reqpermission', component: ReqpermissionComponent, canActivate: [Auth1Guard] },
   { path: 'profile', component: ProfileComponent, canActivate: [Auth1Guard] }
