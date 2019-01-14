@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RequestsComponent } from './requests/requests.component';
 import { StudentProfileComponent } from './student-profile/student-profile.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Add10thComponent } from './education/add10th/add10th.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     MaterialModule,
     ReactiveFormsModule
   ],
-  declarations: [EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent]
+  declarations: [EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, Add10thComponent]
 })
 export class StudentModule { }

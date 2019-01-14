@@ -1,0 +1,38 @@
+<div class="container">
+  <mat-card>
+    <form [formGroup]="add10th" (submit)="value()">
+      <h2>Fill SSLC Details:</h2>
+      <mat-form-field>
+        <input matInput placeholder="Student Id" formControlName="studentid">
+        <mat-error>Enter name</mat-error>
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <input matInput placeholder="Education Category" formControlName="ecategory">
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <input matInput placeholder="Start Year" formControlName="Startyear">
+      </mat-form-field>
+      <br />
+      <mat-form-field>
+        <input matInput placeholder="End Year" formControlName="Endyear">
+      </mat-form-field>
+      <br />
+      <div class="wrapper">
+        <div formArrayName="addsubjects">
+          <button mat-raised-button color="primary" (click)="add()">AddSubject</button>
+          <div *ngFor="let group of subjectArray.controls; let i= index;" [formGroupName]="i">
+            <mat-form-field>
+              <input matInput placeholder="Subject Name" formControlName="subjectname">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="Subject Marks" formControlName="subjectmarks">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="Remove(i)">Remove</button>
+          </div>
+        </div>
+      </div>
+      <button class="submit-button" mat-raised-button type="submit" [disabled]="add10th.invalid" color="primary">Save</button>
+    </form>
+  </mat-card>

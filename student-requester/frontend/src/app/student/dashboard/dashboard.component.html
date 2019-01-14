@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <button mat-button color="warn" [routerLink]="['/account']">Account</button>
   <button mat-button class="profile" (click)="profile()">Profile</button>
+  <button  mat-button  [routerLink]="['/student/education']">Education</button>
   <button class="logout" mat-button [routerLink]="['/login']" (click)="authservice.logoutUser()">Logout</button>
-
 </mat-toolbar>
 <router-outlet></router-outlet>
