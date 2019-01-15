@@ -19,6 +19,6 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  declarations: [EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, Add10thComponent]
+  declarations: [ Add10thComponent,EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent,]
 })
 export class StudentModule { }

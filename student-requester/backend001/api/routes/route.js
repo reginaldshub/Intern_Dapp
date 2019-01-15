@@ -8,11 +8,13 @@ const Profile = require('../models/profile.js')
 const studentProfile = require('../models/studentProfile.js');
 const Accounts = require('../models/account.js')
 const SSLC = require('../models/sslc.js')
+const grantedStudents = require('../models/grantedStudents.js');
 
 const Web3 = require('web3')
 
 const mongoose = require('mongoose')
-const db = "mongodb://santhosh123:santhosh123@ds133533.mlab.com:33533/eventsdb"
+const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
+// const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if (err) {
         console.log("the error" + err)
@@ -337,9 +339,44 @@ router.post('/sslc',(req, res) => {
             res.send("not saved")
         } else {
             console.log(user);
+
         }
     })
 })
+
+router.post('/checkaccess', verifyToken, (req, res) => {
+    let searchData = req.body;
+
+    grantedStudents.find({ name: searchData.name }, (error, user) => {
+        if (error) {
+            console.log(error)
+        }
+        else if(user){            
+                res.json({user : user
+            })
+        }else{
+            Register.find({ name: searchData.name }, (error, user) => {
+                    if (error) {
+                        console.log(error)
+                    }
+                    else if(user){
+                        res.json({
+                            name: searchData.name,
+                            status: 'request'
+                        })
+                    }
+                    else{
+                        res.status(200).json( {user:[{
+                            name: searchData.name,
+                            status: "failed"
+                        }] })
+                    }
+                })
+
+        }
+    })
+})
+
 
 
 module.exports = router;

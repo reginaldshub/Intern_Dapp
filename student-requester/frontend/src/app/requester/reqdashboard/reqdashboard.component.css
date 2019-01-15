@@ -3,3 +3,13 @@
         text-align: right;
         width:auto;
 }
+
+.search-bar{
+        flex: 1 1 auto;
+        text-align: center;
+}
+
+.search-button{
+        padding-left: 20px;
+}
+

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ServiceService } from "../service/service.service";
+import { RequesterService } from "../service/service.service";
 import { Router } from "@angular/router";
 import swal from 'sweetalert';
 
@@ -48,7 +48,7 @@ export class ProfileComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder,
-    private authService: ServiceService,
+    private authService: RequesterService,
     private router: Router,
 
   ) {
