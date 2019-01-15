@@ -9,13 +9,15 @@ import { RequestsComponent } from './requests/requests.component';
 import { StudentProfileComponent } from './student-profile/student-profile.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Add10thComponent } from './education/add10th/add10th.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
     StudentRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   declarations: [EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, Add10thComponent]
 })

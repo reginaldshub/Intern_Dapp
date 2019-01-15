@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators,FormArray,FormBuilder } from '@angular/forms';
+import { StudentService } from '../../student.service';
 @Component({
   selector: 'app-add10th',
   templateUrl: './add10th.component.html',
   styleUrls: ['./add10th.component.css']
 })
 export class Add10thComponent implements OnInit {
-  constructor(private fb:FormBuilder) {
+  constructor(private fb:FormBuilder,private service:StudentService) {
    
   }
   ngOnInit() {
@@ -38,7 +39,10 @@ export class Add10thComponent implements OnInit {
     this.subjectArray.removeAt(index);
   }
   value(){
-    console.log(this.add10th.value)
+    //console.log(this.add10th.value);
+     this.service.add(this.add10th.value).subscribe((res)=>{
+       console.log(res);
+     })
   }
 
 }

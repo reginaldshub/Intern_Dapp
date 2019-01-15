@@ -6,7 +6,7 @@ const routes: Routes = [
   { path: '', loadChildren: './common/common.module#CommonbothModule' },
   { path: 'student', loadChildren: './student/student.module#StudentModule' },
   { path: 'requester', loadChildren: './requester/requester.module#RequesterModule' }
-
+    //  {path:'',redirectTo: '/common',pathMatch:'full'}
   // {path:'', redirectTo:'/requester',pathMatch:'full'},
   // {path:'', redirectTo:'/student',pathMatch:'full'},
   // {path:'', redirectTo:'/requester',pathMatch:'full'}

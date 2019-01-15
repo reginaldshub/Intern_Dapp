@@ -7,6 +7,7 @@ const Register = require('../models/register.js')
 const Profile = require('../models/profile.js')
 const studentProfile = require('../models/studentProfile.js');
 const Accounts = require('../models/account.js')
+const SSLC = require('../models/sslc.js')
 
 const Web3 = require('web3')
 
@@ -325,6 +326,20 @@ router.put('/student/:id', verifyToken, (req, res) => {
             else { console.log('error' + JSON.stringify(err, undefined, 2)); }
         });
 });
+
+router.post('/sslc',(req, res) => {
+    let userData = req.body;
+    console.log(userData);
+    let sslc = new SSLC(userData)
+    console.log(sslc);
+    sslc.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            console.log(user);
+        }
+    })
+})
 
 
 module.exports = router;
