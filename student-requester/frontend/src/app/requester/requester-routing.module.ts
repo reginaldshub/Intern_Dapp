@@ -1,3 +1,4 @@
+import { CertificatesComponent } from './certificates/certificates.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReqdashboardComponent } from './reqdashboard/reqdashboard.component';
@@ -6,6 +7,8 @@ import { ReqpermissionComponent } from './reqpermission/reqpermission.component'
 import { ProfileComponent } from './profile/profile.component';
 import { Auth1Guard } from '../auth1.guard';
 import { RequesterComponent } from './requester.component';
+import { SearchComponent } from './search/search.component';
+import { RequestsComponent } from './requests/requests.component';
 
 const routes: Routes = [
   //       {
@@ -13,9 +16,13 @@ const routes: Routes = [
   // component:RequesterComponent,
   // children:[
   { path: '', component: ReqdashboardComponent, canActivate: [Auth1Guard] },
+  { path: 'dashboard', component: ReqdashboardComponent, canActivate: [Auth1Guard] },
   { path: 'edudetails', component: EdudetailsComponent, canActivate: [Auth1Guard] },
   { path: 'reqpermission', component: ReqpermissionComponent, canActivate: [Auth1Guard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [Auth1Guard] }
+  { path: 'profile', component: ProfileComponent, canActivate: [Auth1Guard] },
+  { path: 'search', component: SearchComponent, canActivate: [Auth1Guard] },
+  { path: 'requests', component: RequestsComponent, canActivate: [Auth1Guard] },
+  { path: 'certificates', component: CertificatesComponent, canActivate: [Auth1Guard] }
 ]
         // }];
 

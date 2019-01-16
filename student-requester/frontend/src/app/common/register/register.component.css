@@ -26,3 +26,8 @@ mat-form-field{
     justify-content: center;
     margin-top:100px;
 }
+
+.login{
+    flex: 1 1 auto;
+  text-align: right;
+}

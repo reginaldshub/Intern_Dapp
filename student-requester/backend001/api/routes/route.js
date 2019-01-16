@@ -7,14 +7,12 @@ const Register = require('../models/register.js')
 const Profile = require('../models/profile.js')
 const studentProfile = require('../models/studentProfile.js');
 const Accounts = require('../models/account.js')
-const SSLC = require('../models/sslc.js')
 const grantedStudents = require('../models/grantedStudents.js');
+const permission = require('../models/permission.js');
 
 const Web3 = require('web3')
 
 const mongoose = require('mongoose')
-const db = "mongodb://santhosh123:santhosh123@ds133533.mlab.com:33533/eventsdb"
-// const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if (err) {
         console.log("the error" + err)
@@ -261,8 +259,6 @@ router.put('/requester/:id', verifyToken, (req, res) => {
             else { console.log('error' + JSON.stringify(err, undefined, 2)); }
         });
 });
-
-
 // Student Part
 
 
@@ -329,54 +325,58 @@ router.put('/student/:id', verifyToken, (req, res) => {
         });
 });
 
-router.post('/sslc',(req, res) => {
-    let userData = req.body;
-    console.log(userData);
-    let sslc = new SSLC(userData)
-    console.log(sslc);
-    sslc.save((err, user) => {
-        if (err) {
-            res.send("not saved")
-        } else {
-            console.log(user);
-
-        }
-    })
-})
-
 router.post('/checkaccess', verifyToken, (req, res) => {
     let searchData = req.body;
 
-    grantedStudents.find({ name: searchData.name }, (error, user) => {
+    Register.findOne({ name: searchData.name }, (error, reg_user) => {
         if (error) {
             console.log(error)
         }
-        else if(user){            
-                res.json({user : user
-            })
-        }else{
-            Register.find({ name: searchData.name }, (error, user) => {
-                    if (error) {
-                        console.log(error)
-                    }
-                    else if(user){
-                        res.json({
-                            name: searchData.name,
-                            status: 'request'
-                        })
-                    }
-                    else{
-                        res.status(200).json( {user:[{
-                            name: searchData.name,
-                            status: "failed"
-                        }] })
+        else if (reg_user) {
+            if (reg_user.Roles == "student") {
+                permission.findOne({ studentID: reg_user._id }, (error, User) => {
+                    if (User) {
+                        res.json({ status: User.Status,name: searchData.name, user: User })
+                    } else {
+                        res.json({ status: "request", user: reg_user })
                     }
                 })
-
+            } else {
+                res.json({ status: "not student" })
+            }
+        }
+        else {
+            res.json({ status: "student not registered" })
         }
     })
 })
 
+router.get('/grantedlist', (req, res) => {
+    permission.find({}, (error, user) => {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(user);
+            res.status(200).json({ students: user })
+        }
+    })
+})
+
+router.post('/request', verifyToken, (req, res) => {
+    let permissionData = req.body;
+    let permissionObject = new permission(permissionData)
+    // console.log(profile);
+    permissionObject.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            res.json({
+                message: "added successfully",
+                user: user
+            })
+        }
+    })
+})
 
 
 module.exports = router;

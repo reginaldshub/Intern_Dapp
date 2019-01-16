@@ -6,6 +6,7 @@ import swal from 'sweetalert';
 
 import { analyzeFile } from '@angular/compiler';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ServiceService } from 'src/app/student/service/service.service';
 
 export interface Role {
   value: string;
@@ -50,7 +51,7 @@ export class ProfileComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private authService: RequesterService,
     private router: Router,
-
+    private service: ServiceService,
   ) {
   }
 

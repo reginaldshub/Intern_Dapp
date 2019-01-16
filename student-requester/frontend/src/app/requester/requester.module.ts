@@ -10,6 +10,9 @@ import { ReqdashboardComponent } from './reqdashboard/reqdashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { MaterialModule } from '../material/material.module';
 import { RequesterComponent } from './requester.component';
+import { SearchComponent } from './search/search.component';
+import { RequestsComponent } from './requests/requests.component';
+import { CertificatesComponent } from './certificates/certificates.component';
 
 @NgModule({
   imports: [
@@ -18,6 +21,6 @@ import { RequesterComponent } from './requester.component';
     MaterialModule,
     ReactiveFormsModule
   ],
-  declarations: [EdudetailsComponent, ReqpermissionComponent, ReqdashboardComponent, ProfileComponent,RequesterComponent]
+  declarations: [EdudetailsComponent, ReqpermissionComponent, ReqdashboardComponent, ProfileComponent,RequesterComponent, SearchComponent, RequestsComponent, CertificatesComponent]
 })
 export class RequesterModule { }
