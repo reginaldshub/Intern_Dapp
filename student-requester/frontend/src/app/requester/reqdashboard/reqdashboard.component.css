@@ -1,15 +1,16 @@
 .profile{
-        flex: 1 1 auto;
+        flex:0  auto;
         text-align: right;
         width:auto;
 }
 
-.search-bar{
-        flex: 1 1 auto;
-        text-align: center;
-}
-
-.search-button{
-        padding-left: 20px;
-}
-
+table{
+        width: 50%;
+    }
+    .granted-list{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    

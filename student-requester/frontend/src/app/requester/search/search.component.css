@@ -1,0 +1,16 @@
+table{
+    width: 30%;
+}
+.search-button{
+    padding-left: 20px;
+}
+.search-bar{
+    flex: 1 1 auto;
+    text-align: center;
+}
+.granted-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
