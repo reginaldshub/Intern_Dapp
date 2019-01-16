@@ -1,11 +1,9 @@
-<div class="sidenav">
 <button mat-button color="warn" [routerLink]="['/student/puc']">PUC</button>
 <button mat-button color="warn" [routerLink]="['/student/add10th']">SSLC</button>
 <button mat-button color="warn" [routerLink]="['/student/degree']">DEGREE</button>
-</div>
 <div class="container">
   <mat-card>
-    <form [formGroup]="add10th">
+    <form [formGroup]="puc">
       <h2>Fill SSLC Details:</h2>
       <mat-form-field>
         <input matInput placeholder="Student Id" formControlName="studentid">
@@ -21,6 +19,10 @@
       <mat-form-field>
         <input matInput placeholder="End Year" formControlName="Endyear">
       </mat-form-field>
+      <br/>
+      <mat-form-field>
+          <input matInput placeholder="Group Name" formControlName="Groupname">
+        </mat-form-field>
       <br />
       <button mat-raised-button color="primary" (click)="Add()">AddSubject</button>
       <div class="wrapper">
@@ -32,12 +34,11 @@
             <mat-form-field>
               <input matInput placeholder="Subject Marks" formControlName="subjectmarks">
             </mat-form-field>
-
             <button class="remove-btn" mat-raised-button color="primary" (click)="Remove(i)">Remove</button>
           </div>
         </div>
       </div>
-      <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="add10th.invalid" color="primary">Save</button>
+      <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="puc.invalid" color="primary">Save</button>
     </form>
   </mat-card>
 </div>

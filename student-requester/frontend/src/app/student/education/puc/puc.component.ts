@@ -2,19 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { StudentService } from '../../student.service';
 @Component({
-  selector: 'app-add10th',
-  templateUrl: './add10th.component.html',
-  styleUrls: ['./add10th.component.css']
+  selector: 'app-puc',
+  templateUrl: './puc.component.html',
+  styleUrls: ['./puc.component.css']
 })
-export class Add10thComponent implements OnInit {
+export class PucComponent implements OnInit {
 
-  add10th: FormGroup
+  puc: FormGroup
   constructor(private fb: FormBuilder, private service: StudentService) {
-    this.add10th = this.fb.group({
+    this.puc = this.fb.group({
       studentid: [],
       ecategory: [],
       Startyear: [],
       Endyear: [],
+      Groupname:[],
       addsubjects: this.fb.array([this.addSubjectGroup()])
     });
   }
@@ -31,7 +32,7 @@ export class Add10thComponent implements OnInit {
 
 
   get subjectArray() {
-    return <FormArray>this.add10th.get('addsubjects');
+    return <FormArray>this.puc.get('addsubjects');
   }
 
   Add(){
@@ -43,10 +44,11 @@ export class Add10thComponent implements OnInit {
   }
 
   submit() {
-    console.log("student id",this.add10th.value.studentid);
+    console.log("student id",this.puc.value.studentid);
     //  this.service.add(this.add10th.value).subscribe((res)=>{
     //    console.log(res);
     //  })
   }
+
 
 }

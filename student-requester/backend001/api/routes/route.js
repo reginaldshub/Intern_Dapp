@@ -13,7 +13,7 @@ const grantedStudents = require('../models/grantedStudents.js');
 const Web3 = require('web3')
 
 const mongoose = require('mongoose')
-const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
+const db = "mongodb://santhosh123:santhosh123@ds133533.mlab.com:33533/eventsdb"
 // const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if (err) {

@@ -2,19 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { StudentService } from '../../student.service';
 @Component({
-  selector: 'app-add10th',
-  templateUrl: './add10th.component.html',
-  styleUrls: ['./add10th.component.css']
+  selector: 'app-degree',
+  templateUrl: './degree.component.html',
+  styleUrls: ['./degree.component.css']
 })
-export class Add10thComponent implements OnInit {
+export class DegreeComponent implements OnInit {
 
-  add10th: FormGroup
+  degree: FormGroup
   constructor(private fb: FormBuilder, private service: StudentService) {
-    this.add10th = this.fb.group({
+    this.degree = this.fb.group({
       studentid: [],
       ecategory: [],
       Startyear: [],
       Endyear: [],
+      Branchname:[],
       addsubjects: this.fb.array([this.addSubjectGroup()])
     });
   }
@@ -31,7 +32,7 @@ export class Add10thComponent implements OnInit {
 
 
   get subjectArray() {
-    return <FormArray>this.add10th.get('addsubjects');
+    return <FormArray>this.degree.get('addsubjects');
   }
 
   Add(){
@@ -43,7 +44,7 @@ export class Add10thComponent implements OnInit {
   }
 
   submit() {
-    console.log("student id",this.add10th.value.studentid);
+    console.log("student id",this.degree.value.studentid);
     //  this.service.add(this.add10th.value).subscribe((res)=>{
     //    console.log(res);
     //  })

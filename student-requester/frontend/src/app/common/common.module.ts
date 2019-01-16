@@ -19,6 +19,14 @@ import { CommonComponent } from '../common/common.component';
     MaterialModule,
     HttpClientModule
   ],
-  declarations: [LoginComponent, RegisterComponent, AccountComponent, CommonComponent]
+  exports: [
+    AccountComponent
+  ],
+  declarations: [
+    LoginComponent,
+    RegisterComponent,
+    AccountComponent,
+    CommonComponent
+  ]
 })
 export class CommonbothModule { }
