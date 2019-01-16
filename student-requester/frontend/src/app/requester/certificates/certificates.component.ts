@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ServiceService } from 'src/app/common/service.service';
 import { RequesterService } from '../service/service.service';
 import { Router } from '@angular/router';
+import { InteractionService } from '../interactionService/interaction.service';
 
 @Component({
   selector: 'app-certificates',
@@ -19,7 +20,8 @@ export class CertificatesComponent implements OnInit {
   constructor( private fb: FormBuilder,
     private requesterService: RequesterService,
     private service: ServiceService,
-    private router: Router
+    private router: Router,
+    private _interactionSerice: InteractionService
    ) { }
 
   ngOnInit() {
@@ -39,6 +41,9 @@ export class CertificatesComponent implements OnInit {
       }
       this.dataSource = array;
     })
+  }
+  sendData(name){
+    this._interactionSerice.sendMessage(name);
   }
 
 }

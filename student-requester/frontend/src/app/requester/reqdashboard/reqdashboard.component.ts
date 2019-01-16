@@ -1,3 +1,4 @@
+import { InteractionService } from './../interactionService/interaction.service';
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { Router } from "@angular/router";
 import swal from 'sweetalert';
@@ -29,7 +30,8 @@ export class ReqdashboardComponent implements OnInit {
   constructor( private fb: FormBuilder,
     private requesterService: RequesterService,
     private service: ServiceService,
-    private router: Router
+    private router: Router,
+    private _interactionSerice: InteractionService
    ) { }
 
   ngOnInit() {
@@ -50,4 +52,8 @@ export class ReqdashboardComponent implements OnInit {
       this.dataSource = array;
     })
   }
+  sendData(name){
+    this._interactionSerice.sendMessage(name);
+  }
+
 }
