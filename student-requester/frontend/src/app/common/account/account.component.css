@@ -5,5 +5,6 @@ mat-card{
 mat-form-field{
     width:350px;
 } 
-    
-   
+button{
+    font-size:23px;
+}
