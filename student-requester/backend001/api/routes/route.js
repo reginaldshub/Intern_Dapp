@@ -9,6 +9,7 @@ const studentProfile = require('../models/studentProfile.js');
 const Accounts = require('../models/account.js')
 const grantedStudents = require('../models/grantedStudents.js');
 const permission = require('../models/permission.js');
+const SSLC = require('../models/sslc.js')
 
 const Web3 = require('web3')
 
@@ -194,6 +195,20 @@ router.post('/set', verifyToken, (req, res) => {
     })
 })
 
+router.post('/sslc',(req, res) => {
+    let userData = req.body;
+    console.log(userData);
+    let sslc = new SSLC(userData)
+    console.log(sslc);
+    sslc.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            console.log(user);
+
+        }
+    })
+})
 
 router.post('/getprofile', verifyToken, (req, res) => {
     let userData = req.body;
