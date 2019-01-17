@@ -395,5 +395,34 @@ router.post('/request', verifyToken, (req, res) => {
     })
 })
 
+router.post('/certificate', verifyToken, (req, res) => {
+    let searchData = req.body;
+
+    Register.findOne({ name: searchData.name }, (error, reg_user) => {
+        if (error) {
+            console.log(error)
+        }
+        else if (reg_user) {
+            if (reg_user.Roles == "student") {
+                permission.findOne({ studentID: reg_user._id }, (error, User) => {
+                    if (User) {
+                        SSLC.findOne({ studentid: reg_user._id }, (error, User) => {
+                        res.json({ certificate: User })
+                        })
+                    } else {
+                        res.json({ status: "request", user: reg_user })
+                    }
+                })
+            } else {
+                res.json({ status: "not student" })
+            }
+        }
+        else {
+            res.json({ status: "student not registered" })
+        }
+    })
+})
+
+
 
 module.exports = router;

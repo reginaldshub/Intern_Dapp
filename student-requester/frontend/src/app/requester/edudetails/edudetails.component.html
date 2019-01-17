@@ -1,4 +1,30 @@
 
-<h1>{{Name}}</h1>
+<h1 *ngIf = "Name.name != null">{{Name.name}}</h1>
 
 
+<h3 *ngIf = "Name.Startyear != null"><strong>Start Year:</strong> {{Name.Startyear}}</h3><br/>
+<h3 *ngIf = "Name.Endyear != null"><strong>End Year:</strong> {{Name.Endyear}}</h3>
+
+<div *ngIf = "Name.Startyear != null" class="granted-list">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  
+  
+        <ng-container matColumnDef="Subject_name">
+            <th mat-header-cell *matHeaderCellDef> Subject </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.subjectname}}
+            </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="Subject_marks">
+            <th mat-header-cell *matHeaderCellDef> Marks </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.subjectmarks}}
+            </td>
+        </ng-container>
+  
+         
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
