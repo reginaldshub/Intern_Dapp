@@ -45,9 +45,9 @@ export class DegreeComponent implements OnInit {
 
   submit() {
     console.log("student id",this.degree.value.studentid);
-    //  this.service.add(this.add10th.value).subscribe((res)=>{
-    //    console.log(res);
-    //  })
+     this.service.add2(this.degree.value).subscribe((res)=>{
+       console.log(res);
+     })
   }
 
 }

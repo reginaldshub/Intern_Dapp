@@ -10,6 +10,8 @@ const Accounts = require('../models/account.js')
 const grantedStudents = require('../models/grantedStudents.js');
 const permission = require('../models/permission.js');
 const SSLC = require('../models/sslc.js')
+const PUC = require('../models/puc.js')
+const DEGREE = require('../models/degree.js')
 
 const Web3 = require('web3')
 
@@ -195,12 +197,42 @@ router.post('/set', verifyToken, (req, res) => {
     })
 })
 
-router.post('/sslc',(req, res) => {
+router.post('/sslc', (req, res) => {
     let userData = req.body;
     console.log(userData);
     let sslc = new SSLC(userData)
     console.log(sslc);
     sslc.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            console.log(user);
+
+        }
+    })
+})
+
+router.post('/puc', (req, res) => {
+    let userData = req.body;
+    console.log(userData);
+    let puc = new PUC(userData)
+    console.log(puc);
+    puc.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            console.log(user);
+
+        }
+    })
+})
+
+router.post('/degree', (req, res) => {
+    let userData = req.body;
+    console.log(userData);
+    let degree = new DEGREE(userData)
+    console.log(degree);
+    degree.save((err, user) => {
         if (err) {
             res.send("not saved")
         } else {
@@ -353,7 +385,7 @@ router.post('/checkaccess', verifyToken, (req, res) => {
             if (reg_user.Roles == "student") {
                 permission.findOne({ studentID: reg_user._id }, (error, User) => {
                     if (User) {
-                        res.json({ status: User.Status,name: searchData.name, user: User })
+                        res.json({ status: User.Status, name: searchData.name, user: User })
                     } else {
                         res.json({ status: "request", user: reg_user })
                     }
@@ -407,7 +439,7 @@ router.post('/certificate', verifyToken, (req, res) => {
                 permission.findOne({ studentID: reg_user._id }, (error, User) => {
                     if (User) {
                         SSLC.findOne({ studentid: reg_user._id }, (error, User) => {
-                        res.json({ certificate: User })
+                            res.json({ certificate: User })
                         })
                     } else {
                         res.json({ status: "request", user: reg_user })
