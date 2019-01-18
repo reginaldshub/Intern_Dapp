@@ -195,7 +195,7 @@ router.post('/set', verifyToken, (req, res) => {
     })
 })
 
-router.post('/sslc',(req, res) => {
+router.post('/sslc', (req, res) => {
     let userData = req.body;
     console.log(userData);
     let sslc = new SSLC(userData)
@@ -353,7 +353,7 @@ router.post('/checkaccess', verifyToken, (req, res) => {
             if (reg_user.Roles == "student") {
                 permission.findOne({ studentID: reg_user._id }, (error, User) => {
                     if (User) {
-                        res.json({ status: User.Status,name: searchData.name, user: User })
+                        res.json({ status: User.Status, name: searchData.name, user: User })
                     } else {
                         res.json({ status: "request", user: reg_user })
                     }
@@ -406,8 +406,14 @@ router.post('/certificate', verifyToken, (req, res) => {
             if (reg_user.Roles == "student") {
                 permission.findOne({ studentID: reg_user._id }, (error, User) => {
                     if (User) {
-                        SSLC.findOne({ studentid: reg_user._id }, (error, User) => {
-                        res.json({ certificate: User })
+                        SSLC.findOne({ studentid: User.studentID }, (error, sslc) => {
+                            if (sslc) {
+                                console.log(sslc);
+                                res.json({ certificate: sslc })
+                            }else{
+                                res.json({ status: "noEntry Found" })
+                            }
+                            
                         })
                     } else {
                         res.json({ status: "request", user: reg_user })

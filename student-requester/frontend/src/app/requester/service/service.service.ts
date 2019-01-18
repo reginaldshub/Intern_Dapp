@@ -50,6 +50,7 @@ export class RequesterService {
     return this.http.post("http://localhost:3000/products/request", data);
   }
   getCertificate(name){
+    console.log(name)
     return this.http.post("http://localhost:3000/products/certificate", name);
   }
 }

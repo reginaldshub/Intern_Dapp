@@ -41,10 +41,13 @@ export class EdudetailsComponent implements OnInit {
 
   getCertificate() {
     this.service.getCertificate(this.Name).subscribe((res: any) => {
+      console.log(res.certificate);
+      console.log(res.status);
+      if(res.certificate){
       this.Name.Startyear = res.certificate.Startyear;
       this.Name.Endyear = res.certificate.Endyear;
       this.dataSource = res.certificate.addsubjects;
-
+    }
     })
   }
 }
