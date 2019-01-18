@@ -16,6 +16,7 @@ export class CertificatesComponent implements OnInit {
     name: String,
     status: String
   }
+  sessionValue;
   
   constructor( private fb: FormBuilder,
     private requesterService: RequesterService,
@@ -23,6 +24,9 @@ export class CertificatesComponent implements OnInit {
     private router: Router,
     private _interactionSerice: InteractionService
    ) { }
+   permissionReq = {
+    requesterID: String,
+  }
 
   ngOnInit() {
     this.search();
@@ -30,7 +34,10 @@ export class CertificatesComponent implements OnInit {
   displayedColumns: string[] = [ 'name','Created_time','status', 'view'];
 
   search(){
-    this.requesterService.getGrantedList().subscribe((res:any)=>
+   
+    this.sessionValue = sessionStorage.getItem('_id');
+    this.permissionReq.requesterID = this.sessionValue;
+    this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
     { 
       let temp = res.students;
       let array = [];

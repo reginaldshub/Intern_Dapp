@@ -12,6 +12,7 @@ import { Add10thComponent } from './education/add10th/add10th.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PucComponent } from './education/puc/puc.component';
 import { DegreeComponent } from './education/degree/degree.component';
+import { MastersComponent } from './education/masters/masters.component';
 // import { CommonbothModule } from '../common/common.module';
 //  import { AccountComponent } from '../common/account/account.component';
 
@@ -25,6 +26,6 @@ import { DegreeComponent } from './education/degree/degree.component';
   //  CommonbothModule
   ],
   declarations: [ 
-  Add10thComponent,EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, PucComponent, DegreeComponent]
+  Add10thComponent,EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, PucComponent, DegreeComponent, MastersComponent]
 })
 export class StudentModule { }

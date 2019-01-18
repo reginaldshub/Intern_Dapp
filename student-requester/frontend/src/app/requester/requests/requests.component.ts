@@ -20,7 +20,10 @@ export class RequestsComponent implements OnInit {
     name: String,
     status: String
   }
-  
+  sessionValue;
+  permissionReq = {
+    requesterID: String,
+  }
   constructor(
     private requesterService: RequesterService,
     private service: ServiceService
@@ -32,7 +35,9 @@ export class RequestsComponent implements OnInit {
   displayedColumns: string[] = [ 'name','status'];
 
   search(){
-    this.requesterService.getGrantedList().subscribe((res:any)=>
+    this.sessionValue = sessionStorage.getItem('_id');
+    this.permissionReq.requesterID = this.sessionValue;
+    this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
     { 
       PermissionData = res.students;
       this.dataSource = PermissionData;

@@ -18,7 +18,7 @@ export class RequestsComponent implements OnInit {
     this.search();
   }
 
-  displayedColumns: string[] = [ 'name','Created_time','status'];
+  displayedColumns: string[] = [ 'name','Created_time','status','accept','reject'];
   search() {
 
     this.sessionValue = sessionStorage.getItem('_id');
@@ -27,6 +27,9 @@ export class RequestsComponent implements OnInit {
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res: any) => {
       this.dataSource = res.students;
     })
+  }
+  grant(data){
+    console.log(data);
   }
 
 }
