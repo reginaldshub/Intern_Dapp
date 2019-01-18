@@ -9,6 +9,14 @@ export class StudentService {
 
   add(sslc) {
     console.log(sslc);
-    return this.http.post("http://localhost:3000/products/sslc", sslc);
+    return this.http.post("http://localhost:3000/products/marks", sslc);
+  }
+  add1(puc) {
+    console.log(puc);
+    return this.http.post("http://localhost:3000/products/puc", puc);
+  }
+  add2(degree) {
+    console.log(degree);
+    return this.http.post("http://localhost:3000/products/degree", degree);
   }
 }

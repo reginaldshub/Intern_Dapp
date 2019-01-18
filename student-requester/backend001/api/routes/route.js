@@ -9,7 +9,9 @@ const studentProfile = require('../models/studentProfile.js');
 const Accounts = require('../models/account.js')
 const grantedStudents = require('../models/grantedStudents.js');
 const permission = require('../models/permission.js');
-const SSLC = require('../models/sslc.js')
+const Certificates = require('../models/certificates.js')
+// const PUC = require('../models/puc.js')
+// const DEGREE = require('../models/degree.js')
 
 const Web3 = require('web3')
 
@@ -24,24 +26,6 @@ mongoose.connect(db, { useNewUrlParser: true }, err => {
     }
 
 })
-
-// function verifyToken(req, res, next) {
-//     if (!req.headers.authorization) {
-//         return res.status(401).send('Unauthorized request')
-//     }
-//     let token = req.headers.authorization.slice(7);
-//     if (token === 'null') {
-//         return res.status(401).send('Unauthorized request')
-//     }
-//     let payload = jwt.verify(token, 'secretKey');
-//     console.log(payload);
-//     if (!payload) {
-//         console.log("executed");
-//         return res.status(401).send('Unauthorized request')
-//     }
-//     req.userId = playload.subject;
-//     next()
-// }
 
 function verifyToken(req, res, next) {
     // check header or url parameters or post parameters for token 
@@ -195,12 +179,46 @@ router.post('/set', verifyToken, (req, res) => {
     })
 })
 
+<<<<<<< HEAD
 router.post('/sslc', (req, res) => {
+=======
+router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
-    let sslc = new SSLC(userData)
-    console.log(sslc);
-    sslc.save((err, user) => {
+    let certificates = new Certificates(userData)
+    console.log(certificates);
+    certificates.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            console.log(user);
+
+        }
+    })
+})
+
+router.post('/puc', (req, res) => {
+    let userData = req.body;
+    console.log(userData);
+    let puc = new PUC(userData)
+    console.log(puc);
+    puc.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            console.log(user);
+
+        }
+    })
+})
+
+router.post('/degree', (req, res) => {
+>>>>>>> a44bdbf19f295e1cdf65d6809071f15f263ff2e2
+    let userData = req.body;
+    console.log(userData);
+    let degree = new DEGREE(userData)
+    console.log(degree);
+    degree.save((err, user) => {
         if (err) {
             res.send("not saved")
         } else {
@@ -406,6 +424,7 @@ router.post('/certificate', verifyToken, (req, res) => {
             if (reg_user.Roles == "student") {
                 permission.findOne({ studentID: reg_user._id }, (error, User) => {
                     if (User) {
+<<<<<<< HEAD
                         SSLC.findOne({ studentid: User.studentID }, (error, sslc) => {
                             if (sslc) {
                                 console.log(sslc);
@@ -414,6 +433,10 @@ router.post('/certificate', verifyToken, (req, res) => {
                                 res.json({ status: "noEntry Found" })
                             }
                             
+=======
+                        SSLC.findOne({ studentid: reg_user._id }, (error, User) => {
+                            res.json({ certificate: User })
+>>>>>>> a44bdbf19f295e1cdf65d6809071f15f263ff2e2
                         })
                     } else {
                         res.json({ status: "request", user: reg_user })
