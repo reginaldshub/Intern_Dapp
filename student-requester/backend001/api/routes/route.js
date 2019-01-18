@@ -27,24 +27,6 @@ mongoose.connect(db, { useNewUrlParser: true }, err => {
 
 })
 
-// function verifyToken(req, res, next) {
-//     if (!req.headers.authorization) {
-//         return res.status(401).send('Unauthorized request')
-//     }
-//     let token = req.headers.authorization.slice(7);
-//     if (token === 'null') {
-//         return res.status(401).send('Unauthorized request')
-//     }
-//     let payload = jwt.verify(token, 'secretKey');
-//     console.log(payload);
-//     if (!payload) {
-//         console.log("executed");
-//         return res.status(401).send('Unauthorized request')
-//     }
-//     req.userId = playload.subject;
-//     next()
-// }
-
 function verifyToken(req, res, next) {
     // check header or url parameters or post parameters for token 
 
