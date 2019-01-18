@@ -420,7 +420,7 @@ router.post('/certificate', verifyToken, (req, res) => {
             if (reg_user.Roles == "student") {
                 permission.findOne({ studentID: reg_user._id }, (error, User) => {
                     if (User) {
-                        SSLC.findOne({ studentid: reg_user._id }, (error, User) => {
+                        Certificates.findOne({ studentid: reg_user._id }, (error, User) => {
                             res.json({ certificate: User })
                         })
                     } else {
