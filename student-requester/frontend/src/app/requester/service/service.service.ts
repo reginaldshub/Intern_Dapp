@@ -43,8 +43,8 @@ export class RequesterService {
     return this.http.post("http://localhost:3000/products/checkaccess", data);
   }
 
-  getGrantedList(){
-    return this.http.get("http://localhost:3000/products/grantedlist");
+  getGrantedList(data){
+    return this.http.post("http://localhost:3000/products/grantedlist", data);
   }
   request(data){
     return this.http.post("http://localhost:3000/products/request", data);

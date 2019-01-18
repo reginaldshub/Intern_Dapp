@@ -12,6 +12,8 @@ export class EdudetailsComponent implements OnInit {
   constructor(private _interactionsrvice: InteractionService,
     private service: RequesterService) { }
   public dataSource: any = null;
+  public pucdataSource: any = null;
+  public degreedataSource: any = null;
   Name = {
     name: String,
     Endyear: Number,
@@ -43,11 +45,11 @@ export class EdudetailsComponent implements OnInit {
     this.service.getCertificate(this.Name).subscribe((res: any) => {
       console.log(res.certificate);
       console.log(res.status);
-      if(res.certificate){
-      this.Name.Startyear = res.certificate.Startyear;
-      this.Name.Endyear = res.certificate.Endyear;
-      this.dataSource = res.certificate.addsubjects;
-    }
+    //   if(res.certificate){
+    //   this.Name.Startyear = res.certificate.Startyear;
+    //   this.Name.Endyear = res.certificate.Endyear;
+    //   this.dataSource = res.certificate;
+    // }
     })
   }
 }

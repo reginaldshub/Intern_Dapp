@@ -31,7 +31,7 @@ export class SearchComponent implements OnInit {
 
   searchString = {
     name: String,
-    status: String
+    status: String,
   }
   constructor(private fb: FormBuilder,
     private requesterService: RequesterService,

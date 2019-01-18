@@ -9,6 +9,7 @@ const studentProfile = require('../models/studentProfile.js');
 const Accounts = require('../models/account.js')
 const grantedStudents = require('../models/grantedStudents.js');
 const permission = require('../models/permission.js');
+const SSLC = require('../models/sslc.js')
 const Certificates = require('../models/certificates.js')
 // const PUC = require('../models/puc.js')
 // const DEGREE = require('../models/degree.js')
@@ -179,9 +180,6 @@ router.post('/set', verifyToken, (req, res) => {
     })
 })
 
-<<<<<<< HEAD
-router.post('/sslc', (req, res) => {
-=======
 router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
@@ -213,7 +211,6 @@ router.post('/puc', (req, res) => {
 })
 
 router.post('/degree', (req, res) => {
->>>>>>> a44bdbf19f295e1cdf65d6809071f15f263ff2e2
     let userData = req.body;
     console.log(userData);
     let degree = new DEGREE(userData)
@@ -386,8 +383,9 @@ router.post('/checkaccess', verifyToken, (req, res) => {
     })
 })
 
-router.get('/grantedlist', (req, res) => {
-    permission.find({}, (error, user) => {
+router.post('/grantedlist', (req, res) => {
+   let query = req.body;
+    permission.find(query, (error, user) => {
         if (error) {
             console.log(error)
         } else {
@@ -424,8 +422,7 @@ router.post('/certificate', verifyToken, (req, res) => {
             if (reg_user.Roles == "student") {
                 permission.findOne({ studentID: reg_user._id }, (error, User) => {
                     if (User) {
-<<<<<<< HEAD
-                        SSLC.findOne({ studentid: User.studentID }, (error, sslc) => {
+                        Certificates.findOne({ studentid: User.studentID }, (error, sslc) => {
                             if (sslc) {
                                 console.log(sslc);
                                 res.json({ certificate: sslc })
@@ -433,10 +430,6 @@ router.post('/certificate', verifyToken, (req, res) => {
                                 res.json({ status: "noEntry Found" })
                             }
                             
-=======
-                        SSLC.findOne({ studentid: reg_user._id }, (error, User) => {
-                            res.json({ certificate: User })
->>>>>>> a44bdbf19f295e1cdf65d6809071f15f263ff2e2
                         })
                     } else {
                         res.json({ status: "request", user: reg_user })
