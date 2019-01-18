@@ -9,9 +9,9 @@ const studentProfile = require('../models/studentProfile.js');
 const Accounts = require('../models/account.js')
 const grantedStudents = require('../models/grantedStudents.js');
 const permission = require('../models/permission.js');
-const SSLC = require('../models/sslc.js')
-const PUC = require('../models/puc.js')
-const DEGREE = require('../models/degree.js')
+const Certificates = require('../models/certificates.js')
+// const PUC = require('../models/puc.js')
+// const DEGREE = require('../models/degree.js')
 
 const Web3 = require('web3')
 
@@ -179,12 +179,12 @@ router.post('/set', verifyToken, (req, res) => {
     })
 })
 
-router.post('/sslc', (req, res) => {
+router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
-    let sslc = new SSLC(userData)
-    console.log(sslc);
-    sslc.save((err, user) => {
+    let certificates = new Certificates(userData)
+    console.log(certificates);
+    certificates.save((err, user) => {
         if (err) {
             res.send("not saved")
         } else {

@@ -45,7 +45,7 @@ export class PucComponent implements OnInit {
 
   submit() {
     console.log("student id",this.puc.value.studentid);
-     this.service.add1(this.puc.value).subscribe((res)=>{
+     this.service.add(this.puc.value).subscribe((res)=>{
        console.log(res);
      })
   }

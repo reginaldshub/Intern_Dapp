@@ -7,6 +7,8 @@ const userSchema = new Schema({
     ecategory : {type:String},
     Startyear : {type:String},
     Endyear   : {type:String},
+    Groupname : {type:String},
+    Branchname: {type:String},
     addsubjects:[{
         subjectname:{type:String},
         subjectmarks:{type:String}
@@ -14,4 +16,4 @@ const userSchema = new Schema({
     
 })
 
-module.exports = mongoose.model('sslc', userSchema, 'sslcs')
+module.exports = mongoose.model('certificate', userSchema, 'certificates')
