@@ -32,7 +32,9 @@ export class SearchComponent implements OnInit {
   searchString = {
     name: String,
     status: String,
+    id: String
   }
+  sessionValue: any;
   constructor(private fb: FormBuilder,
     private requesterService: RequesterService,
     private _interactionservice: InteractionService) { }
@@ -46,6 +48,8 @@ export class SearchComponent implements OnInit {
   displayedColumns: string[] = ['name', 'status'];
 
   search() {
+    this.sessionValue = sessionStorage.getItem('_id');
+    this.searchString.id = this.sessionValue;
     this.searchString.name = this.searchForm.value.search;
     this.requesterService.checkAccess(this.searchString).subscribe((res: any) => {
       let array = [];

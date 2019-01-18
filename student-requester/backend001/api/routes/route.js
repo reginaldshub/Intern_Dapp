@@ -366,7 +366,7 @@ router.post('/checkaccess', verifyToken, (req, res) => {
         }
         else if (reg_user) {
             if (reg_user.Roles == "student") {
-                permission.findOne({ studentID: reg_user._id }, (error, User) => {
+                permission.findOne({ studentID: reg_user._id, requesterID:searchData.id }, (error, User) => {
                     if (User) {
                         res.json({ status: User.Status, name: searchData.name, user: User })
                     } else {
