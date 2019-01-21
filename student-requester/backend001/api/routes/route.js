@@ -366,7 +366,7 @@ router.post('/checkaccess', verifyToken, (req, res) => {
         }
         else if (reg_user) {
             if (reg_user.Roles == "student") {
-                permission.findOne({ studentID: reg_user._id, requesterID:searchData.id }, (error, User) => {
+                permission.findOne({ studentID: reg_user._id, requesterID: searchData.id }, (error, User) => {
                     if (User) {
                         res.json({ status: User.Status, name: searchData.name, user: User })
                     } else {
@@ -384,13 +384,31 @@ router.post('/checkaccess', verifyToken, (req, res) => {
 })
 
 router.post('/grantedlist', (req, res) => {
-   let query = req.body;
-    permission.find(query, (error, user) => {
+    let query = req.body;
+    permission.find(query, async (error, user) => {
         if (error) {
             console.log(error)
         } else {
-            console.log(user);
-            res.status(200).json({ students: user })
+
+            if (req.body.requesterID == undefined) {
+                var name_array = [];
+                for (var i = 0; i < user.length; i++) {
+                    Register.findOne({ _id: user[i].requesterID }, (error, reg_user) => {
+                        if (error) {
+                            console.log(error)
+                        } else {
+                          name_array.push(reg_user.name);
+                        }
+                    })
+                }
+                
+                setTimeout(() => {
+                    console.log(name_array)
+             res.status(200).json({ students: user, name: name_array })
+                }, 2000)
+            } else {
+                res.status(200).json({ students: user})
+            }
         }
     })
 })
@@ -426,10 +444,10 @@ router.post('/certificate', verifyToken, (req, res) => {
                             if (sslc) {
                                 console.log(sslc);
                                 res.json({ certificate: sslc })
-                            }else{
+                            } else {
                                 res.json({ status: "noEntry Found" })
                             }
-                            
+
                         })
                     } else {
                         res.json({ status: "request", user: reg_user })
