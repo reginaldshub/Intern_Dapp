@@ -19,4 +19,9 @@ export class StudentService {
     console.log(degree);
     return this.http.post("http://localhost:3000/products/degree", degree);
   }
+  grantc(data){
+    console.log(data)
+    debugger;
+    return this.http.put('http://localhost:3000/products/grant',data);
+  }
 }

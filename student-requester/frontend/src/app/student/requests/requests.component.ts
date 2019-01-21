@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RequesterService } from 'src/app/requester/service/service.service';
+import { StudentService } from '../student.service';
 
 @Component({
   selector: 'app-requests',
@@ -12,7 +13,7 @@ export class RequestsComponent implements OnInit {
   permissionReq = {
     studentID: String,
   }
-  constructor(private requesterService: RequesterService) { }
+  constructor(private requesterService: RequesterService,private service: StudentService) { }
 
   ngOnInit() {
     this.search();
@@ -29,6 +30,12 @@ export class RequestsComponent implements OnInit {
     })
   }
   grant(data){
+    console.log(data);
+    this.service.grantc(data).subscribe((res)=>{
+      console.log(res);
+    })
+  }
+  deny(data){
     console.log(data);
   }
 

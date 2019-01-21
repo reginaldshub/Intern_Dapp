@@ -183,16 +183,16 @@ router.post('/set', verifyToken, (req, res) => {
 router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
-    let certificates = new Certificates(userData)
-    console.log(certificates);
-    certificates.save((err, user) => {
-        if (err) {
-            res.send("not saved")
-        } else {
-            console.log(user);
+    // let certificates = new Certificates(userData)
+    // console.log(certificates);
+    // certificates.save((err, user) => {
+    //     if (err) {
+    //         res.send("not saved")
+    //     } else {
+    //         console.log(user);
 
-        }
-    })
+    //     }
+    // })
 })
 
 router.post('/puc', (req, res) => {
@@ -291,8 +291,8 @@ router.put('/requester/:id', verifyToken, (req, res) => {
             else { console.log('error' + JSON.stringify(err, undefined, 2)); }
         });
 });
-// Student Part
 
+// Student Part
 
 router.post('/getstudentprofile', verifyToken, (req, res) => {
     let userData = req.body;
@@ -385,6 +385,7 @@ router.post('/checkaccess', verifyToken, (req, res) => {
 
 router.post('/grantedlist', (req, res) => {
    let query = req.body;
+   con
     permission.find(query, (error, user) => {
         if (error) {
             console.log(error)
