@@ -13,23 +13,36 @@ export class RequestsComponent implements OnInit {
   permissionReq = {
     studentID: String,
   }
-  constructor(private requesterService: RequesterService,private service: StudentService) { }
+
+  data_array = [{
+    name: String,
+    created_Time: Date,
+    status: String
+  }]
+
+  constructor(private requesterService: RequesterService,private service :StudentService) { }
 
   ngOnInit() {
     this.search();
   }
 
-  displayedColumns: string[] = [ 'name','Created_time','status','accept','reject'];
+  displayedColumns: string[] = ['name', 'Created_time', 'status', 'accept', 'reject'];
   search() {
 
     this.sessionValue = sessionStorage.getItem('_id');
     this.permissionReq.studentID = this.sessionValue;
 
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res: any) => {
-      this.dataSource = res.students;
+console.log(res);
+      for (var i = 0; i < res.students.length; i++) {
+        this.data_array[i].name = res.name[i];
+        this.data_array[i].status = res.students[i].Status;
+        this.data_array[i].created_Time = res.students[i].Created_time;
+      }
+      this.dataSource = this.data_array;
     })
   }
-  grant(data){
+  grant(data) {
     console.log(data);
     this.service.grantc(data).subscribe((res)=>{
       console.log(res);
