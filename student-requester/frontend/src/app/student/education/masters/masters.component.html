@@ -7,8 +7,8 @@
   </div>
 <div class="container">
   <mat-card>
-    <form [formGroup]="degree">
-      <h2>Fill DEGREE Details:</h2>
+    <form [formGroup]="masters">
+      <h2>Fill Master's Details:</h2>
       <mat-form-field>
         <input matInput placeholder="Student Id" formControlName="studentid">
         <mat-error>Enter name</mat-error>
@@ -43,7 +43,7 @@
           </div>
         </div>
       </div>
-      <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="degree.invalid" color="primary">Save</button>
+      <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="masters.invalid" color="primary">Save</button>
     </form>
   </mat-card>
 </div>
