@@ -14,6 +14,7 @@ export class EdudetailsComponent implements OnInit {
   public dataSource: any = null;
   public pucdataSource: any = null;
   public degreedataSource: any = null;
+  response;
   Name = {
     name: String,
     Endyear: Number,
@@ -44,7 +45,8 @@ export class EdudetailsComponent implements OnInit {
   getCertificate() {
     this.service.getCertificate(this.Name).subscribe((res: any) => {
       console.log(res.certificate);
-      console.log(res.status);
+      this.response = res.certificate;
+      // console.log(res.status);
     //   if(res.certificate){
     //   this.Name.Startyear = res.certificate.Startyear;
     //   this.Name.Endyear = res.certificate.Endyear;

@@ -1,3 +1,11 @@
 button {
     font-size:23px;
 }
+table{
+    width: 50%;
+}
+.granted-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

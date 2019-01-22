@@ -538,9 +538,9 @@ router.post('/certificate', verifyToken, (req, res) => {
             if (reg_user.Roles == "student") {
                 permission.findOne({ studentID: reg_user._id }, (error, User) => {
                     if (User) {
-                        Certificates.findOne({ studentid: User.studentID }, (error, sslc) => {
+                        Certificates.find({ studentid: User.studentID }, (error, sslc) => {
                             if (sslc) {
-                                console.log(sslc);
+                                // console.log(sslc);
                                 res.json({ certificate: sslc })
                             } else {
                                 res.json({ status: "noEntry Found" })
