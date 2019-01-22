@@ -293,6 +293,38 @@ router.put('/requester/:id', verifyToken, (req, res) => {
             else { console.log('error' + JSON.stringify(err, undefined, 2)); }
         });
 });
+
+
+router.post('/reqpermit', (req, res) => {
+    let requesterID = req.body.requesterID;
+    let studentID = req.body.studentID;
+    let status = req.body.Status;
+
+    var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
+    var newvalues = { $set: {Status: status } };
+    permission.updateOne(myquery, newvalues, function(err, res) {
+      if (err) {
+      throw err;
+    }else{
+      console.log("1 document updated");
+    }
+    });
+
+    // permission.findOne({ $and: [{ requesterID: requesterID }, { studentID: studentID }] }, (error, user) => {
+    //     if (error) {
+    //         console.log(error)
+    //     }
+    //     else {
+    //         console.log(user);
+    //         permission.findOneAndUpdate(user._id, { $set: status }, { new: true },
+    //             (err, doc) => {
+    //                 if (!err) { res.send({ message: "updated success", doc: doc }) }
+    //                 else { console.log('error' + JSON.stringify(err, undefined, 2)); }
+    //             });
+    //     }
+
+    // })
+})
 // Student Part
 
 
@@ -436,7 +468,7 @@ router.post('/grantedlist', (req, res) => {
                 }
 
                 setTimeout(() => {
-                    console.log(name_array)
+                    // console.log(name_array)
                     res.status(200).json({ students: user, name: name_array })
                 }, 1000)
             }
@@ -461,7 +493,7 @@ router.post('/grantedlist', (req, res) => {
                 }
 
                 setTimeout(() => {
-                    console.log(name_array)
+                    // console.log(name_array)
                     res.status(200).json({ students: user, name: name_array })
                 }, 2000)
             }
