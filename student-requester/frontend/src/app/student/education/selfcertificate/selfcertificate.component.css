@@ -1,0 +1,8 @@
+table{
+    width: 50%;
+}
+.granted-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

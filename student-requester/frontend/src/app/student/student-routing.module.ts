@@ -10,6 +10,7 @@ import { AccountComponent } from '../common/account/account.component';
 import { PucComponent } from './education/puc/puc.component';
 import { DegreeComponent } from './education/degree/degree.component';
 import { MastersComponent } from './education/masters/masters.component';
+import { SelfcertificateComponent } from './education/selfcertificate/selfcertificate.component';
 
 const routes: Routes = [
   // { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
@@ -26,7 +27,8 @@ const routes: Routes = [
      { path: 'add10th', component: Add10thComponent},
      { path: 'puc', component: PucComponent},
      { path: 'degree', component:DegreeComponent},
-     { path: 'masters', component:MastersComponent}
+     { path: 'masters', component:MastersComponent},
+     { path: 'certificates', component:SelfcertificateComponent}
    ]
 }
 ];
