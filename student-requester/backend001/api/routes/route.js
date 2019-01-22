@@ -11,6 +11,7 @@ const grantedStudents = require('../models/grantedStudents.js');
 const permission = require('../models/permission.js');
 const SSLC = require('../models/sslc.js')
 const Certificates = require('../models/certificates.js')
+const perm_register_join = require('../models/permregJoin.js')
 // const PUC = require('../models/puc.js')
 // const DEGREE = require('../models/degree.js')
 
@@ -82,6 +83,7 @@ router.post('/login', (req, res) => {
                     token: token,
                     role: user.Roles,
                     _id: user._id,
+                    name: user.name,
                     message: 'logged in sucessfully'
                 })
             }
@@ -359,8 +361,7 @@ router.put('/student/:id', verifyToken, (req, res) => {
 
 router.post('/checkaccess', verifyToken, (req, res) => {
     let searchData = req.body;
-
-    Register.findOne({ name: searchData.name }, (error, reg_user) => {
+    Register.findOne({ name: searchData.studentName }, (error, reg_user) => {
         if (error) {
             console.log(error)
         }
@@ -368,7 +369,7 @@ router.post('/checkaccess', verifyToken, (req, res) => {
             if (reg_user.Roles == "student") {
                 permission.findOne({ studentID: reg_user._id, requesterID: searchData.id }, (error, User) => {
                     if (User) {
-                        res.json({ status: User.Status, name: searchData.name, user: User })
+                        res.json({ status: User.Status, name: searchData.studentName, user: User })
                     } else {
                         res.json({ status: "request", user: reg_user })
                     }
@@ -383,37 +384,102 @@ router.post('/checkaccess', verifyToken, (req, res) => {
     })
 })
 
-router.post('/grantedlist', (req, res) => {
-    let query = req.body;
-    permission.find(query, async (error, user) => {
-        if (error) {
-            console.log(error)
-        } else {
 
-            if (req.body.requesterID == undefined) {
+
+
+router.post('/grantedlist', (req, res) => {
+    var requesterID = req.body.requesterID;
+    var studentID = req.body.studentID;
+    var status = req.body.status;
+    if (requesterID != null) {
+
+        // const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
+        // mongoose.connect(db, { useNewUrlParser: true }, err => {
+        //     if (err) {
+        //         console.log("the error" + err)
+        //     } else {
+        //         permission.aggregate([
+        //             {
+        //                 $lookup:
+        //                 {
+        //                     from: 'Register',
+        //                     localField: 'requesterID',
+        //                     foreignField: '_id',
+        //                     as: 'requesterName'
+        //                 }
+        //             }
+        //         ]).then((res, err) => {
+        //             if (err) {
+        //                 console.log(err);
+        //             }
+        //             else {
+        //                 console.log(res)
+        //                 res.status(200).json({ res: res })
+        //             }
+        //         });
+        //     }
+
+        // })
+        permission.find({ requesterID: requesterID }, async (error, user) => {
+            if (error) {
+                console.log(error)
+            } else {
                 var name_array = [];
                 for (var i = 0; i < user.length; i++) {
                     Register.findOne({ _id: user[i].requesterID }, (error, reg_user) => {
                         if (error) {
                             console.log(error)
                         } else {
-                          name_array.push(reg_user.name);
+                            name_array.push(reg_user.name);
                         }
                     })
                 }
-                
+
                 setTimeout(() => {
                     console.log(name_array)
-             res.status(200).json({ students: user, name: name_array })
-                }, 2000)
-            } else {
-                res.status(200).json({ students: user})
+                    res.status(200).json({ students: user, name: name_array })
+                }, 1000)
             }
-        }
-    })
+        })
+
+    }
+    if (studentID != null) {
+        console.log(studentID);
+        permission.find({ studentID: studentID }, (error, user) => {
+            if (error) {
+                console.log(error)
+            } else {
+                var name_array = [];
+                for (var i = 0; i < user.length; i++) {
+                    Register.findOne({ _id: user[i].requesterID }, (error, reg_user) => {
+                        if (error) {
+                            console.log(error)
+                        } else {
+                            name_array.push(reg_user.name);
+                        }
+                    })
+                }
+
+                setTimeout(() => {
+                    console.log(name_array)
+                    res.status(200).json({ students: user, name: name_array })
+                }, 2000)
+            }
+        })
+    }
+    if (status != null) {
+        permission.find({ Status: status }, async (error, user) => {
+            if (error) {
+                console.log(error)
+            } else {
+                res.status(200).json({ students: user })
+            }
+        })
+    }
 })
 
 router.post('/request', verifyToken, (req, res) => {
+    console.log(JSON.stringify(res.body))
     let permissionData = req.body;
     let permissionObject = new permission(permissionData)
     // console.log(profile);

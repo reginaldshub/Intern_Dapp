@@ -47,6 +47,7 @@ export class RequesterService {
     return this.http.post("http://localhost:3000/products/grantedlist", data);
   }
   request(data){
+    console.log(data);
     return this.http.post("http://localhost:3000/products/request", data);
   }
   getCertificate(name){

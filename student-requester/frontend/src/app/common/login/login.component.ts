@@ -26,11 +26,13 @@ export class LoginComponent implements OnInit {
       if (res['role'] == "student") {
         swal("", "" + res['message'], "success");
         sessionStorage.setItem('_id', res['_id']);
+        sessionStorage.setItem('name', res['name']);
         localStorage.setItem('token', res['token']);
         this.router.navigate(['/student'])
       } else if (res['role'] == "requester") {
         swal("", "" + res['message'], "success");
         sessionStorage.setItem('_id', res['_id']);
+        sessionStorage.setItem('name', res['name']);
         localStorage.setItem('token', res['token']);
         this.router.navigate(['/requester'])
       } else {

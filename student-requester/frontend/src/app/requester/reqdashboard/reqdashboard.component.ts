@@ -51,6 +51,7 @@ export class ReqdashboardComponent implements OnInit {
 
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
     { 
+      console.log(res);
       let temp = res.students;
       let array = [];
       for( var i = 0; i < temp.length; i++){

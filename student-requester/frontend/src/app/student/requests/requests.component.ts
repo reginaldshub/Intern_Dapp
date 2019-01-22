@@ -32,15 +32,10 @@ export class RequestsComponent implements OnInit {
     this.permissionReq.studentID = this.sessionValue;
 
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res: any) => {
-console.log(res);
-      for (var i = 0; i < res.students.length; i++) {
-        this.data_array[i].name = res.name[i];
-        this.data_array[i].status = res.students[i].Status;
-        this.data_array[i].created_Time = res.students[i].Created_time;
-      }
-      this.dataSource = this.data_array;
+      this.dataSource = res.students;
     })
   }
+
   grant(data) {
     console.log(data);
   }

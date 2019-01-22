@@ -18,11 +18,15 @@ import { RequesterService } from '../service/service.service';
 export class SearchComponent implements OnInit {
   searchForm: FormGroup;
   status;
-  searchResponse;
+  searchResponse= {
+    id: String,
+    studentName: String
+  };
   public dataSource: any = null;
 
   requestdata = {
-    name: String,
+    requesterName: String,
+    studentName: String,
     requesterID: String,
     studentID: String,
     Created_time: Date,
@@ -30,7 +34,8 @@ export class SearchComponent implements OnInit {
   }
 
   searchString = {
-    name: String,
+    requesterName: String,
+    studentName: String,
     status: String,
     id: String
   }
@@ -50,22 +55,32 @@ export class SearchComponent implements OnInit {
   search() {
     this.sessionValue = sessionStorage.getItem('_id');
     this.searchString.id = this.sessionValue;
-    this.searchString.name = this.searchForm.value.search;
+    this.sessionValue = sessionStorage.getItem('name');
+    this.searchString.requesterName = this.sessionValue;
+    this.searchString.studentName = this.searchForm.value.search;
     this.requesterService.checkAccess(this.searchString).subscribe((res: any) => {
       let array = [];
       this.status = res.status;
       if (res.status == "request") {
-        this.searchResponse = res.user;
-        array.push(res.user);
+        console.log(res);
+        this.searchResponse.id = res.user._id;
+        this.searchResponse.studentName = res.user.name;
+        array.push(this.searchResponse);
         this.dataSource = array;
       } else if (res.status === "student not registered") {
-        array = [{ "name": this.searchForm.value.search }];
+        array = [{ "studentName": this.searchForm.value.search }];
         this.dataSource = array;
       } else if (res.status == "not student") {
-        array = [{ "name": this.searchForm.value.search }];
+        array = [{ "studentName": this.searchForm.value.search }];
         this.dataSource = array;
       } else {
-        this.requestdata.name = res.name;
+        console.log(res)
+        this.requestdata.studentName = res.user.studentName;
+        this.requestdata.requesterName = res.user.requesterName;
+        this.requestdata.requesterID = res.user.requesterID;
+        this.requestdata.studentID = res.user.studentID;
+        this.requestdata.Created_time = res.user.Created_time;
+        this.requestdata.Status = res.user.Status;
         array.push(this.requestdata);
         this.dataSource = array;
       }
@@ -75,11 +90,13 @@ export class SearchComponent implements OnInit {
   sendData(name) {
     // this._interactionservice.sendMessage(name);
     let sessionValue: any = sessionStorage.getItem('_id');
+    let sessionNameValue: any = sessionStorage.getItem('name');
     let date: any = new Date();
     let temp: any = "pending";
-    this.requestdata.name = name;
+    this.requestdata.studentName = name;
+    this.requestdata.requesterName = sessionNameValue
     this.requestdata.requesterID = sessionValue;
-    this.requestdata.studentID = this.searchResponse._id;
+    this.requestdata.studentID = this.searchResponse.id;
     this.requestdata.Created_time = date;
     this.requestdata.Status = temp;
 
