@@ -7,7 +7,11 @@ const permissionSchema = new Schema({
         type: String,
         required: true
     },
-    name: {
+    requesterName: {
+        type: String,
+        required: true
+    },
+    studentName: {
         type: String,
         required: true
     },

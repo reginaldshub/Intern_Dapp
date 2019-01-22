@@ -35,12 +35,19 @@ export class RequestsComponent implements OnInit {
   displayedColumns: string[] = [ 'name','status'];
 
   search(){
+ 
     this.sessionValue = sessionStorage.getItem('_id');
     this.permissionReq.requesterID = this.sessionValue;
+
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
     { 
-      PermissionData = res.students;
-      this.dataSource = PermissionData;
+      console.log(res);
+      let temp = res.students;
+      let array = [];
+      for( var i = 0; i < temp.length; i++){
+         array.push(temp[i]);
+      }
+      this.dataSource = array;
     })
   }
 }
