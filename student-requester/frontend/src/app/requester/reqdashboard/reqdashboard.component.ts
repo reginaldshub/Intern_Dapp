@@ -63,6 +63,7 @@ export class ReqdashboardComponent implements OnInit {
     })
   }
   sendData(name){
+    // this.router.navigate(['/requester/edudetails']);
     this._interactionSerice.sendMessage(name);
   }
 

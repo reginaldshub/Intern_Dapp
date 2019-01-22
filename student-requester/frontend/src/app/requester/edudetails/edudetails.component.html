@@ -1,12 +1,17 @@
+<h1 *ngIf = "response != null">Certificates</h1>
+<hr />
+<div *ngFor = "let data of response">
 
-<h1 *ngIf = "Name.name != null">{{Name.name}}</h1>
+<!-- <h1 *ngIf = "data.name != null">{{data.name}}</h1> -->
 
+<h3 *ngIf = "data.ecategory != null"><strong>Course:</strong> {{data.ecategory}}</h3>
+<!-- <h3 *ngIf = "data.Groupname != null"><strong>Groupname:</strong> {{data.Groupname}}</h3>
+<h3 *ngIf = "data.Branchname != null"><strong>Branchname:</strong> {{data.Branchname}}</h3> -->
+<h3 *ngIf = "data.Startyear != null"><strong>Start Year:</strong> {{data.Startyear}}</h3>
+<h3 *ngIf = "data.Endyear != null"><strong>End Year:</strong> {{data.Endyear}}</h3>
 
-<h3 *ngIf = "Name.Startyear != null"><strong>Start Year:</strong> {{Name.Startyear}}</h3><br/>
-<h3 *ngIf = "Name.Endyear != null"><strong>End Year:</strong> {{Name.Endyear}}</h3>
-
-<div *ngIf = "Name.Startyear != null" class="granted-list">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<div *ngIf = "data.Startyear != null" class="granted-list">
+    <table mat-table [dataSource]="data.addsubjects" class="mat-elevation-z8">
   
   
         <ng-container matColumnDef="Subject_name">
@@ -28,7 +33,9 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
+  <br/><hr /><br/>
 
+</div>
   <!-- puc -->
 
 <!-- <h3 *ngIf = "Name.Startyear != null"><strong>Start Year:</strong> {{Name.Startyear}}</h3><br/>

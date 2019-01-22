@@ -52,7 +52,7 @@ requester_status = {
   }
 
   grant(req, stu) {    
-    let status: any = "grant";
+    let status: any = "granted";
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
     this.requester_status.Status = status;
@@ -63,7 +63,7 @@ requester_status = {
   }
 
   deny(req, stu) {
-    let status: any = "deny";
+    let status: any = "denied";
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
     this.requester_status.Status = status;
