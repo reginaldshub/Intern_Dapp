@@ -2,6 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { RequesterService } from 'src/app/requester/service/service.service';
 import { StudentService } from '../student.service';
 
+interface type{
+  name: String,
+  created_Time: Date,
+  status: String
+}
+
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.component.html',
@@ -13,12 +19,10 @@ export class RequestsComponent implements OnInit {
   permissionReq = {
     studentID: String,
   }
+s
+  public data_array:type[]=[];
+  
 
-  data_array = [{
-    name: String,
-    created_Time: Date,
-    status: String
-  }]
 
   constructor(private requesterService: RequesterService,private service :StudentService) { }
 

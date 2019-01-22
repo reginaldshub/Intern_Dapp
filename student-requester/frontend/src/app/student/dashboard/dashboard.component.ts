@@ -10,9 +10,12 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
 
   constructor(private authservice: ServiceService, private router: Router) { }
+   name = sessionStorage.getItem('name');
 
   ngOnInit() {
+    
   }
+
   navigate() {
     this.router.navigate(['/account'])
   }

@@ -25,6 +25,7 @@ export class ServiceService {
     localStorage.removeItem('email');
     localStorage.removeItem('token');
     sessionStorage.removeItem('_id');
+    sessionStorage.removeItem('name');
   }
 
   attach(user) {

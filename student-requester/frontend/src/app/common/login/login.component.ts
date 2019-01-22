@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     localStorage.setItem('email', this.proliform.value.email);
     this.service.login(this.proliform.value).subscribe((res) => {
+    sessionStorage.setItem('name',res['name']);
       if (res['role'] == "student") {
         swal("", "" + res['message'], "success");
         sessionStorage.setItem('_id', res['_id']);
