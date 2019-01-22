@@ -305,13 +305,13 @@ router.post('/reqpermit', (req, res) => {
     let status = req.body.Status;
 
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
-    var newvalues = { $set: {Status: status } };
-    permission.updateOne(myquery, newvalues, function(err, res) {
-      if (err) {
-      throw err;
-    }else{
-      console.log("1 document updated");
-    }
+    var newvalues = { $set: { Status: status } };
+    permission.updateOne(myquery, newvalues, function (err, res) {
+        if (err) {
+            throw err;
+        } else {
+            console.log("1 document updated");
+        }
     });
 
     // permission.findOne({ $and: [{ requesterID: requesterID }, { studentID: studentID }] }, (error, user) => {
@@ -425,94 +425,126 @@ router.post('/checkaccess', verifyToken, (req, res) => {
 
 
 router.post('/grantedlist', (req, res) => {
-    var requesterID = req.body.requesterID;
-    var studentID = req.body.studentID;
-    var status = req.body.status;
-    if (requesterID != null) {
-
-        // const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
-        // mongoose.connect(db, { useNewUrlParser: true }, err => {
-        //     if (err) {
-        //         console.log("the error" + err)
-        //     } else {
-        //         permission.aggregate([
-        //             {
-        //                 $lookup:
-        //                 {
-        //                     from: 'Register',
-        //                     localField: 'requesterID',
-        //                     foreignField: '_id',
-        //                     as: 'requesterName'
-        //                 }
-        //             }
-        //         ]).then((res, err) => {
-        //             if (err) {
-        //                 console.log(err);
-        //             }
-        //             else {
-        //                 console.log(res)
-        //                 res.status(200).json({ res: res })
-        //             }
-        //         });
-        //     }
-
-        // })
-        permission.find({ requesterID: requesterID }, async (error, user) => {
-            if (error) {
-                console.log(error)
-            } else {
-                var name_array = [];
-                for (var i = 0; i < user.length; i++) {
-                    Register.findOne({ _id: user[i].requesterID }, (error, reg_user) => {
-                        if (error) {
-                            console.log(error)
-                        } else {
-                            name_array.push(reg_user.name);
-                        }
-                    })
-                }
-
-                setTimeout(() => {
-                    // console.log(name_array)
-                    res.status(200).json({ students: user, name: name_array })
-                }, 1000)
-            }
-        })
-
+    var requesterID = { requesterID: req.body.requesterID };
+    var studentID = { studentID: req.body.studentID };
+    var status = { status: req.body.status };
+    var query;
+    if(requesterID.requesterID != undefined && studentID.studentID != undefined && status.status != undefined){
+        query = { $and: [requesterID, studentID, status] };
+    }else{
+    if (requesterID.requesterID != undefined) {
+        if (status.status != null) {
+            console.log("both requester and student");
+            query = { $and: [requesterID, status] };
+        } else {
+            console.log('only requester');
+            query = requesterID;
+        }
     }
-    if (studentID != null) {
-        console.log(studentID);
-        permission.find({ studentID: studentID }, (error, user) => {
-            if (error) {
-                console.log(error)
-            } else {
-                var name_array = [];
-                for (var i = 0; i < user.length; i++) {
-                    Register.findOne({ _id: user[i].requesterID }, (error, reg_user) => {
-                        if (error) {
-                            console.log(error)
-                        } else {
-                            name_array.push(reg_user.name);
-                        }
-                    })
-                }
+    if (studentID.studentID != undefined) {
+        if (status.status != null) {
+            console.log("both student and student");
+            query = { $and: [studentID, status] };
+        } else {
+            console.log('only student');
+            query = studentID;
+        }
+    }
+    if (status.status != null) {
+        console.log("only status");
+        query = status;
+    }
+    }
 
-                setTimeout(() => {
-                    // console.log(name_array)
-                    res.status(200).json({ students: user, name: name_array })
-                }, 2000)
+    permission.find(query, async (error, user) => {
+        console.log(query);
+        if (error) {
+            console.log(error)
+        } else {
+            var name_array = [];
+            for (var i = 0; i < user.length; i++) {
+                Register.findOne({ _id: user[i].studentID }, (error, reg_user) => {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        name_array.push(reg_user.name);
+                    }
+                })
             }
-        })
-    }
-    if (status != null) {
-        permission.find({ Status: status }, async (error, user) => {
-            if (error) {
-                console.log(error)
-            } else {
-                res.status(200).json({ students: user })
-            }
-        })
-    }
+
+            setTimeout(() => {
+                // console.log(name_array)
+                res.status(200).json({ students: user, name: name_array })
+            }, 1000)
+        }
+    })
+
+    // if (requesterID != null) {
+    // mongo db tried aggregation
+    // const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
+    // mongoose.connect(db, { useNewUrlParser: true }, err => {
+    //     if (err) {
+    //         console.log("the error" + err)
+    //     } else {
+    //         permission.aggregate([
+    //             {
+    //                 $lookup:
+    //                 {
+    //                     from: 'Register',
+    //                     localField: 'requesterID',
+    //                     foreignField: '_id',
+    //                     as: 'requesterName'
+    //                 }
+    //             }
+    //         ]).then((res, err) => {
+    //             if (err) {
+    //                 console.log(err);
+    //             }
+    //             else {
+    //                 console.log(res)
+    //                 res.status(200).json({ res: res })
+    //             }
+    //         });
+    //     }
+
+    // })
+    // end of aggregation
+
+
+    // }
+    // if (studentID != null) {
+    //     console.log(studentID);
+    //     permission.find({ studentID: studentID }, (error, user) => {
+    //         if (error) {
+    //             console.log(error)
+    //         } else {
+    //             var name_array = [];
+    //             for (var i = 0; i < user.length; i++) {
+    //                 Register.findOne({ _id: user[i].requesterID }, (error, reg_user) => {
+    //                     if (error) {
+    //                         console.log(error)
+    //                     } else {
+    //                         name_array.push(reg_user.name);
+    //                     }
+    //                 })
+    //             }
+
+    //             setTimeout(() => {
+    //                 // console.log(name_array)
+    //                 res.status(200).json({ students: user, name: name_array })
+    //             }, 2000)
+    //         }
+    //     })
+    // }
+    // if (status != null) {
+    //     permission.find({ Status: status }, async (error, user) => {
+    //         if (error) {
+    //             console.log(error)
+    //         } else {
+    //             res.status(200).json({ students: user })
+    //         }
+    //     })
+    // }
 })
 
 router.post('/request', verifyToken, (req, res) => {

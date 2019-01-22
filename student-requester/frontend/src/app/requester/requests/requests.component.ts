@@ -24,12 +24,14 @@ export class RequestsComponent implements OnInit {
   permissionReq = {
     requesterID: String,
   }
+  username: string;
   constructor(
     private requesterService: RequesterService,
     private service: ServiceService
    ) { }
 
   ngOnInit() {
+    this.username = sessionStorage.getItem('name');
     this.search();
   }
   displayedColumns: string[] = [ 'name','status'];

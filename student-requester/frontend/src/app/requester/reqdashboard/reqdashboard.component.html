@@ -5,6 +5,8 @@
     <!-- <button mat-button class="profile" [routerLink]="['/requester/certificates']">Certificates</button> -->
     <button mat-button class="profile" [routerLink]="['/requester/profile']">Profile</button>
     <button class="logout" mat-button [routerLink]="['/login']" (click)="service.logoutUser()">Logout</button>
+    <mat-icon>person</mat-icon>
+    <p><strong>{{username}}</strong></p>
 </mat-toolbar>
 <br />
 

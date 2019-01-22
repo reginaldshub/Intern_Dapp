@@ -30,7 +30,9 @@ export class ReqdashboardComponent implements OnInit {
 
   permissionReq = {
     requesterID: String,
+    status: String
   }
+  username: string;
   
   constructor( private fb: FormBuilder,
     private requesterService: RequesterService,
@@ -40,6 +42,7 @@ export class ReqdashboardComponent implements OnInit {
    ) { }
 
   ngOnInit() {
+    this.username = sessionStorage.getItem('name');
     this.search();
   }
   displayedColumns: string[] = [ 'name','Created_time','status', 'view'];
@@ -48,6 +51,7 @@ export class ReqdashboardComponent implements OnInit {
  
     this.sessionValue = sessionStorage.getItem('_id');
     this.permissionReq.requesterID = this.sessionValue;
+    this.permissionReq.status = null;
 
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
     { 
