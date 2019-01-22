@@ -9,7 +9,7 @@ import { StudentService } from '../../student.service';
 })
 export class MastersComponent implements OnInit {
 
-  masters: FormGroup
+  masters: FormGroup;
   constructor(private fb: FormBuilder, private service: StudentService) {
     this.masters = this.fb.group({
       studentid: [],

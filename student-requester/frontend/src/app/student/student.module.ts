@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PucComponent } from './education/puc/puc.component';
 import { DegreeComponent } from './education/degree/degree.component';
 import { MastersComponent } from './education/masters/masters.component';
+import { SelfcertificateComponent } from './education/selfcertificate/selfcertificate.component';
 // import { CommonbothModule } from '../common/common.module';
 //  import { AccountComponent } from '../common/account/account.component';
 
@@ -26,6 +27,6 @@ import { MastersComponent } from './education/masters/masters.component';
   //  CommonbothModule
   ],
   declarations: [ 
-  Add10thComponent,EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, PucComponent, DegreeComponent, MastersComponent]
+  Add10thComponent,EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, PucComponent, DegreeComponent, MastersComponent, SelfcertificateComponent]
 })
 export class StudentModule { }
