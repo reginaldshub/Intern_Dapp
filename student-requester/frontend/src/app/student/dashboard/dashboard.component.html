@@ -4,6 +4,7 @@
   <button mat-button  [routerLink]="['/student/education']">Education</button>
   <button mat-button  [routerLink]="['/student/requests']">Requests</button>
   <button class="logout" mat-button [routerLink]="['/login']" (click)="authservice.logoutUser()">Logout</button> 
- <b>{{name}} </b>
+  <mat-icon>person_pin</mat-icon>
+ <p>{{name}} </p>
 </mat-toolbar>
 <router-outlet></router-outlet>

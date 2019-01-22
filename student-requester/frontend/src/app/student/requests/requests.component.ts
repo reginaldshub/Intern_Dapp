@@ -1,17 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { RequesterService } from 'src/app/requester/service/service.service';
-<<<<<<< HEAD
-import { StudentService } from '../student.service';
-
-interface type{
-  name: String,
-  created_Time: Date,
-  status: String
-}
-=======
 import { ServiceService } from '../service/service.service';
->>>>>>> 841e74d31354eb9481d0ce470382df30d1a27529
 
 @Component({
   selector: 'app-requests',
@@ -24,14 +14,6 @@ export class RequestsComponent implements OnInit {
   permissionReq = {
     studentID: String,
   }
-<<<<<<< HEAD
-s
-  public data_array:type[]=[];
-  
-
-
-  constructor(private requesterService: RequesterService,private service :StudentService) { }
-=======
 requester_status = {
   studentID: String,
   requesterID: String,
@@ -45,7 +27,6 @@ requester_status = {
 
   constructor(private requesterService: RequesterService,
     private service: ServiceService) { }
->>>>>>> 841e74d31354eb9481d0ce470382df30d1a27529
 
   ngOnInit() {
     this.search();
@@ -80,16 +61,6 @@ requester_status = {
     })
     
   }
-<<<<<<< HEAD
-  grant(data) {
-    console.log(data);
-    this.service.grantc(data).subscribe((res)=>{
-      console.log(res);
-    })
-  }
-  deny(data){
-    console.log(data);
-=======
 
   deny(req, stu) {
     let status: any = "deny";
@@ -99,7 +70,6 @@ requester_status = {
     this.service.requesterPermit(this.requester_status).subscribe((res:any)=>{ 
       console.log(res)
     })
->>>>>>> 841e74d31354eb9481d0ce470382df30d1a27529
   }
 
 }
