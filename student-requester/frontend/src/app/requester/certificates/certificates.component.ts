@@ -29,28 +29,28 @@ export class CertificatesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.search();
+    // this.search();
   }
   displayedColumns: string[] = [ 'name','Created_time','status', 'view'];
 
-  search(){
+  // search(){
    
-    this.sessionValue = sessionStorage.getItem('_id');
-    this.permissionReq.requesterID = this.sessionValue;
-    this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
-    { 
-      let temp = res.students;
-      let array = [];
-      for( var i = 0; i < temp.length; i++){
-        if(temp[i].Status == 'granted'){
-         array.push(temp[i]);
-        }
-      }
-      this.dataSource = array;
-    })
-  }
-  sendData(name){
-    this._interactionSerice.sendMessage(name);
-  }
+  //   this.sessionValue = sessionStorage.getItem('_id');
+  //   this.permissionReq.requesterID = this.sessionValue;
+  //   this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
+  //   { 
+  //     let temp = res.students;
+  //     let array = [];
+  //     for( var i = 0; i < temp.length; i++){
+  //       if(temp[i].Status == 'granted'){
+  //        array.push(temp[i]);
+  //       }
+  //     }
+  //     this.dataSource = array;
+  //   })
+  // }
+  // sendData(name){
+  //   this._interactionSerice.sendMessage(name);
+  // }
 
 }
