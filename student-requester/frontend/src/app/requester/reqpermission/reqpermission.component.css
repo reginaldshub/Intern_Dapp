@@ -1,0 +1,14 @@
+.profile{
+    flex:0  auto;
+    text-align: right;
+    width:auto;
+}
+
+table{
+    width: 50%;
+}
+.granted-list{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

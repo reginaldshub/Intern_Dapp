@@ -189,16 +189,16 @@ router.post('/set', verifyToken, (req, res) => {
 router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
-    // let certificates = new Certificates(userData)
-    // console.log(certificates);
-    // certificates.save((err, user) => {
-    //     if (err) {
-    //         res.send("not saved")
-    //     } else {
-    //         console.log(user);
+    let certificates = new Certificates(userData)
+    console.log(certificates);
+    certificates.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            console.log(user);
 
-    //     }
-    // })
+        }
+    })
 })
 
 router.post('/puc', (req, res) => {
@@ -429,35 +429,35 @@ router.post('/grantedlist', (req, res) => {
     var studentID = { studentID: req.body.studentID };
     var status = { status: req.body.status };
     var query;
-    if(requesterID.requesterID != undefined && studentID.studentID != undefined && status.status != undefined){
+    if (requesterID.requesterID != undefined && studentID.studentID != undefined && status.status != undefined) {
         query = { $and: [requesterID, studentID, status] };
-    }else{
-    if (requesterID.requesterID != undefined) {
-        if (status.status != null) {
-            console.log("both requester and student");
-            query = { $and: [requesterID, status] };
-        } else {
-            console.log('only requester');
-            query = requesterID;
+    } else {
+        if (requesterID.requesterID != undefined) {
+            if (status.status != null) {
+                console.log("both requester and student");
+                query = { $and: [requesterID, status] };
+            } else {
+                console.log('only requester');
+                query = requesterID;
+            }
         }
-    }
-    if (studentID.studentID != undefined) {
-        if (status.status != null) {
-            console.log("both student and student");
-            query = { $and: [studentID, status] };
-        } else {
-            console.log('only student');
-            query = studentID;
+        if (studentID.studentID != undefined) {
+            if (status.status != null) {
+                console.log("both student and student");
+                query = { $and: [studentID, status] };
+            } else {
+                console.log('only student');
+                query = studentID;
+            }
         }
-    }
-    if (status.status != null) {
-        console.log("only status");
-        query = status;
-    }
+        if (status.status != null) {
+            console.log("only status");
+            query = status;
+        }
     }
 
     permission.find(query, async (error, user) => {
-        console.log(query);
+        // console.log(query);
         if (error) {
             console.log(error)
         } else {
@@ -475,7 +475,7 @@ router.post('/grantedlist', (req, res) => {
             setTimeout(() => {
                 // console.log(name_array)
                 res.status(200).json({ students: user, name: name_array })
-            }, 1000)
+            }, 700)
         }
     })
 
@@ -566,7 +566,6 @@ router.post('/request', verifyToken, (req, res) => {
 
 router.post('/certificate', verifyToken, (req, res) => {
     let searchData = req.body;
-
     Register.findOne({ name: searchData.name }, (error, reg_user) => {
         if (error) {
             console.log(error)
@@ -577,7 +576,6 @@ router.post('/certificate', verifyToken, (req, res) => {
                     if (User) {
                         Certificates.find({ studentid: User.studentID }, (error, sslc) => {
                             if (sslc) {
-                                // console.log(sslc);
                                 res.json({ certificate: sslc })
                             } else {
                                 res.json({ status: "noEntry Found" })
