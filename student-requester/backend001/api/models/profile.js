@@ -41,6 +41,12 @@ const profileSchema = new Schema({
     phone: {
         type: Number,
         required: true
+    },
+    account_address:{
+        type:String
+    },
+    contract_address:{
+        type:String
     }
 
 }

@@ -14,6 +14,7 @@ import { PucComponent } from './education/puc/puc.component';
 import { DegreeComponent } from './education/degree/degree.component';
 import { MastersComponent } from './education/masters/masters.component';
 import { SelfcertificateComponent } from './education/selfcertificate/selfcertificate.component';
+import { CommitComponent } from './education/commit/commit.component';
 // import { CommonbothModule } from '../common/common.module';
 //  import { AccountComponent } from '../common/account/account.component';
 
@@ -27,6 +28,6 @@ import { SelfcertificateComponent } from './education/selfcertificate/selfcertif
   //  CommonbothModule
   ],
   declarations: [ 
-  Add10thComponent,EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, PucComponent, DegreeComponent, MastersComponent, SelfcertificateComponent]
+  Add10thComponent,EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, PucComponent, DegreeComponent, MastersComponent, SelfcertificateComponent, CommitComponent]
 })
 export class StudentModule { }

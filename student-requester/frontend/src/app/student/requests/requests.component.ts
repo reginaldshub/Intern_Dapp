@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RequesterService } from 'src/app/requester/service/service.service';
 import { ServiceService } from '../service/service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-requests',
@@ -26,7 +27,7 @@ requester_status = {
   }]
 
   constructor(private requesterService: RequesterService,
-    private service: ServiceService) { }
+    private service: ServiceService,private router:Router) { }
     public disable = [];
 
     
@@ -63,8 +64,9 @@ requester_status = {
     this.requester_status.requesterID = req;
     this.requester_status.Status = status;
     this.service.requesterPermit(this.requester_status).subscribe((res:any)=>{ 
-      console.log(res)
+      console.log(res);
       this.disable[i] = false;
+      this.search();
     })
     
   }
@@ -78,6 +80,7 @@ requester_status = {
     this.service.requesterPermit(this.requester_status).subscribe((res:any)=>{ 
       console.log(res)
     this.disable[i] = false;
+    this.search();
     })
   }
 

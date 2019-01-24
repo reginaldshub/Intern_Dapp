@@ -149,6 +149,79 @@ router.post('/register', (req, res) => {
 // console.log(result.toString());
 // })
 
+
+
+router.post('/reqcreate', (req, res) => {
+    let userData = req.body;
+    console.log(userData._id);
+    Profile.findOne({ userId: userData._id }, (error, user) => {
+        if (error) {
+            console.log(error)
+        } else if (user.account_address) {
+            console.log('you have an account');
+            console.log(user);
+        } else {
+            console.log('create');
+            if (!web3.isConnected()) {
+                // res.json({
+                //     message: "geth is not running please run the geth"
+                // })
+                console.log('not running');
+            } else {
+                console.log('running');
+                web3.personal.newAccount(userData.password, (err, result) => {
+                    if (err) {
+                        console.log('error');
+                    } else {
+                        // console.log(result);
+                        user.account_address = result;
+                        user.state = "saved";
+                        console.log(user.account_address)
+                        user.save((error, data) => {
+                            console.log('save');
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log(data);
+                            }
+                        })
+                    }
+                })
+
+
+            }
+
+        }
+
+    })
+    // let account = new Accounts(userData)
+    // if (!web3.isConnected()) {
+    //     res.json({
+    //         message: "geth is not running please run the geth"
+    //     })
+    // } else {
+    //     web3.personal.newAccount(account.password, (err, result) => {
+    //         if (err) {
+    //             res.send(err);
+    //         } else {
+    //             account.network = 'local';
+    //             account.accountNumber = result;
+    //             account.save((err, user) => {
+    //                 if (err) {
+    //                     res.send("not saved")
+    //                 } else {
+    //                     res.json({
+    //                         message: "created successfully",
+    //                         result: result
+    //                     })
+    //                 }
+    //             })
+    //             //res.json({account:result});
+    //         }
+    //     })
+    // }
+})
+
 // api to create local network account
 router.post('/create', verifyToken, (req, res) => {
     let userData = req.body;
@@ -355,11 +428,12 @@ router.post('/reqpermit', (req, res) => {
 
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
     var newvalues = { $set: { Status: status } };
-    permission.updateOne(myquery, newvalues, function (err, res) {
+    permission.updateOne(myquery, newvalues, function (err, user) {
         if (err) {
             throw err;
         } else {
-            console.log("1 document updated");
+            console.log(user);
+            res.json({res:user.nModified});
         }
     });
 
@@ -645,14 +719,14 @@ router.post('/certificate', verifyToken, (req, res) => {
     })
 })
 //deploying the smart contract
-router.post('/commit', (req, res) => {
+router.post('/commit', (req, response) => {
     userData = req.body;
     console.log(userData);
     studentProfile.findOne({ userId: userData._id }, (error, user) => {
         if (error) {
-            console.log(error)
+            console.log(error) 
         } else if (user.contract_address) {
-            console.log('you already deployed the contract');
+            response.json({message:'you already deployed the contract'});
         }
         else {
             console.log('Compiling Contract...');
@@ -688,14 +762,17 @@ router.post('/commit', (req, res) => {
                         user.save((error, data) => {
                             if (error) {
                                 console.log(error);
+                                response.json({message:"deployed and but contract_address is not saved"})
                             } else {
                                 console.log(data)
+
+                                response.json({message:"deployed contract"});
                             }
                         })
                     }
 
                 });
-                console.log(helloWorldContractInstance);
+                // console.log(helloWorldContractInstance);
             }
         }
     })

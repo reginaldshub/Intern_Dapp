@@ -21,6 +21,12 @@ const registerSchema = new Schema({
     password: {
         type: String,
         require: true
+    },
+    account_address:{
+        type:String
+    },
+    contract_address:{
+        type:String
     }
 
 }
