@@ -40,11 +40,13 @@ export class SearchComponent implements OnInit {
     id: String
   }
   sessionValue: any;
+  username: string;
   constructor(private fb: FormBuilder,
     private requesterService: RequesterService,
     private _interactionservice: InteractionService) { }
 
   ngOnInit() {
+    this.username = sessionStorage.getItem('name');
     this.searchForm = this.fb.group({
       'search': ['', [Validators.required, Validators.pattern('^[A-Za-z]+$')]]
     });

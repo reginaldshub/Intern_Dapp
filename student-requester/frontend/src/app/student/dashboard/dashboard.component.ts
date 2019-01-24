@@ -10,10 +10,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  username: string;
   
   constructor(private authservice: ServiceService, private router: Router) { }
 
   ngOnInit() {
+    this.username = sessionStorage.getItem('name');
   }
 
   name= sessionStorage.getItem('name');

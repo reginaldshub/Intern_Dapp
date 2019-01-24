@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { InteractionService } from './../interactionService/interaction.service';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { RequesterService } from '../service/service.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-edudetails',
@@ -10,7 +11,8 @@ import { RequesterService } from '../service/service.service';
 })
 export class EdudetailsComponent implements OnInit {
   constructor(private _interactionsrvice: InteractionService,
-    private service: RequesterService) { }
+    private service: RequesterService,
+    private route: ActivatedRoute) { }
   public dataSource: any = null;
   public pucdataSource: any = null;
   public degreedataSource: any = null;
@@ -21,37 +23,48 @@ export class EdudetailsComponent implements OnInit {
     Startyear: Number
   };
   ngOnInit() {
-    this.Name.name = null;
-    this.Name.Endyear = null;
+    {
+      this.route.params.subscribe(params=>{
+        this.Name.name=params.name;
+        this.Name.Endyear = null;
     this.Name.Startyear = null;
-
-    this._interactionsrvice.Message$
-      .subscribe(
-        (message: any) => {
-          if (message != null) {
-            this.Name.name = message;
-            this.getCertificate();
-            // alert(message);
-          }
-          else {
-            alert("nothing");
-          }
-        }
-      )
+        console.log(this.Name)
+    
+        this.service.getCertificate(this.Name).subscribe((res: any) => {
+                this.response = res.certificate;
+                // console.log(this.response);
+              })
+      })
+    }
   }
+      
+//     this.response = null;
+//     this.Name.name = null;
+//     this.Name.Endyear = null;
+//     this.Name.Startyear = null;
+
+//     this._interactionsrvice.Message$
+//       .subscribe(
+//         (message: any) => {
+//           if (message != null) {
+//             this.Name.name = message;
+//             this.getCertificate();
+//             // alert(message);
+//           }
+//           else {
+//             console.log('no message');
+//             alert("nothing");
+//           }
+//         }
+//       )
+//   }
 
   displayedColumns: string[] = ['Subject_name', 'Subject_marks'];
 
-  getCertificate() {
-    this.service.getCertificate(this.Name).subscribe((res: any) => {
-      console.log(res.certificate);
-      this.response = res.certificate;
-      // console.log(res.status);
-    //   if(res.certificate){
-    //   this.Name.Startyear = res.certificate.Startyear;
-    //   this.Name.Endyear = res.certificate.Endyear;
-    //   this.dataSource = res.certificate;
-    // }
-    })
-  }
+//   getCertificate() {
+//     this.service.getCertificate(this.Name).subscribe((res: any) => {
+//       this.response = res.certificate;
+//       console.log(this.response);
+//     })
+//   }
 }

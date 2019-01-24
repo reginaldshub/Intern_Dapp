@@ -46,6 +46,7 @@ export class ProfileComponent implements OnInit {
   email: string = '';
   country: string = '';
   phone: number;
+  username: string;
 
 
   constructor(private fb: FormBuilder,
@@ -86,6 +87,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getProfile() {
+    this.username = sessionStorage.getItem('name');
     this.sessionValue = sessionStorage.getItem('_id');
     this.session.userId = this.sessionValue;
     this.authService.getProfile(this.session).subscribe((res: any) => {

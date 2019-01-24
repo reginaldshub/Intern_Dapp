@@ -7,13 +7,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ServiceService } from '../../common/service.service';
 import { RequesterService } from '../service/service.service';
 
-export interface permissionElement {
-  name: String;
-  Status: String;
-}
-
-let PermissionData: permissionElement[];
-
 @Component({
   selector: 'app-reqdashboard',
   templateUrl: './reqdashboard.component.html',
@@ -21,17 +14,8 @@ let PermissionData: permissionElement[];
 })
 
 export class ReqdashboardComponent implements OnInit {
-  public dataSource:any=null;
-  searchString = {
-    name: String,
-    status: String
-  }
-  sessionValue;
+  username: string;
 
-  permissionReq = {
-    requesterID: String,
-  }
-  
   constructor( private fb: FormBuilder,
     private requesterService: RequesterService,
     private service: ServiceService,
@@ -40,31 +24,7 @@ export class ReqdashboardComponent implements OnInit {
    ) { }
 
   ngOnInit() {
-    this.search();
+    this.username = sessionStorage.getItem('name');
+    // this.router.navigate(['/', 'reqpermission']);
   }
-  displayedColumns: string[] = [ 'name','Created_time','status', 'view'];
-
-  search(){
- 
-    this.sessionValue = sessionStorage.getItem('_id');
-    this.permissionReq.requesterID = this.sessionValue;
-
-    this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
-    { 
-      console.log(res);
-      let temp = res.students;
-      let array = [];
-      for( var i = 0; i < temp.length; i++){
-        if(temp[i].Status == 'granted'){
-         array.push(temp[i]);
-        }
-      }
-      this.dataSource = array;
-    })
-  }
-  sendData(name){
-    // this.router.navigate(['/requester/edudetails']);
-    this._interactionSerice.sendMessage(name);
-  }
-
 }
