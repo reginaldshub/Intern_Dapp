@@ -27,12 +27,14 @@ requester_status = {
 
   constructor(private requesterService: RequesterService,
     private service: ServiceService) { }
+    public disable = [];
+
+    
 
   ngOnInit() {
     this.search();
   }
-
-  displayedColumns: string[] = ['name', 'Created_time', 'status', 'accept', 'reject'];
+  displayedColumns: string[] = ['name', 'Created_time', 'status','accept','reject'];
   search() {
 
     this.sessionValue = sessionStorage.getItem('_id');
@@ -45,30 +47,37 @@ requester_status = {
       for( var i = 0; i < temp.length; i++){
         // if(temp[i].Status == 'pending'){
          array.push(temp[i]);
+         this.disable[i]  = temp[i].Status!='pending'?false:true;
+         console.log(this.disable)
         // }
       }
       this.dataSource = array;
     })
   }
 
-  grant(req, stu) {    
+  grant(req, stu, i) {   
+    this.disable[i] = false;
+    console.log(i);
     let status: any = "granted";
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
     this.requester_status.Status = status;
     this.service.requesterPermit(this.requester_status).subscribe((res:any)=>{ 
       console.log(res)
+      this.disable[i] = false;
     })
     
   }
 
-  deny(req, stu) {
+  deny(req, stu, i) {
+    this.disable[i] = false;
     let status: any = "denied";
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
     this.requester_status.Status = status;
     this.service.requesterPermit(this.requester_status).subscribe((res:any)=>{ 
       console.log(res)
+    this.disable[i] = false;
     })
   }
 

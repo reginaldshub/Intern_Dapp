@@ -26,14 +26,14 @@
 
         <ng-container class="status" matColumnDef="accept">
             <th mat-header-cell *matHeaderCellDef> accept</th>
-            <td mat-cell *matCellDef="let element">
-           <button color="primary" (click) = "grant(element.requesterID,element.studentID)" mat-button>Grant</button>
+            <td  mat-cell *matCellDef="let element; let i = index;">
+           <button  *ngIf="disable[i]" color="primary" (click) = "grant(element.requesterID,element.studentID, i)" mat-button>Grant</button>
             </td>
         </ng-container>
         <ng-container class="status" matColumnDef="reject">
             <th mat-header-cell *matHeaderCellDef> reject </th>
-            <td mat-cell *matCellDef="let element">
-                <button color="warn" (click) = "deny(element.requesterID,element.studentID)" mat-button>Deny</button>
+            <td mat-cell *matCellDef="let element; let i = index;">
+                <button  *ngIf="disable[i]" color="warn" (click) = "deny(element.requesterID,element.studentID, i)" mat-button>Deny</button>
 
             </td>
         </ng-container>

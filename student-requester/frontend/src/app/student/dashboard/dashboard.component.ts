@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
   }
 
-  
+  name= sessionStorage.getItem('name');
   navigate() {
     this.router.navigate(['/account'])
 

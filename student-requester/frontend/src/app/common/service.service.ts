@@ -17,7 +17,7 @@ export class ServiceService {
   }
 
   newaccount(user) {
-    user.email = localStorage.getItem('email');
+    user._id = sessionStorage.getItem('_id');
     return this.http.post("http://localhost:3000/products/create", user);
   }
   logoutUser() {

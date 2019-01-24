@@ -7,44 +7,40 @@ const studentProfileSchema = new Schema({
         type: String
     },
     name: {
-        type: String,
-        required: true
+        type: String
     },
     address: {
-        type: String,
-        required: true
+        type: String
     },
     city: {
-        type: String,
-        required: true
+        type: String
     },
     state: {
-        type: String,
-        require: true
+        type: String
     },
     pincode: {
-        type: Number,
-        required: true
+        type: Number
     },
     gender: {
-        type: String,
-        required: true
+        type: String
     },
     dob: {
-        type: Date,
-        required: true
+        type: Date
     },
     country: {
-        type: String,
-        require: true
+        type: String
     },
     phone: {
-        type: Number,
-        required: true
+        type: Number
+    },
+    account_address:{
+        type:String
+    },
+    contract_address:{
+        type:String
     }
 
-}
-);
+});
 
 
 module.exports = mongoose.model('studentProfile', studentProfileSchema, 'studentProfile');

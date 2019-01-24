@@ -1,5 +1,6 @@
 const express = require('express')
-
+const fs = require('fs');
+const solc = require('solc');
 const router = express.Router();
 
 const jwt = require('jsonwebtoken');
@@ -16,6 +17,13 @@ const perm_register_join = require('../models/permregJoin.js')
 // const DEGREE = require('../models/degree.js')
 
 const Web3 = require('web3')
+console.log('Reading Contract...');
+const input = fs.readFileSync('api/routes/Simple.sol');
+
+// console.log(input);
+// console.log('Compiling Contract...');
+// const output = solc.compile(input.toString(), 1);
+// console.log(output);
 
 const mongoose = require('mongoose')
 // const db = "mongodb://santhosh123:santhosh123@ds133533.mlab.com:33533/eventsdb"
@@ -144,32 +152,73 @@ router.post('/register', (req, res) => {
 // api to create local network account
 router.post('/create', verifyToken, (req, res) => {
     let userData = req.body;
-    let account = new Accounts(userData)
-    if (!web3.isConnected()) {
-        res.json({
-            message: "geth is not running please run the geth"
-        })
-    } else {
-        web3.personal.newAccount(account.password, (err, result) => {
-            if (err) {
-                res.send(err);
+    console.log(userData._id);
+    studentProfile.findOne({ userId: userData._id }, (error, user) => {
+        if (error) {
+            console.log(error)
+        } else if (user.account_address) {
+            console.log('you have an account');
+            console.log(user);
+        } else {
+            console.log('create');
+            if (!web3.isConnected()) {
+                // res.json({
+                //     message: "geth is not running please run the geth"
+                // })
+                console.log('not running');
             } else {
-                account.network = 'local';
-                account.accountNumber = result;
-                account.save((err, user) => {
+                console.log('running');
+                web3.personal.newAccount(userData.password, (err, result) => {
                     if (err) {
-                        res.send("not saved")
+                        console.log('error');
                     } else {
-                        res.json({
-                            message: "created successfully",
-                            result: result
+                        // console.log(result);
+                        user.account_address = result;
+                        user.state = "saved";
+                        console.log(user.account_address)
+                        user.save((error, data) => {
+                            console.log('save');
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log(data);
+                            }
                         })
                     }
                 })
-                //res.json({account:result});
+
+
             }
-        })
-    }
+
+        }
+
+    })
+    // let account = new Accounts(userData)
+    // if (!web3.isConnected()) {
+    //     res.json({
+    //         message: "geth is not running please run the geth"
+    //     })
+    // } else {
+    //     web3.personal.newAccount(account.password, (err, result) => {
+    //         if (err) {
+    //             res.send(err);
+    //         } else {
+    //             account.network = 'local';
+    //             account.accountNumber = result;
+    //             account.save((err, user) => {
+    //                 if (err) {
+    //                     res.send("not saved")
+    //                 } else {
+    //                     res.json({
+    //                         message: "created successfully",
+    //                         result: result
+    //                     })
+    //                 }
+    //             })
+    //             //res.json({account:result});
+    //         }
+    //     })
+    // }
 })
 //set the account address
 router.post('/set', verifyToken, (req, res) => {
@@ -189,16 +238,16 @@ router.post('/set', verifyToken, (req, res) => {
 router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
-    // let certificates = new Certificates(userData)
-    // console.log(certificates);
-    // certificates.save((err, user) => {
-    //     if (err) {
-    //         res.send("not saved")
-    //     } else {
-    //         console.log(user);
+    let certificates = new Certificates(userData)
+    console.log(certificates);
+    certificates.save((err, user) => {
+        if (err) {
+            res.send("not saved")
+        } else {
+            console.log(user);
 
-    //     }
-    // })
+        }
+    })
 })
 
 router.post('/puc', (req, res) => {
@@ -305,13 +354,13 @@ router.post('/reqpermit', (req, res) => {
     let status = req.body.Status;
 
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
-    var newvalues = { $set: {Status: status } };
-    permission.updateOne(myquery, newvalues, function(err, res) {
-      if (err) {
-      throw err;
-    }else{
-      console.log("1 document updated");
-    }
+    var newvalues = { $set: { Status: status } };
+    permission.updateOne(myquery, newvalues, function (err, res) {
+        if (err) {
+            throw err;
+        } else {
+            console.log("1 document updated");
+        }
     });
 
     // permission.findOne({ $and: [{ requesterID: requesterID }, { studentID: studentID }] }, (error, user) => {
@@ -565,7 +614,60 @@ router.post('/certificate', verifyToken, (req, res) => {
         }
     })
 })
+//deploying the smart contract
+router.post('/commit', (req, res) => {
+    userData = req.body;
+    console.log(userData);
+    studentProfile.findOne({ userId: userData._id }, (error, user) => {
+        if (error) {
+            console.log(error)
+        } else if (user.contract_address) {
+            console.log('you already deployed the contract');
+        }
+        else {
+            console.log('Compiling Contract...');
+            const output = solc.compile(input.toString(), 1);
+            for (var contractName in output.contracts) {
+                const bytecode = output.contracts[contractName].bytecode;
+                console.log(bytecode);
+                const abi = output.contracts[contractName].interface;
+                const helloWorldContract = web3.eth.contract(JSON.parse(abi));
+                console.log('unlocking local geth account');
+                const password = "30";
+                try {
+                    web3.personal.unlockAccount(user.account_address, password);
+                } catch (e) {
+                    console.log(e);
+                    return;
+                }
+                console.log("Deploying the contract");
+                const helloWorldContractInstance = helloWorldContract.new({
+                    data: '0x' + bytecode,
+                    from: user.account_address,
+                    gas: 2000000
+                }, (err, res) => {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    // If we have an address property, the contract was deployed
+                    if (res.address) {
+                        console.log("contract addres");
+                        console.log('Contract address: ' + res.address);
+                        user.contract_address = res.address;
+                        user.save((error, data) => {
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log(data)
+                            }
+                        })
+                    }
 
-
-
+                });
+                console.log(helloWorldContractInstance);
+            }
+        }
+    })
+})
 module.exports = router;
