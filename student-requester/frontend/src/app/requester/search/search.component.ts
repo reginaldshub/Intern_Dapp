@@ -104,6 +104,7 @@ export class SearchComponent implements OnInit {
 
     this.requesterService.request(this.requestdata).subscribe((res: any) => {
       console.log(res);
+      this.search();
     })
   }
 }
