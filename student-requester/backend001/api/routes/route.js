@@ -338,6 +338,7 @@ router.post('/marks', (req, res) => {
     console.log(userData);
     let certificates = new Certificates(userData)
     console.log(certificates);
+    cer
     certificates.save((err, user) => {
         if (err) {
             res.send("not saved")

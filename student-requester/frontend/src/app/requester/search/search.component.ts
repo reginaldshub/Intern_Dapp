@@ -48,7 +48,8 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.username = sessionStorage.getItem('name');
     this.searchForm = this.fb.group({
-      'search': ['', [Validators.required, Validators.pattern('^[A-Za-z]+$')]]
+      'search': ['', [Validators.required]]
+      // Validators.pattern('^[A-Za-z]+$')
     });
   }
 

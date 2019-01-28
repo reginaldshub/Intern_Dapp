@@ -31,7 +31,7 @@ a:hover{
 }
 
 .container > div:nth-child(7) {
-    padding-left: 20px
+    margin-left:70px
 }
 .back-btn{
     position: absolute;
