@@ -19,20 +19,21 @@ a:hover{
 
 .container {
     display: grid;
-    /* grid-gap: 10px;   */
-    grid-template-columns: repeat(7,100px);
+    grid-gap: 10px;  
+    grid-template-columns: repeat(5, auto);
+    grid-template-rows: 40px;
     justify-items: center;
 }
 /* .user{
     grid-column: 7/-1;
 } */
-.container > div:nth-child(4) {
+/* .container > div:nth-child(4) {
     padding-left: 10px
-}
+}*/
+/* .container > div:nth-child(7) {
+    grid-column: 9/-1;
+}  */
 
-.container > div:nth-child(7) {
-    margin-left:70px
-}
 .back-btn{
     position: absolute;
     right: 0px;
