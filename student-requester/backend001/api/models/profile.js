@@ -47,6 +47,9 @@ const profileSchema = new Schema({
     },
     contract_address:{
         type:String
+    },
+    STATE:{
+        type:String
     }
 
 }

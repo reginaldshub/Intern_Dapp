@@ -47,6 +47,8 @@ export class ProfileComponent implements OnInit {
   country: string = '';
   phone: number;
   username: string;
+  locemail: string;
+  account_address: string;
 
 
   constructor(private fb: FormBuilder,
@@ -61,15 +63,16 @@ export class ProfileComponent implements OnInit {
     this.profileDetails = this.fb.group({
       'Id': [{ value: '', disabled: true }],
       'userId': [{ value: '', disabled: true }],
-      'name': [''],
+      'name': [{ value: '', disabled: true }],
       'address': [''],
       'city': [''],
       'state': [''],
       'pincode': [''],
       'url': [''],
-      'email': ['', [Validators.required, Validators.email]],
+      'email': [{ value: '', disabled: true }],
       'country': [''],
-      'phone': ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
+      'phone': ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      'account_address':[{ value: '', disabled: true }]
     });
 
     this.profileForm = this.fb.group({
@@ -89,6 +92,8 @@ export class ProfileComponent implements OnInit {
   getProfile() {
     this.username = sessionStorage.getItem('name');
     this.sessionValue = sessionStorage.getItem('_id');
+
+    this.locemail = localStorage.getItem('email');
     this.session.userId = this.sessionValue;
     this.authService.getProfile(this.session).subscribe((res: any) => {
       if (res.hide) {
@@ -108,7 +113,8 @@ export class ProfileComponent implements OnInit {
           url: this.data.user.url,
           email: this.data.user.email,
           country: this.data.user.country,
-          phone: this.data.user.phone
+          phone: this.data.user.phone,
+          account_address:this.data.user.account_address
         })
       }
     }, err => {
@@ -123,6 +129,8 @@ export class ProfileComponent implements OnInit {
   setProfile() {
     this.sessionValue = sessionStorage.getItem('_id');
     this.profileForm.value.userId = this.sessionValue;
+    this.profileForm.value.name = this.username;
+    this.profileForm.value.email = this.locemail;
     this.authService.setProfile(this.profileForm.value).subscribe(res => {
       if ((res['message'])) {
         swal("", "" + res['message'], "success");

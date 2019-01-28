@@ -57,12 +57,12 @@ export class RequesterService {
 
   newaccount(user) {
     user._id = sessionStorage.getItem('_id');
-    return this.http.post("http://localhost:3000/products/create", user);
+    return this.http.post("http://localhost:3000/products/reqcreate", user);
   }
   
   attach(user) {
     user.email = localStorage.getItem('email');
-    return this.http.post("http://localhost:3000/products/set", user)
+    return this.http.post("http://localhost:3000/products/reqset", user)
   }
   
 }

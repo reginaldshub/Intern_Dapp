@@ -173,8 +173,8 @@ router.post('/reqcreate', (req, res) => {
                     if (err) {
                         console.log('error');
                     } else {
-                        // console.log(result);
                         user.account_address = result;
+                        user.network = "localhost";
                         user.state = "saved";
                         console.log(user.account_address)
                         user.save((error, data) => {
@@ -308,6 +308,32 @@ router.post('/set', verifyToken, (req, res) => {
     })
 })
 
+router.post('/reqset', verifyToken, (req, res) => {
+    let userData = req.body;
+    console.log(userData)
+    Profile.findOne({ email: userData.email }, (error, user) => {
+        if (error) {
+            console.log(error)
+        } else if (user.account_address) {
+            console.log('you have an account');
+            console.log(user);
+        } else {
+            console.log('attaching');
+            console.log(user);
+            user.account_address = userData.accountNumber;
+            user.network = userData.network;
+            user.save((error, data) => {
+                console.log('save');
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(data);
+                }
+            })
+        }
+    })
+})
+
 router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
@@ -433,7 +459,7 @@ router.post('/reqpermit', (req, res) => {
             throw err;
         } else {
             console.log(user);
-            res.json({res:user.nModified});
+            res.json({ res: user.nModified });
         }
     });
 
@@ -521,6 +547,15 @@ router.put('/student/:id', verifyToken, (req, res) => {
 
 router.post('/checkaccess', verifyToken, (req, res) => {
     let searchData = req.body;
+    // Profile.findOne({ name: searchData.studentName }, (error, profile_data) => {
+    //     if (error) {
+    //         console.log(error)
+    //     }else if(profile_data.STATE == 'committed'){
+
+    //     }else{
+
+    //     }
+    // })
     Register.findOne({ name: searchData.studentName }, (error, reg_user) => {
         if (error) {
             console.log(error)
@@ -724,9 +759,9 @@ router.post('/commit', (req, response) => {
     console.log(userData);
     studentProfile.findOne({ userId: userData._id }, (error, user) => {
         if (error) {
-            console.log(error) 
+            console.log(error)
         } else if (user.contract_address) {
-            response.json({message:'you already deployed the contract'});
+            response.json({ message: 'you already deployed the contract' });
         }
         else {
             console.log('Compiling Contract...');
@@ -762,11 +797,11 @@ router.post('/commit', (req, response) => {
                         user.save((error, data) => {
                             if (error) {
                                 console.log(error);
-                                response.json({message:"deployed and but contract_address is not saved"})
+                                response.json({ message: "deployed and but contract_address is not saved" })
                             } else {
                                 console.log(data)
 
-                                response.json({message:"deployed contract"});
+                                response.json({ message: "deployed contract" });
                             }
                         })
                     }
