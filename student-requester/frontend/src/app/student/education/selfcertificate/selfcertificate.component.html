@@ -1,14 +1,10 @@
-
-<!-- table rendering -->
+<!-- 
 <h1 *ngIf = "response != null">Certificates</h1>
 <hr />
 <div *ngFor = "let data of response">
 
-<!-- <h1 *ngIf = "data.name != null">{{data.name}}</h1> -->
 
 <h3 *ngIf = "data.ecategory != null"><strong>Course:</strong> {{data.ecategory}}</h3>
-<!-- <h3 *ngIf = "data.Groupname != null"><strong>Groupname:</strong> {{data.Groupname}}</h3>
-<h3 *ngIf = "data.Branchname != null"><strong>Branchname:</strong> {{data.Branchname}}</h3> -->
 <h3 *ngIf = "data.Startyear != null"><strong>Start Year:</strong> {{data.Startyear}}</h3>
 <h3 *ngIf = "data.Endyear != null"><strong>End Year:</strong> {{data.Endyear}}</h3>
 
@@ -37,4 +33,56 @@
   </div>
   <br/><hr /><br/>
 
+</div> -->
+
+<h1 *ngIf="response != null">Certificates</h1>
+<h3>Student Name: <i>{{Name.name}}</i></h3>
+<hr />
+<div class="container">
+    <div class="card-element" *ngFor="let data of response">
+
+        <mat-card class="example-card">
+
+            <mat-card-header>
+                <mat-card-title *ngIf="data.ecategory != null">
+                    Course:<strong> {{data.ecategory}}</strong>
+                </mat-card-title>
+                <mat-card-subtitle *ngIf="data.Startyear != null">
+                    {{data.Startyear}}<strong> - </strong>{{data.Endyear}}
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <!-- <h3 *ngIf="data.Startyear != null"><strong>Start Year:</strong> {{data.Startyear}}</h3>
+        <h3 *ngIf="data.Endyear != null"><strong>End Year:</strong> {{data.Endyear}}</h3> -->
+
+
+            <mat-card-content>
+                <div *ngIf="data.Startyear != null" class="granted-list">
+                    <table mat-table [dataSource]="data.addsubjects" class="mat-elevation-z8">
+
+
+                        <ng-container matColumnDef="Subject_name">
+                            <th mat-header-cell *matHeaderCellDef> Subject </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.subjectname}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Subject_marks">
+                            <th mat-header-cell *matHeaderCellDef> Marks </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.subjectmarks}}
+                            </td>
+                        </ng-container>
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+
+            </mat-card-content>
+
+        </mat-card>
+    </div>
 </div>

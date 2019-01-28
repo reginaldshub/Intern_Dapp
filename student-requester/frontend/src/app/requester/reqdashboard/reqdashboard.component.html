@@ -1,4 +1,19 @@
-<mat-toolbar color="primary">
+<mat-sidenav-container>
+        <mat-sidenav #sidenav role="navigation">
+                <app-sidenav-list (closeSidenav)="sidenav.close()"></app-sidenav-list>
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <app-header (sidenavToggle)="sidenav.toggle()"></app-header>
+                <!-- <main> -->
+                    <br/>
+                    <br/> 
+                    <router-outlet></router-outlet>
+                <!-- </main> -->
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+
+
+<!-- <mat-toolbar color="primary">
     <button mat-button color="warn" [routerLink]="['/account']">Account</button>
     <button mat-button class="profile" [routerLink]="['/requester/search']">Search</button>
     <button mat-button class="profile" [routerLink]="['/requester/requests']">Requests</button>
@@ -8,7 +23,7 @@
     <mat-icon>person</mat-icon>
     <p><strong>{{username}}</strong></p>
 </mat-toolbar>
-<br />
+<br /> -->
 
 
 <!-- <mat-card>
@@ -42,4 +57,4 @@
 
 
 <!-- <app-edudetails></app-edudetails> -->
-<router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->

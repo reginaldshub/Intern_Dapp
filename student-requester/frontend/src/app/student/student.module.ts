@@ -15,6 +15,11 @@ import { DegreeComponent } from './education/degree/degree.component';
 import { MastersComponent } from './education/masters/masters.component';
 import { SelfcertificateComponent } from './education/selfcertificate/selfcertificate.component';
 import { CommitComponent } from './education/commit/commit.component';
+import { HeaderComponent } from './navigation/header/header.component';
+import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import { AccountComponent } from './account/account.component';
+
 // import { CommonbothModule } from '../common/common.module';
 //  import { AccountComponent } from '../common/account/account.component';
 
@@ -24,10 +29,24 @@ import { CommitComponent } from './education/commit/commit.component';
     StudentRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FlexLayoutModule
   //  CommonbothModule
   ],
   declarations: [ 
-  Add10thComponent,EducationComponent, DashboardComponent, RequestsComponent, StudentProfileComponent, PucComponent, DegreeComponent, MastersComponent, SelfcertificateComponent, CommitComponent]
+  Add10thComponent,
+  EducationComponent, 
+  DashboardComponent, 
+  RequestsComponent, 
+  StudentProfileComponent, 
+  PucComponent, 
+  DegreeComponent, 
+  MastersComponent, 
+  SelfcertificateComponent, 
+  CommitComponent,
+  HeaderComponent,
+  SidenavListComponent,
+  AccountComponent
+]
 })
 export class StudentModule { }

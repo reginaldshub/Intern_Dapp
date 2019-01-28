@@ -15,6 +15,7 @@ import { RequesterService } from '../service/service.service';
 
 export class ReqdashboardComponent implements OnInit {
   username: string;
+  openSidenav:Boolean = false;
 
   constructor( private fb: FormBuilder,
     private requesterService: RequesterService,

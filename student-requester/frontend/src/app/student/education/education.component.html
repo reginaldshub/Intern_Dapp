@@ -1,8 +1,102 @@
-<div class="sidenav">
-<button mat-button color="warn" [routerLink]="['/education/puc']">PUC</button>
-<button mat-button color="warn" [routerLink]="['/education/add10th']">SSLC</button>
-<button mat-button color="warn" [routerLink]="['/education/degree']">DEGREE</button>
-<button mat-button color="warn" [routerLink]="['/education/masters']">MASTERS</button>
-<button mat-button color="warn" [routerLink]="['/education/commit']">COMMIT</button>
+<!-- <div class="sidenav">
+<button mat-button color="warn" [routerLink]="['/student/puc']">PUC</button>
+<button mat-button color="warn" [routerLink]="['/student/add10th']">SSLC</button>
+<button mat-button color="warn" [routerLink]="['/student/degree']">DEGREE</button>
+<button mat-button color="warn" [routerLink]="['/student/masters']">MASTERS</button>
+<button mat-button color="warn" [routerLink]="['/student/commit']">COMMIT</button>
 <div>
-<router-outlet></router-outlet>
+<router-outlet></router-outlet> -->
+
+<mat-accordion class="example-headers-align">
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                SSLC
+            </mat-panel-title>
+            <mat-panel-description>
+               Add your Tenth class marks 
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <app-add10th></app-add10th>
+        <!-- <mat-form-field>
+            <input matInput placeholder="First name">
+          </mat-form-field>
+      
+          <mat-form-field>
+            <input matInput type="number" min="1" placeholder="Age">
+          </mat-form-field> -->
+
+
+
+        <mat-action-row>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                PUC
+            </mat-panel-title>
+            <mat-panel-description>
+                    Add your Twelth class marks 
+                <!-- <mat-icon>map</mat-icon> -->
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!-- <mat-form-field>
+            <input matInput placeholder="Country">
+          </mat-form-field> -->
+        <app-puc></app-puc>
+
+        <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">Next</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Degree
+                </mat-panel-title>
+                <mat-panel-description>
+                        Add your Bachelor marks 
+                    <!-- <mat-icon>map</mat-icon> -->
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+    
+            <!-- <mat-form-field>
+                <input matInput placeholder="Country">
+              </mat-form-field> -->
+              <app-degree></app-degree>
+    
+            <mat-action-row>
+                <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                <button mat-button color="primary" (click)="nextStep()">Next</button>
+            </mat-action-row>
+        </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Masters
+            </mat-panel-title>
+            <mat-panel-description>
+                    Add your Master Degree marks 
+                <!-- <mat-icon>date_range</mat-icon> -->
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!-- <mat-form-field>
+            <input matInput placeholder="Date" [matDatepicker]="picker" (focus)="picker.open()" readonly>
+          </mat-form-field>
+          <mat-datepicker #picker></mat-datepicker> -->
+        <app-masters></app-masters>
+        <mat-action-row>
+            <button mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button mat-button color="primary" (click)="nextStep()">End</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+
+</mat-accordion>

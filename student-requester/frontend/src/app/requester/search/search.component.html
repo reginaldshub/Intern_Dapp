@@ -61,7 +61,8 @@
             <ng-container class="status" matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef> Status </th>
               <td mat-cell *matCellDef="let element">
-                    <button (click) = "sendData(element.studentName)" mat-raised-button matTooltip="click">{{status}}</button>
+                    <button *ngIf = "status == 'request'" class="request-btn" (click) = "sendData(element.studentName)" mat-raised-button matTooltip="request">{{status}}</button>
+                    <p *ngIf = "status != 'request'">{{status}}</p>
                 </td>
             </ng-container>
                   

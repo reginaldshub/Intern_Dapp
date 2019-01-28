@@ -1,0 +1,36 @@
+<div class="container">
+  <div>
+    <mat-card class="account">
+      <form [formGroup]="Account" (submit)="onSubmit()">
+        <h3>Select Network</h3>
+        <mat-form-field>
+          <mat-select placeholder="Select network" formControlName="network">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let network of networks" [value]="network.value">
+              {{network.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <h3>Attach Account Address</h3>
+        <mat-form-field>
+          <input formControlName="accountNumber" matInput placeholder="Account number">
+        </mat-form-field><br />
+        <button mat-raised-button type="submit" color="primary" [disabled]="Account.invalid">Save</button>
+      </form>
+    </mat-card>
+  </div>
+
+  <div>
+    <mat-card class="new-account">
+      <form [formGroup]="Create" (submit)="onCreate()">
+        <h3>Create New Account (Local Network)</h3>
+        <mat-form-field>
+          <input formControlName="password" matInput placeholder="Password">
+          <mat-error>enter password</mat-error>
+        </mat-form-field><br />
+        <button mat-raised-button type="submit" color="primary" [disabled]="Create.invalid">Create</button>
+      </form>
+      {{account}}
+    </mat-card>
+  </div>
+</div>

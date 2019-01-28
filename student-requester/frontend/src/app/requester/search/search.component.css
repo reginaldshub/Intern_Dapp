@@ -1,5 +1,5 @@
 table{
-    width: 30%;
+    width: 300px;;
 }
 .search-button{
     padding-left: 20px;
@@ -13,4 +13,7 @@ table{
     align-items: center;
     justify-content: center;
 }
-
+.request-btn{
+    background-color: green;
+    color: white;
+}

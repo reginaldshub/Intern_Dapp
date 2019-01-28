@@ -3,18 +3,22 @@
 
 
       <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element">
+          <th style="text-align: left" mat-header-cell *matHeaderCellDef> Name </th>
+          <td style="text-align: left" mat-cell *matCellDef="let element">
               {{element.studentName}}
           </td>
       </ng-container>
-
-      <ng-container matColumnDef="Created_time">
-          <th mat-header-cell *matHeaderCellDef> Created Time </th>
+      
+      <!-- <div fxShow.lt-md="false" fxShow.gt-sm="true"> -->
+      <ng-container matColumnDef="Created_time" >
+          <th style="text-align: left" mat-header-cell *matHeaderCellDef> Created Time </th>
           <td mat-cell *matCellDef="let element">
-              {{element.Created_time}}
+              <!-- <div fxShow.lt-md="false" fxShow.gt-sm="true"> -->
+                {{element.Created_time | date:'shortDate'}}
+              <!-- </div> -->
           </td>
       </ng-container>
+      <!-- </div> -->
 
       <ng-container class="status" matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef> Status </th>
@@ -25,9 +29,9 @@
       </ng-container>
 
       <ng-container class="view" matColumnDef="view">
-          <th mat-header-cell *matHeaderCellDef> Action </th>
-          <td mat-cell *matCellDef="let element">
-              <button (click)="sendData(element.studentName)" mat-button matTooltip="click">view</button>
+          <th style="text-align: end; padding-right:50px" mat-header-cell *matHeaderCellDef> Action </th>
+          <td style="text-align: end" mat-cell *matCellDef="let element">
+              <button (click)="sendData(element.studentName)" mat-raised-button color = "primary" matTooltip="view">view</button>
           </td>
       </ng-container>
 

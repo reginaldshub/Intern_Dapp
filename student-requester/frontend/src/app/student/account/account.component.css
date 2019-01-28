@@ -1,0 +1,30 @@
+/* mat-card{
+    width: 400px;
+    height: 300px;
+}
+mat-form-field{
+    width:350px;
+} 
+button{
+    font-size:23px;
+} */
+.container {
+    display: grid;
+    grid-gap: 30px;
+    grid-row-gap:20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-rows:repeat(2, 350px);
+    /* justify-content: space-evenly; */
+    /* grid-auto-rows: 500px; */
+}
+
+.container > div:nth-child(n) {
+    /* padding-left: 20px; */
+    /* padding-right: 20px */
+}
+
+.account, .new-account, button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

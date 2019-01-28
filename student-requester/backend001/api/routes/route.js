@@ -172,8 +172,8 @@ router.post('/reqcreate', (req, res) => {
                     if (err) {
                         console.log('error');
                     } else {
-                        // console.log(result);
                         user.account_address = result;
+                        user.network = "localhost";
                         user.state = "saved";
                         console.log(user.account_address)
                         user.save((error, data) => {
@@ -302,6 +302,32 @@ router.post('/set', verifyToken, (req, res) => {
         } else {
             res.json({
                 message: "added successfully"
+            })
+        }
+    })
+})
+
+router.post('/reqset', verifyToken, (req, res) => {
+    let userData = req.body;
+    console.log(userData)
+    Profile.findOne({ email: userData.email }, (error, user) => {
+        if (error) {
+            console.log(error)
+        } else if (user.account_address) {
+            console.log('you have an account');
+            console.log(user);
+        } else {
+            console.log('attaching');
+            console.log(user);
+            user.account_address = userData.accountNumber;
+            user.network = userData.network;
+            user.save((error, data) => {
+                console.log('save');
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(data);
+                }
             })
         }
     })
@@ -520,6 +546,15 @@ router.put('/student/:id', verifyToken, (req, res) => {
 
 router.post('/checkaccess', verifyToken, (req, res) => {
     let searchData = req.body;
+    // Profile.findOne({ name: searchData.studentName }, (error, profile_data) => {
+    //     if (error) {
+    //         console.log(error)
+    //     }else if(profile_data.STATE == 'committed'){
+
+    //     }else{
+
+    //     }
+    // })
     Register.findOne({ name: searchData.studentName }, (error, reg_user) => {
         if (error) {
             console.log(error)
