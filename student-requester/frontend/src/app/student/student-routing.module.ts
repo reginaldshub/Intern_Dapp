@@ -19,19 +19,39 @@ const routes: Routes = [
   // { path: 'requests', component: RequestsComponent, canActivate: [AuthGuard] },
   // { path: 'profile', component: StudentProfileComponent, canActivate: [AuthGuard] },
   // { path: 'add10th', component: Add10thComponent, canActivate: [AuthGuard] }
+// {
+//    path: '', component: DashboardComponent,
+//    children:[
+//      { path: 'education', component: EducationComponent},
+//      { path: 'profile', component: StudentProfileComponent},
+//      { path: 'requests', component: RequestsComponent},
+//      { path: 'add10th', component: Add10thComponent},
+//      { path: 'puc', component: PucComponent},
+//      { path: 'degree', component:DegreeComponent},
+//      { path: 'masters', component:MastersComponent},
+//      { path: 'certificates', component:SelfcertificateComponent},
+//      { path: 'commit', component:CommitComponent}
+//    ]
+// }
 {
-   path: '', component: DashboardComponent,
-   children:[
-     { path: 'education', component: EducationComponent},
-     { path: 'profile', component: StudentProfileComponent},
-     { path: 'requests', component: RequestsComponent},
-     { path: 'add10th', component: Add10thComponent},
-     { path: 'puc', component: PucComponent},
-     { path: 'degree', component:DegreeComponent},
-     { path: 'masters', component:MastersComponent},
-     { path: 'certificates', component:SelfcertificateComponent},
-     { path: 'commit', component:CommitComponent}
-   ]
+  path: '', component: DashboardComponent,
+  children:[
+    
+    {    
+    path: 'education', component: EducationComponent,
+    children:[
+      { path: '', component: Add10thComponent},
+      { path: 'add10th', component: Add10thComponent},
+      { path: 'degree', component:DegreeComponent},
+      { path: 'masters', component:MastersComponent},
+      { path: 'commit', component:CommitComponent},
+      { path: 'puc', component: PucComponent}
+    ]
+  },
+    { path: 'profile', component: StudentProfileComponent},
+    { path: 'requests', component: RequestsComponent},
+    { path: 'certificates', component:SelfcertificateComponent}
+  ]
 }
 ];
 

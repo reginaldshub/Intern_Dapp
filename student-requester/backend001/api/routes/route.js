@@ -12,13 +12,14 @@ const grantedStudents = require('../models/grantedStudents.js');
 const permission = require('../models/permission.js');
 const SSLC = require('../models/sslc.js')
 const Certificates = require('../models/certificates.js')
+const HelloWorldABI = require("../../HelloWorldABI.json");
 const perm_register_join = require('../models/permregJoin.js')
 // const PUC = require('../models/puc.js')
 // const DEGREE = require('../models/degree.js')
 
 const Web3 = require('web3')
 console.log('Reading Contract...');
-const input = fs.readFileSync('api/routes/Simple.sol');
+const input = fs.readFileSync('api/routes/PermissionList.sol');
 
 // console.log(input);
 // console.log('Compiling Contract...');
@@ -148,8 +149,6 @@ router.post('/register', (req, res) => {
 // web3.eth.getBalance("0x4af692cf7948c78bc7e94561b84b6e0f3d3552e6",(error,result)=>{
 // console.log(result.toString());
 // })
-
-
 
 router.post('/reqcreate', (req, res) => {
     let userData = req.body;
@@ -433,7 +432,7 @@ router.post('/reqpermit', (req, res) => {
             throw err;
         } else {
             console.log(user);
-            res.json({res:user.nModified});
+            res.json({ res: user.nModified });
         }
     });
 
@@ -724,28 +723,37 @@ router.post('/commit', (req, response) => {
     console.log(userData);
     studentProfile.findOne({ userId: userData._id }, (error, user) => {
         if (error) {
-            console.log(error) 
+            console.log(error)
+        
         } else if (user.contract_address) {
-            response.json({message:'you already deployed the contract'});
+            response.json({ message: 'you already deployed the contract' });
         }
         else {
+             console.log(user.name);
             console.log('Compiling Contract...');
             const output = solc.compile(input.toString(), 1);
             for (var contractName in output.contracts) {
                 const bytecode = output.contracts[contractName].bytecode;
                 console.log(bytecode);
                 const abi = output.contracts[contractName].interface;
+                fs.writeFile("./HelloWorldABI.JSON", abi, function (err) {
+
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log("ABI Saved");
+                });
                 const helloWorldContract = web3.eth.contract(JSON.parse(abi));
                 console.log('unlocking local geth account');
                 const password = "30";
                 try {
-                    web3.personal.unlockAccount(user.account_address, password);
+                    web3.personal.unlockAccount(user.account_address, userData.password);
                 } catch (e) {
                     console.log(e);
                     return;
                 }
                 console.log("Deploying the contract");
-                const helloWorldContractInstance = helloWorldContract.new({
+                const helloWorldContractInstance = helloWorldContract.new(user.name,{
                     data: '0x' + bytecode,
                     from: user.account_address,
                     gas: 2000000
@@ -762,11 +770,11 @@ router.post('/commit', (req, response) => {
                         user.save((error, data) => {
                             if (error) {
                                 console.log(error);
-                                response.json({message:"deployed and but contract_address is not saved"})
+                                response.json({ message: "deployed and but contract_address is not saved" })
                             } else {
                                 console.log(data)
 
-                                response.json({message:"deployed contract"});
+                                response.json({ message: "deployed contract" });
                             }
                         })
                     }
@@ -776,5 +784,73 @@ router.post('/commit', (req, response) => {
             }
         }
     })
+})
+
+router.post('/req',(req,res)=>{
+    const tempContract = web3.eth.contract(HelloWorldABI);
+    var tempContractInstance = tempContract.at("0x1ed6fc63f8111304d32340fbb3b37450733ff626");
+    const password1 = "30";
+//     console.log("unlocking the account");
+// try {
+//     web3.personal.unlockAccount("0xbe5126597392442f2a802537dfe1c735ec56b579", password1);
+
+// } catch (e) {
+//     console.log(e);
+//     return;
+// }
+
+tempContractInstance.getPermissionStatus({from:"0x290f7686d38d61f5da0ef736cfa4e21826a082e2"},(err,result)=>{
+    if(err){
+        console.log(err);
+    }else{
+        console.log(result);
+    }
+});
+//  request for permission from student 
+//    tempContractInstance.requestPermission("rahul",103,{
+//         from:"0x290f7686d38d61f5da0ef736cfa4e21826a082e2",
+//         gas:4000000},function (error, result){ 
+//             if(!error){
+//                 console.log(result);
+//             } else{
+//                 console.log(error);
+//             }
+//     });
+
+
+
+// grant permission for  the requester
+
+//    tempContractInstance.grantPermission("0x290f7686d38d61f5da0ef736cfa4e21826a082e2",{
+//         from:"0xbe5126597392442f2a802537dfe1c735ec56b579",
+//         gas:4000000},function (error, result){ 
+//             if(!error){
+//                 console.log(result);
+//             } else{
+//                 console.log(error);
+//             }
+//     });
+
+// get permission status of the specific requester checked by student
+
+//console.log(tempContractInstance.getPermissionStatus.call("0x290f7686d38d61f5da0ef736cfa4e21826a082e2",{from:"0xbe5126597392442f2a802537dfe1c735ec56b579"}).toString())
+
+
+// to deny permission to requester
+
+//    tempContractInstance.denyPermission("0x290f7686d38d61f5da0ef736cfa4e21826a082e2",{
+//         from:"0xbe5126597392442f2a802537dfe1c735ec56b579",
+//         gas:4000000},function (error, result){ 
+//             if(!error){
+//                 console.log(result);
+//             } else{
+//                 console.log(error);
+//             }
+//     });
+
+// to get all requesters 
+// console.log(tempContractInstance.getAllRequesters.call({from:"0xbe5126597392442f2a802537dfe1c735ec56b579"}))
+
+// console.log(tempContractInstance.getPermissionStatus({from:"0x2463f4c2404ac36ebe5da89bfe788ddfa8d11c47"}).toString())
 })
 module.exports = router;
