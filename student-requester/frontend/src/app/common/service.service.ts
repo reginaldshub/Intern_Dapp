@@ -20,17 +20,18 @@ export class ServiceService {
     user._id = sessionStorage.getItem('_id');
     return this.http.post("http://localhost:3000/products/create", user);
   }
+  
+  attach(user) {
+    user.email = localStorage.getItem('email');
+    return this.http.post("http://localhost:3000/products/set", user)
+  }
+
   logoutUser() {
     let email = localStorage.getItem('email');
     localStorage.removeItem('email');
     localStorage.removeItem('token');
     sessionStorage.removeItem('_id');
     sessionStorage.removeItem('name');
-  }
-
-  attach(user) {
-    user.email = localStorage.getItem('email');
-    return this.http.post("http://localhost:3000/products/set", user)
   }
 
   loggedIn() {

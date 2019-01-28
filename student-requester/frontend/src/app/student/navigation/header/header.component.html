@@ -1,0 +1,28 @@
+<mat-toolbar color="primary">
+    <div class="mob-container" fxShow.lt-md="true" fxShow.gt-sm="false">
+        <button  mat-icon-button (click)="onToggleSidenav()">
+            <mat-icon>
+                menu
+            </mat-icon>
+        </button>
+        <button class="back-btn" mat-raised-button [routerLink]="['/requester']">
+            Back
+        </button>
+
+    </div>
+    <!-- <div fxFlex fxLayout fxLayoutAlign="flex-end">
+        <ul fxLayout fxLayoutGap="10px" class="navigation-items" fxHide.lt-sm> -->
+    <div class="container" fxShow.lt-md="false" fxShow.gt-sm="true">
+        <div><a routerLink='/student/account'>Account</a></div>
+        <div><a routerLink='/student/education'>Education</a></div>
+        <div><a routerLink='/student/requests'>Requests</a></div>
+        <div><a routerLink='/student/certificates'>Certificates</a></div>
+        <div><a routerLink='/student/profile'>Profile</a></div>
+        <div><a routerLink='/login' (click)="service.logoutUser()">Logout</a></div>
+        <div>
+            <mat-icon>account_circle</mat-icon>{{username}}
+        </div>
+       
+        <!-- </ul> -->
+    </div>
+</mat-toolbar>

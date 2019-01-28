@@ -12,6 +12,7 @@ import { TokenInterceptorService } from './token-interceptor.service';
 import { RequesterModule } from './requester/requester.module';
 import { StudentModule } from './student/student.module';
 import { CommonModule } from '@angular/common';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     RequesterModule,
     StudentModule,
-    CommonModule
+    CommonModule,
+    FlexLayoutModule
   ],
   providers: [AuthGuard, TokenInterceptorService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],
   bootstrap: [AppComponent]

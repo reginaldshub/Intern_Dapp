@@ -9,6 +9,8 @@ import { Auth1Guard } from '../auth1.guard';
 import { RequesterComponent } from './requester.component';
 import { SearchComponent } from './search/search.component';
 import { RequestsComponent } from './requests/requests.component';
+import { AccountComponent } from './account/account.component';
+
 
 const routes: Routes = [
   {
@@ -22,7 +24,7 @@ const routes: Routes = [
       { path: 'profile', component: ProfileComponent, canActivate: [Auth1Guard] },
       { path: 'search', component: SearchComponent, canActivate: [Auth1Guard] },
       { path: 'requests', component: RequestsComponent, canActivate: [Auth1Guard] },
-      // { path: 'certificates', component: CertificatesComponent, canActivate: [Auth1Guard] }
+      { path: 'account', component: AccountComponent, canActivate: [Auth1Guard] }
     ]
   }];
 

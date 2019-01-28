@@ -6,7 +6,7 @@ import { RequestsComponent } from './requests/requests.component';
 import { AuthGuard } from '../auth.guard';
 import { StudentProfileComponent } from './student-profile/student-profile.component';
 import { Add10thComponent } from './education/add10th/add10th.component';
-import { AccountComponent } from '../common/account/account.component';
+import { AccountComponent } from './account/account.component';
 import { PucComponent } from './education/puc/puc.component';
 import { DegreeComponent } from './education/degree/degree.component';
 import { MastersComponent } from './education/masters/masters.component';
@@ -30,7 +30,8 @@ const routes: Routes = [
      { path: 'degree', component:DegreeComponent},
      { path: 'masters', component:MastersComponent},
      { path: 'certificates', component:SelfcertificateComponent},
-     { path: 'commit', component:CommitComponent}
+     { path: 'commit', component:CommitComponent},
+     { path: 'account', component:AccountComponent}
    ]
 }
 ];

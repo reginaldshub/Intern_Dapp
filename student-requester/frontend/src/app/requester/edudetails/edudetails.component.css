@@ -1,9 +1,22 @@
-
+ 
 table{
-    width: 50%;
+    width: 300px;
+  
 }
+
 .granted-list{
     display: flex;
     align-items: center;
     justify-content: center;
+} 
+
+
+.container {
+    display: grid;
+    grid-gap: 30px;
+    grid-row-gap:0px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-rows:400px 400px;     
+    /* justify-content: space-evenly; */
+    /* grid-auto-rows: 500px; */
 }

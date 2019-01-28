@@ -1,25 +1,27 @@
 <mat-toolbar color="primary">
 </mat-toolbar>
 <div class="login">
+  <div>
   <mat-card class="card">
-    <mat-card-header>
+    <!-- <mat-card-header>
       <div mat-card-avatar class="example-header-image">
       </div>
-    </mat-card-header>
+    </mat-card-header> -->
     <mat-card-content>
       <form [formGroup]="proliform" (submit)="onSubmit()">
         <mat-form-field>
           <input formControlName="email" matInput placeholder="Email">
           <mat-error>enter valid email</mat-error>
-        </mat-form-field>
+        </mat-form-field><br/>
         <mat-form-field>
-          <input type="password" formControlName="password" matInput placeholder="password">
+          <input type="password" formControlName="password" matInput placeholder="Password">
           <mat-error>enter valid password</mat-error>
         </mat-form-field><br />
-        <button id="sign" mat-raised-button type="submit" color="primary" [disabled]="proliform.invalid">sign in</button>
+        <button id="sign" mat-raised-button type="submit" color="primary" [disabled]="proliform.invalid">Sign in</button>
         <strong id="notreg">If not registered <span id="red">*</span></strong>
-        <button id="register" [routerLink]="['/register']" mat-button type="submit" color="primary"><strong>Register</strong></button>
+        <button id="register" [routerLink]="['/register']" mat-raised-button type="button" color="primary"><strong>Register</strong></button>
       </form>
     </mat-card-content>
   </mat-card>
+</div>
 </div>

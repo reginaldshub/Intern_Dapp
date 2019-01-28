@@ -1,0 +1,34 @@
+<mat-nav-list>
+        <a mat-list-item> <mat-icon>account_circle</mat-icon>
+            <span class="nav-caption">{{username}}</span></a>
+    <a mat-list-item routerLink='/requester/account' (click)="onClose()">
+        <mat-icon>account_box
+            </mat-icon>
+        <span class="nav-caption">Account</span>
+    </a>
+    <a mat-list-item routerLink='/requester/search' (click)="onClose()">
+        <mat-icon>search</mat-icon>
+        <span class="nav-caption">Search</span>
+    </a>
+    <a mat-list-item routerLink='/requester/requests' (click)="onClose()">
+        <mat-icon>supervisor_account</mat-icon>
+        <span class="nav-caption">Requests</span>
+    </a>
+    <a mat-list-item routerLink='/requester/reqpermission' (click)="onClose()">
+        <mat-icon>library_books</mat-icon>
+        <span class="nav-caption">Certificates</span>
+    </a>
+    <a mat-list-item routerLink='/requester/profile' (click)="onClose()">
+        <mat-icon>face</mat-icon>
+        <span class="nav-caption">Profile</span>
+    </a>
+    <a mat-list-item routerLink='/login' (click)="service.logoutUser()">
+        <mat-icon>eject</mat-icon>
+        <span class="nav-caption">Logout</span>
+    </a>
+    <!-- <mat-list-item>
+        <button mat-icon-button (click)="onClose()">
+            <mat-icon>eject</mat-icon>
+        </button>
+    </mat-list-item> -->
+</mat-nav-list>

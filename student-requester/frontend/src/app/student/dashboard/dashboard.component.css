@@ -1,11 +1,8 @@
-button {
-    font-size:23px;
+mat-sidenav-container, mat-sidenav-content{
+    background-color: white ;
+    height: 100%;
 }
-table{
-    width: 50%;
-}
-.granted-list{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+mat-sidenav{
+    width: 200px; 
 }
