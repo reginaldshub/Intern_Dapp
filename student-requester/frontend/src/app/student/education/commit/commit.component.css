@@ -1,4 +1,4 @@
-.card{
+/* .card{
     width:400px;
     height:400px;
     text-align: center;
@@ -17,4 +17,29 @@ h2{
     font-size: 30px;
     text-decoration:underline;
     color: brown;
+} */
+
+mat-form-field{
+    padding-left: 20px;
+}
+
+mat-card{
+    width:auto;
+    max-height:auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+mat-form-field{
+    width:300px;
+        height:60px;
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin-right: 200px; */
+    /* margin-top:100px; */
 }

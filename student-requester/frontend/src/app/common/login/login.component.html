@@ -9,8 +9,8 @@
       </div>
     </mat-card-header> -->
     <mat-card-content>
-      <form [formGroup]="proliform" (submit)="onSubmit()">
-        <mat-form-field><br />
+      <form [formGroup]="proliform" (submit)="onSubmit()"><br />
+        <mat-form-field>
           <input formControlName="email" matInput placeholder="Email">
           <mat-error>enter valid email</mat-error>
         </mat-form-field><br/><br />
