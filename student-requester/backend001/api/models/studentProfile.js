@@ -38,8 +38,10 @@ const studentProfileSchema = new Schema({
     },
     contract_address:{
         type:String
+    },
+    State:{
+    type:String
     }
-
 });
 
 

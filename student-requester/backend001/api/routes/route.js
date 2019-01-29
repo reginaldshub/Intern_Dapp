@@ -338,7 +338,6 @@ router.post('/marks', (req, res) => {
     console.log(userData);
     let certificates = new Certificates(userData)
     console.log(certificates);
-    cer
     certificates.save((err, user) => {
         if (err) {
             res.send("not saved")
@@ -822,71 +821,4 @@ router.post('/commit', (req, response) => {
     })
 })
 
-router.post('/req',(req,res)=>{
-    const tempContract = web3.eth.contract(HelloWorldABI);
-    var tempContractInstance = tempContract.at("0x1ed6fc63f8111304d32340fbb3b37450733ff626");
-    const password1 = "30";
-//     console.log("unlocking the account");
-// try {
-//     web3.personal.unlockAccount("0xbe5126597392442f2a802537dfe1c735ec56b579", password1);
-
-// } catch (e) {
-//     console.log(e);
-//     return;
-// }
-
-tempContractInstance.getPermissionStatus({from:"0x290f7686d38d61f5da0ef736cfa4e21826a082e2"},(err,result)=>{
-    if(err){
-        console.log(err);
-    }else{
-        console.log(result);
-    }
-});
-//  request for permission from student 
-//    tempContractInstance.requestPermission("rahul",103,{
-//         from:"0x290f7686d38d61f5da0ef736cfa4e21826a082e2",
-//         gas:4000000},function (error, result){ 
-//             if(!error){
-//                 console.log(result);
-//             } else{
-//                 console.log(error);
-//             }
-//     });
-
-
-
-// grant permission for  the requester
-
-//    tempContractInstance.grantPermission("0x290f7686d38d61f5da0ef736cfa4e21826a082e2",{
-//         from:"0xbe5126597392442f2a802537dfe1c735ec56b579",
-//         gas:4000000},function (error, result){ 
-//             if(!error){
-//                 console.log(result);
-//             } else{
-//                 console.log(error);
-//             }
-//     });
-
-// get permission status of the specific requester checked by student
-
-//console.log(tempContractInstance.getPermissionStatus.call("0x290f7686d38d61f5da0ef736cfa4e21826a082e2",{from:"0xbe5126597392442f2a802537dfe1c735ec56b579"}).toString())
-
-
-// to deny permission to requester
-
-//    tempContractInstance.denyPermission("0x290f7686d38d61f5da0ef736cfa4e21826a082e2",{
-//         from:"0xbe5126597392442f2a802537dfe1c735ec56b579",
-//         gas:4000000},function (error, result){ 
-//             if(!error){
-//                 console.log(result);
-//             } else{
-//                 console.log(error);
-//             }
-//     });
-
-// to get all requesters 
-// console.log(tempContractInstance.getAllRequesters.call({from:"0xbe5126597392442f2a802537dfe1c735ec56b579"}))
-
-// console.log(tempContractInstance.getPermissionStatus({from:"0x2463f4c2404ac36ebe5da89bfe788ddfa8d11c47"}).toString())
-})
 module.exports = router;

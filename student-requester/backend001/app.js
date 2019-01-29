@@ -8,17 +8,17 @@ const morgan = require('morgan')
 
 var cors = require('cors')
 
-
-const api = require("./api/routes/route.js")
-
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors())
 
 // routes which handle requests 
+const api = require("./api/routes/route.js")
 app.use("/products", api)
-
+//routes which calls contract methods
+const api1 = require("./api/routes/smartcontract.js")
+app.use("/smartcontract", api1)
 app.use((req,res,next)=>{
     const error = new Error("not found");
     error.status = 404;
