@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { RequesterService } from './../service/service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ export interface Network {
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css']
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit{
   account: string;
   networks: Network[] = [
     { value: 'localhost', viewValue: 'Localhost 8545' },
@@ -23,43 +23,101 @@ export class AccountComponent implements OnInit {
     { value: 'rinkbey', viewValue: 'Rinkeby' }
   ];
 
-  Account: FormGroup = new FormGroup({
-    network: new FormControl('', Validators.required),
-    accountNumber: new FormControl('', Validators.required)
-  })
-
-  Create: FormGroup = new FormGroup({
-    password: new FormControl('', Validators.required)
-  })
-
-  constructor(private Service: RequesterService,
+  accountSelection;
+  create:boolean = false;
+  attach: boolean = false;
+  Account: FormGroup ;
+  CreateForm: FormGroup ;
+  
+  
+  constructor(private Service: RequesterService, private _fb : FormBuilder,
     private service: ServiceService, private router: Router) { }
 
-  ngOnInit() {
-  }
+ 
+    ngOnInit() {
+      this.generateForm();
+      this.onChanges();
+    }
+    
+onChanges(){
+  this.Account.get('create').valueChanges.subscribe(res =>{
+
+    if(res === 'true'){
+      this.Account.get('password').enable();
+      if(!this.Account.get('accountNumber').disabled)
+        this.Account.get('accountNumber').disable()
+    }
+    else{
+      this.Account.get('accountNumber').enable()
+      if(!this.Account.get('password').disabled)
+        this.Account.get('password').disable()
+    }
+  })
+}
+
+
+    generateForm(){
+      this.Account = this._fb.group({
+        network : ['', Validators.required,],
+        create : [false],
+        accountNumber:[{ value:'', disabled:true}, Validators.required],
+        password: [{ value:'', disabled:true}, Validators.required]
+      })
+    }
+
+
+
+  // this.Account= new FormGroup({
+  //   network: new FormControl('', Validators.required, ),
+  //    accountNumber: new FormControl({ value:'', disabled:this.create}, Validators.required)
+  // })
+
+  // this.CreateForm = new FormGroup({
+  //   password: new FormControl({ value:'', disabled:this.attach}, Validators.required)
+  // })
+
+  
+
+
+  
   onSubmit() {
-    this.Service.attach(this.Account.value).subscribe((res) => {
-    }, err => {
-      if (err instanceof HttpErrorResponse) {
-        if (err.status === 401) {
-          this.router.navigate(['/login']);
-        }
-      }
-    })
+    debugger
+    // this.Service.attach(this.Account.value).subscribe((res) => {
+    // }, err => {
+    //   if (err instanceof HttpErrorResponse) {
+    //     if (err.status === 401) {
+    //       this.router.navigate(['/login']);
+    //     }
+    //   }
+    // })
   }
 
   onCreate() {
-    this.Service.newaccount(this.Create.value).subscribe((res) => {
-      if (res['result']) {
-        this.account = res['result'];
-      }
-    },
-      err => {
-        if (err instanceof HttpErrorResponse) {
-          if (err.status === 401) {
-            this.router.navigate(['/login']);
-          }
-        }
-      })
+    debugger
+    // this.Service.newaccount(this.CreateForm.value).subscribe((res) => {
+    //   if (res['result']) {
+    //     this.account = res['result'];
+    //   }
+    // },
+    //   err => {
+    //     if (err instanceof HttpErrorResponse) {
+    //       if (err.status === 401) {
+    //         this.router.navigate(['/login']);
+    //       }
+    //     }
+    //   })
+  }
+
+  createacc(event){
+ 
+   // this.Account.controls['accountNumber'].disable();
+   this.create = true;
+   this.attach = false;
+  } 
+   attachacc(event){
+   
+    //this.Account.controls['password'].disable();
+    this.create = false;
+    this.attach = true;
   }
 }

@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
   <div>
     <mat-card class="account">
       <form [formGroup]="Account" (submit)="onSubmit()">
@@ -11,11 +11,11 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <h3>Attach Account Address</h3>
+        <h3>Account Address</h3>
         <mat-form-field>
           <input formControlName="accountNumber" matInput placeholder="Account number">
         </mat-form-field><br />
-        <button mat-raised-button type="submit" color="primary" [disabled]="Account.invalid">Save</button>
+        <button mat-raised-button type="submit" color="primary" [disabled]="Account.invalid">Attach</button>
       </form>
     </mat-card>
   </div>
@@ -33,4 +33,63 @@
       {{account}}
     </mat-card>
   </div>
-</div>
+</div> -->
+
+<!-- <mat-radio-group class="example-radio-group"> -->
+    <!-- <mat-radio-button [value] ="create" (click)="createacc($event)"> 
+    </mat-radio-button>
+        <mat-card class="new-account">
+            <form [formGroup]="CreateForm" (submit)="onCreate()">
+              <h3>Create New Account (Local Network)</h3>
+              <mat-form-field>
+                <input  formControlName="password" matInput placeholder="Password">
+                <mat-error>enter password</mat-error> attach: {{attach}} create {{create}}
+              </mat-form-field><br />
+              <button mat-raised-button type="submit" color="primary" [disabled]="CreateForm.invalid">Create</button>
+            </form>
+            {{account}}
+         
+    <!-- <mat-radio-button [value] = "attach" (click)="attachacc($event)"></mat-radio-button> -->
+        <!-- <div *ngIf = "attach" style="display:block"> -->
+        <!-- <mat-card class="account">
+            <form [formGroup]="Account" (submit)="onSubmit()">
+              <h3>Select Network</h3>
+              <mat-form-field>
+                <mat-select placeholder="Select network" [disabled]= "create" formControlName="network">
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let network of networks" [value]="network.value">
+                    {{network.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <h3>Account Address</h3>
+              <mat-form-field>
+                <input formControlName="accountNumber"  matInput placeholder="Account number">
+              </mat-form-field><br />
+              <button mat-raised-button type="submit" color="primary" [disabled]="Account.invalid">Attach</button>
+            </form>
+          </mat-card> -->
+  <!-- </mat-radio-group> -->
+
+<form [formGroup]="Account" (submit)="onCreate()">
+    <input type="radio"  value='true' formControlName="create"/>
+    <h3>Create New Account (Local Network)</h3>
+      <input  formControlName="password"  placeholder="Password">
+    <br />
+    <button type="submit" color="primary" [disabled]="Account.invalid"> Create</button>
+    <input type="radio"  value='false' formControlName="create"/>
+  
+      <h3>Select Network</h3>
+      
+        <select placeholder="Select network" [disabled]= "!attach" formControlName="network">
+          <option>None</option>
+          <option *ngFor="let network of networks" [value]="network.value">
+            {{network.viewValue}}
+          </option>
+        </select>
+      <h3>Account Address</h3>
+  
+        <input formControlName="accountNumber"  placeholder="Account number">
+     <br />
+      <button mat-raised-button type="submit" color="primary" [disabled]="Account.invalid">Attach</button>
+    </form>
