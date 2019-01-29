@@ -1,4 +1,4 @@
-import { ServiceService } from 'src/app/student/service/service.service';
+import { ServiceService } from './../../../common/service.service';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({

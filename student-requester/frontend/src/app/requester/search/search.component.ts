@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from '../interactionService/interaction.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RequesterService } from '../service/service.service';
+import {MatSort, MatTableDataSource} from '@angular/material';
 
 // export interface searchElement {
 //   name: String;
@@ -9,6 +10,15 @@ import { RequesterService } from '../service/service.service';
 // }
 
 // let SearchData: searchElement[];
+export interface UserData {
+  Created_time: Date;
+  Status: String;
+  requesterID: String;
+  requesterName: String;
+  studentID: String;
+  studentName: String;
+  _id: String;
+}
 
 @Component({
   selector: 'app-search',
@@ -16,13 +26,16 @@ import { RequesterService } from '../service/service.service';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
+  
   searchForm: FormGroup;
   status;
   searchResponse= {
     id: String,
     studentName: String
   };
-  public dataSource: any = null;
+  dataSource: MatTableDataSource<UserData>;
+  searchDataSourceName;
+  searchDataSourceStatus;
 
   requestdata = {
     requesterName: String,
@@ -41,6 +54,11 @@ export class SearchComponent implements OnInit {
   }
   sessionValue: any;
   username: string;
+  permissionReq = {
+    requesterID: String,
+  }
+  searchDataSourceValue: any;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(private fb: FormBuilder,
     private requesterService: RequesterService,
     private _interactionservice: InteractionService) { }
@@ -48,12 +66,29 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.username = sessionStorage.getItem('name');
     this.searchForm = this.fb.group({
-      'search': ['', [Validators.required]]
+      'search': ['', [Validators.required, ]]
       // Validators.pattern('^[A-Za-z]+$')
     });
+    this.getRequests();
   }
 
   displayedColumns: string[] = ['name', 'status'];
+
+  // searchName(name, array){
+  //   for (let i=0; i < array.length; i++) {
+  //   if(array[i].studentName == name){
+  //     console.log(array[i])
+  //     this.dataSource = null;
+  //     var a = [];
+  //     a.push(array[i])
+  //     this.dataSource = null;
+  //     this.dataSource = a;
+  //     console.log("if")
+  //   }else{
+  //     console.log("else")
+  //   }
+  // }
+// }
 
   search() {
     this.sessionValue = sessionStorage.getItem('_id');
@@ -63,34 +98,47 @@ export class SearchComponent implements OnInit {
     this.searchString.studentName = this.searchForm.value.search;
     this.requesterService.checkAccess(this.searchString).subscribe((res: any) => {
       let array = [];
-      this.status = res.status;
+      console.log(res)
       if (res.status == "request") {
-        console.log(res);
+        this.getRequests();
+        this.searchDataSourceValue = true;
         this.searchResponse.id = res.user._id;
         this.searchResponse.studentName = res.user.name;
-        array.push(this.searchResponse);
-        this.dataSource = array;
-      } else if (res.status === "student not registered") {
-        array = [{ "studentName": this.searchForm.value.search }];
-        this.dataSource = array;
+        this.searchDataSourceName = res.user.name;
+        this.searchDataSourceStatus = res.status;
+        // this.dataSource = array;
+      }
+       else if (res.status === "student not registered") {
+        this.getRequests();
+        this.searchDataSourceValue = true;
+        this.searchDataSourceName = this.searchString.studentName;
+        this.searchDataSourceStatus = res.status;
       } else if (res.status == "not student") {
-        array = [{ "studentName": this.searchForm.value.search }];
-        this.dataSource = array;
-      } else {
-        console.log(res)
-        this.requestdata.studentName = res.user.studentName;
-        this.requestdata.requesterName = res.user.requesterName;
-        this.requestdata.requesterID = res.user.requesterID;
-        this.requestdata.studentID = res.user.studentID;
-        this.requestdata.Created_time = res.user.Created_time;
-        this.requestdata.Status = res.user.Status;
-        array.push(this.requestdata);
-        this.dataSource = array;
+        this.getRequests();
+        this.searchDataSourceValue = true;
+        this.searchDataSourceName = this.searchString.studentName;
+        this.searchDataSourceStatus = res.status;
+      } 
+      else {
+        this.searchDataSourceValue = false;
+        let name: any = this.searchString.studentName;
+        this.dataSource.filter = name.trim();
+        // this.searchName(this.searchString.studentName, this.dataSource);
+        // console.log(res)
+        // this.requestdata.studentName = res.user.studentName;
+        // this.requestdata.requesterName = res.user.requesterName;
+        // this.requestdata.requesterID = res.user.requesterID;
+        // this.requestdata.studentID = res.user.studentID;
+        // this.requestdata.Created_time = res.user.Created_time;
+        // this.requestdata.Status = res.user.Status;
+        // array.push(this.requestdata);
+        // this.dataSource = array;
       }
     })
   }
 
   sendData(name) {
+    this.searchDataSourceValue = false;
     // this._interactionservice.sendMessage(name);
     let sessionValue: any = sessionStorage.getItem('_id');
     let sessionNameValue: any = sessionStorage.getItem('name');
@@ -104,8 +152,34 @@ export class SearchComponent implements OnInit {
     this.requestdata.Status = temp;
 
     this.requesterService.request(this.requestdata).subscribe((res: any) => {
-      console.log(res);
+      // console.log(res);
       this.search();
+      this.getRequests();
     })
   }
-}
+
+
+  getRequests(){
+ 
+    this.sessionValue = sessionStorage.getItem('_id');
+    this.permissionReq.requesterID = this.sessionValue;
+
+    this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
+    { 
+      // console.log(res);
+      let temp = res.students;
+      let array = [];
+      for( var i = 0; i < temp.length; i++){
+         array.push(temp[i]);
+      }
+
+      this.dataSource = new MatTableDataSource(array);
+      // this.dataSource = array;
+      // console.log(this.dataSource);
+    })
+  }
+
+//   applyFilter(filterValue: string) {
+//     this.dataSource.filter = filterValue.trim().toLowerCase();
+//   }
+// }

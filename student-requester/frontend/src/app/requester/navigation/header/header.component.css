@@ -9,13 +9,13 @@
 /* li{
     padding: 10px;
 }  */
-a:hover{
+/* a:hover{
     color: lightgray;
 }
  a{
     text-decoration: none;
     color: white;
-}
+} */
 
 .container {
     display: grid;
@@ -38,3 +38,36 @@ a:hover{
     right: 0px;
     margin: 5px;
 }
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3C55B0;
+    width:100%
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  li a:hover:not(.active) {
+    /* background-color: white; */
+    opacity: 0.6;
+    /* color:white; */
+    border-radius: 10px;
+  }
+  
+  .active {
+    background-color: #4CAF50;
+  }
