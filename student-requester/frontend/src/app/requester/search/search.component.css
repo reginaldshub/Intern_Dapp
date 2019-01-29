@@ -1,5 +1,5 @@
 table{
-    width: 300px;;
+    width: 300px;
 }
 .search-button{
     padding-left: 20px;
@@ -8,7 +8,7 @@ table{
     flex: 1 1 auto;
     text-align: center;
 }
-.granted-list{
+.granted-list, .search-results{
     display: flex;
     align-items: center;
     justify-content: center;

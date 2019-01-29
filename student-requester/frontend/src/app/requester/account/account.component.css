@@ -18,6 +18,9 @@ button{
     /* grid-auto-rows: 500px; */
 }
 
+input{
+    width: 250px;
+}
 .container > div:nth-child(n) {
     /* padding-left: 20px; */
     /* padding-right: 20px */
