@@ -178,8 +178,8 @@ export class SearchComponent implements OnInit {
       // console.log(this.dataSource);
     })
   }
-}
-//   applyFilter(filterValue: string) {
+
+}//   applyFilter(filterValue: string) {
 //     this.dataSource.filter = filterValue.trim().toLowerCase();
 //   }
 // }
