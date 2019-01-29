@@ -43,6 +43,7 @@ export class Add10thComponent implements OnInit {
   }
 
   submit() {
+    console.log(this.add10th.value);
     console.log("student id",this.add10th.value.studentid);
      this.service.add(this.add10th.value).subscribe((res)=>{
        console.log(res);

@@ -9,6 +9,7 @@ export class StudentService {
 
   add(sslc) {
     console.log(sslc);
+    debugger;
     return this.http.post("http://localhost:3000/products/marks", sslc);
   }
   add1(puc) {
