@@ -22,22 +22,40 @@ export class AccountComponent implements OnInit {
     { value: 'ropston', viewValue: 'Ropston' },
     { value: 'rinkbey', viewValue: 'Rinkeby' }
   ];
+ 
+  ;
+// // disable input box
+// disableInput(): void {
+//    this.disabled = true;
+// }
 
-  Account: FormGroup = new FormGroup({
-    network: new FormControl('', Validators.required),
-    accountNumber: new FormControl('', Validators.required)
-  })
-
+// // enable input box
+// enableInput(): void {
+//    this.disabled = false;
+// }
+// private disabled: boolean = true
+ 
+  
   Create: FormGroup = new FormGroup({
     password: new FormControl('', Validators.required)
   })
-
+  
+  Account: FormGroup= new FormGroup({
+    network: new FormControl('', Validators.required),
+    accountNumber: new FormControl('', Validators.required)
+  })
   constructor(private Service: RequesterService,
-    private service: ServiceService, private router: Router) { }
+    private service: ServiceService, private router: Router) { 
+      
+    }
 
   ngOnInit() {
+    
+    
   }
   onSubmit() {
+   console.log(this.Account.value);
+   debugger;  
     this.Service.attach(this.Account.value).subscribe((res) => {
     }, err => {
       if (err instanceof HttpErrorResponse) {
@@ -49,6 +67,7 @@ export class AccountComponent implements OnInit {
   }
 
   onCreate() {
+    console.log(this.Create.value);
     this.Service.newaccount(this.Create.value).subscribe((res) => {
       if (res['result']) {
         this.account = res['result'];
