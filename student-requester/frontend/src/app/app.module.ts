@@ -34,4 +34,5 @@ import {FlexLayoutModule} from '@angular/flex-layout';
   providers: [AuthGuard, TokenInterceptorService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

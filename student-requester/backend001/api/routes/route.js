@@ -545,8 +545,8 @@ router.post('/setprofile', verifyToken, (req, res) => {
 })
 
 router.put('/requester/:id', verifyToken, (req, res) => {
-    console.log("params post" + req.body.name + req.body.Id)
-    console.log("req" + req.params.id)
+    console.log("params post" + req.body.name + JSON.stringify(req.body.Id))
+    console.log("req" +  JSON.stringify(req.params.id))
     console.log("body" + JSON.stringify(req.body))
     var profile = {
         name: req.body.name,

@@ -21,7 +21,7 @@
 
 <mat-toolbar color="primary">
     <div class="mob-container" fxShow.lt-md="true" fxShow.gt-sm="false">
-        <button  mat-icon-button (click)="onToggleSidenav()">
+        <button mat-icon-button (click)="onToggleSidenav()">
             <mat-icon>
                 menu
             </mat-icon>
@@ -34,14 +34,24 @@
     <!-- <div fxFlex fxLayout fxLayoutAlign="flex-end">
         <ul fxLayout fxLayoutGap="10px" class="navigation-items" fxHide.lt-sm> -->
     <ul fxShow.lt-md="false" fxShow.gt-sm="true">
-        <li><a routerLink='/requester/account'>Account</a></li>
+        <!-- <li><a routerLink='/requester/account'>Account</a></li> -->
         <li><a routerLink='/requester/search'>Search</a></li>
         <!-- <li><a routerLink='/requester/requests'>Requests</a></li> -->
         <li><a routerLink='/requester/reqpermission'>Certificates</a></li>
-        <li><a routerLink='/requester/profile'>Profile</a></li>
-        <li style="float:right"><a routerLink='/login' (click)="service.logoutUser()">Logout &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<mat-icon>account_circle</mat-icon>{{username}}</a></li>
-       
-       
+        <!-- <li><a routerLink='/requester/profile'>Profile</a></li> -->
+
+        
+        <!-- <li style="float:right"><a routerLink='/login' (click)="service.logoutUser()">Logout&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<mat-icon>account_circle</mat-icon>{{username}}</a></li> -->
+
+
         <!-- </ul> -->
     </ul>
+    <div class="dropdown" fxShow.lt-md="false" fxShow.gt-sm="true">
+            <button class="dropbtn"><i class="fa fa-user-circle" style="font-size: 30px;padding-right:5px;" aria-hidden="true"> </i> {{username}}</button>
+            <div class="dropdown-content">
+                    <a routerLink='/requester/profile'>Profile</a>
+                    <a routerLink='/requester/account'>Account</a>
+                    <a routerLink='/login' (click)="service.logoutUser()">Logout</a>
+            </div>
+          </div>
 </mat-toolbar>

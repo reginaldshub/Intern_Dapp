@@ -10,24 +10,19 @@ button{
 } */
 .container {
     display: grid;
-    grid-gap: 30px;
+    grid-gap: 50px;
     grid-row-gap:20px;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     grid-template-rows:repeat(2, 350px);
-    /* justify-content: space-evenly; */
-    /* grid-auto-rows: 500px; */
 }
 
-input{
-    width: 250px;
-}
-.container > div:nth-child(n) {
-    /* padding-left: 20px; */
-    /* padding-right: 20px */
-}
 
 .account, .new-account, button{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+mat-form-field{
+    width: 280px;
 }
