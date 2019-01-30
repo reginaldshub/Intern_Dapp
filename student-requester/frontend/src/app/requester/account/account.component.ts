@@ -39,7 +39,9 @@ export class AccountComponent implements OnInit{
   
   
   constructor(private Service: RequesterService,
-    private service: ServiceService, private router: Router) { }
+    private service: ServiceService, private router: Router) { 
+      
+    }
 
  
     ngOnInit() {
@@ -88,6 +90,7 @@ export class AccountComponent implements OnInit{
 
 
   onSubmit() {
+   console.log(this.Account.value);
     this.Service.attach(this.Account.value).subscribe((res) => {
       if(res)
       alert("attached")
