@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./education.component.css']
 })
 export class EducationComponent implements OnInit {
+  id: string;
 
   constructor() { }
 
   ngOnInit() {
+    
   }
 
   // testing collapse

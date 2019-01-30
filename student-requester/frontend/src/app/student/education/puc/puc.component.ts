@@ -9,8 +9,10 @@ import { StudentService } from '../../student.service';
 export class PucComponent implements OnInit {
 
   puc: FormGroup
+  id: string;
   constructor(private fb: FormBuilder, private service: StudentService) {
     this.puc = this.fb.group({
+      id: [],
       studentid: [],
       ecategory: [],
       Startyear: [],
@@ -20,7 +22,7 @@ export class PucComponent implements OnInit {
     });
   }
   ngOnInit() {
-
+    this.id = sessionStorage.getItem('_id');
   }
   addSubjectGroup() {
     return this.fb.group({
@@ -44,6 +46,7 @@ export class PucComponent implements OnInit {
   }
 
   submit() {
+    this.puc.value.studentid = this.id;
     console.log("student id",this.puc.value.studentid);
      this.service.add(this.puc.value).subscribe((res)=>{
        console.log(res);

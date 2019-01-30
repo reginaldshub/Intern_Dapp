@@ -10,8 +10,10 @@ import { StudentService } from '../../student.service';
 export class MastersComponent implements OnInit {
 
   masters: FormGroup;
+  id: string;
   constructor(private fb: FormBuilder, private service: StudentService) {
     this.masters = this.fb.group({
+      id: [],
       studentid: [],
       ecategory: [],
       Startyear: [],
@@ -21,7 +23,7 @@ export class MastersComponent implements OnInit {
     });
   }
   ngOnInit() {
-
+    this.id = sessionStorage.getItem('_id');
   }
   addSubjectGroup() {
     return this.fb.group({
@@ -45,6 +47,7 @@ export class MastersComponent implements OnInit {
   }
 
   submit() {
+    this.masters.value.studentid = this.id;
     console.log("student id",this.masters.value.studentid);
      this.service.add(this.masters.value).subscribe((res)=>{
        console.log(res);

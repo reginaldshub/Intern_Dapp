@@ -23,15 +23,15 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     localStorage.setItem('email', this.proliform.value.email);
     this.service.login(this.proliform.value).subscribe((res) => {
-    sessionStorage.setItem('name',res['name']);
+      sessionStorage.setItem('name', res['name']);
       if (res['role'] == "student") {
-        swal("", "" + res['message'], "success");
+        // swal("", "" + res['message'], "success");
         sessionStorage.setItem('_id', res['_id']);
         sessionStorage.setItem('name', res['name']);
         localStorage.setItem('token', res['token']);
         this.router.navigate(['/student'])
       } else if (res['role'] == "requester") {
-        swal("", "" + res['message'], "success");
+        // swal("", "" + res['message'], "success");
         sessionStorage.setItem('_id', res['_id']);
         sessionStorage.setItem('name', res['name']);
         localStorage.setItem('token', res['token']);
@@ -39,8 +39,10 @@ export class LoginComponent implements OnInit {
       } else {
         swal("", "" + res['message'], "error");
       }
-
-    })
+    },
+      (error) => {
+        swal("", "" + error.error.message, "error");
+      })
 
   }
 }

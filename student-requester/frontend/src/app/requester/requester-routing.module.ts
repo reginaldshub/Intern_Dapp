@@ -16,7 +16,7 @@ const routes: Routes = [
   {
     path: '', component: ReqdashboardComponent,
     children: [
-      // { path: '', component: ReqpermissionComponent, canActivate: [Auth1Guard] },
+      { path: '', component: SearchComponent, canActivate: [Auth1Guard] },
       { path: 'dashboard', component: ReqdashboardComponent, canActivate: [Auth1Guard] },
       { path: 'edudetails', component: EdudetailsComponent, canActivate: [Auth1Guard] },
       { path: 'edudetails/:name', component: EdudetailsComponent, canActivate: [Auth1Guard] },

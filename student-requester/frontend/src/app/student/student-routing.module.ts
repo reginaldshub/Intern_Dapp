@@ -14,28 +14,10 @@ import { SelfcertificateComponent } from './education/selfcertificate/selfcertif
 import { CommitComponent } from './education/commit/commit.component';
 
 const routes: Routes = [
-  // { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
-  // { path: 'education', component: EducationComponent, canActivate: [AuthGuard] },
-  // { path: 'requests', component: RequestsComponent, canActivate: [AuthGuard] },
-  // { path: 'profile', component: StudentProfileComponent, canActivate: [AuthGuard] },
-  // { path: 'add10th', component: Add10thComponent, canActivate: [AuthGuard] }
-// {
-//    path: '', component: DashboardComponent,
-//    children:[
-//      { path: 'education', component: EducationComponent},
-//      { path: 'profile', component: StudentProfileComponent},
-//      { path: 'requests', component: RequestsComponent},
-//      { path: 'add10th', component: Add10thComponent},
-//      { path: 'puc', component: PucComponent},
-//      { path: 'degree', component:DegreeComponent},
-//      { path: 'masters', component:MastersComponent},
-//      { path: 'certificates', component:SelfcertificateComponent},
-//      { path: 'commit', component:CommitComponent}
-//    ]
-// }
 {
    path: '', component: DashboardComponent,
    children:[
+    { path: '', component: RequestsComponent},
      { path: 'education', component: EducationComponent},
      { path: 'profile', component: StudentProfileComponent},
      { path: 'requests', component: RequestsComponent},
