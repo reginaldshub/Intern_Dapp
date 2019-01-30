@@ -150,16 +150,92 @@ router.post('/register', (req, res) => {
 // console.log(result.toString());
 // })
 
-router.post('/reqcreate', (req, res) => {
+// router.post('/reqcreate', (req, res) => {
+//     let userData = req.body;
+//     console.log(userData._id);
+//     Profile.findOne({ userId: userData._id }, (error, user) => {
+//         if (error) {
+//             console.log(error)
+//         } else if (user.account_address) {
+//             console.log('you have an account');
+//             console.log(user);
+//         } else {
+//             console.log('create');
+//             if (!web3.isConnected()) {
+//                 // res.json({
+//                 //     message: "geth is not running please run the geth"
+//                 // })
+//                 console.log('not running');
+//             } else {
+//                 console.log('running');
+//                 web3.personal.newAccount(userData.password, (err, result) => {
+//                     if (err) {
+//                         console.log('error');
+//                     } else {
+//                         user.account_address = result;
+//                         user.network = "localhost";
+//                         user.state = "saved";
+//                         console.log(user.account_address)
+//                         user.save((error, data) => {
+//                             console.log('save');
+//                             if (error) {
+//                                 console.log(error);
+//                             } else {
+//                                 console.log(data);
+//                             }
+//                         })
+//                     }
+//                 })
+
+
+//             }
+
+//         }
+
+//     })
+//     // let account = new Accounts(userData)
+//     // if (!web3.isConnected()) {
+//     //     res.json({
+//     //         message: "geth is not running please run the geth"
+//     //     })
+//     // } else {
+//     //     web3.personal.newAccount(account.password, (err, result) => {
+//     //         if (err) {
+//     //             res.send(err);
+//     //         } else {
+//     //             account.network = 'local';
+//     //             account.accountNumber = result;
+//     //             account.save((err, user) => {
+//     //                 if (err) {
+//     //                     res.send("not saved")
+//     //                 } else {
+//     //                     res.json({
+//     //                         message: "created successfully",
+//     //                         result: result
+//     //                     })
+//     //                 }
+//     //             })
+//     //             //res.json({account:result});
+//     //         }
+//     //     })
+//     // }
+// })
+//api to create local network account for requester
+
+// api to create local network account
+router.post('/reqcreate', verifyToken, (req, res) => {
     let userData = req.body;
     console.log(userData._id);
-    Profile.findOne({ userId: userData._id }, (error, user) => {
+    Profile.findOne({ userId: userData._id }, (error, requester) => {
         if (error) {
             console.log(error)
-        } else if (user.account_address) {
-            console.log('you have an account');
-            console.log(user);
-        } else {
+        }
+        // else if (requester.account_address) {
+        //     console.log('you have an account');
+        //     console.log(requester);
+        // }
+        else {
+            console.log(requester);
             console.log('create');
             if (!web3.isConnected()) {
                 // res.json({
@@ -168,23 +244,45 @@ router.post('/reqcreate', (req, res) => {
                 console.log('not running');
             } else {
                 console.log('running');
+
                 web3.personal.newAccount(userData.password, (err, result) => {
                     if (err) {
                         console.log('error');
                     } else {
-                        user.account_address = result;
-                        user.network = "localhost";
-                        user.state = "saved";
-                        console.log(user.account_address)
-                        user.save((error, data) => {
+                        // console.log(result);
+                    requester.account_address = result;
+                    requester.state = "saved";
+
+                        try {
+                            web3.personal.unlockAccount("0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7", "Accion")
+                        }
+                        catch (e) {
+                            console.log(e);
+                            return;
+                        }
+                        web3.eth.sendTransaction({
+                            from: "0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7",
+                            to: result,
+                            value: web3.toWei("25", 'ether')
+                        }, (error, res) => {
+                            if (error) {
+                                console.log(error)
+                            } else {
+                                console.log(res);
+                            }
+                        })
+
+                        console.log(requester.account_address)
+                        requester.save((error, data) => {
                             console.log('save');
                             if (error) {
                                 console.log(error);
                             } else {
-                                console.log(data);
+                                res.status(200).json("saved");
                             }
                         })
                     }
+
                 })
 
 
@@ -228,10 +326,12 @@ router.post('/create', verifyToken, (req, res) => {
     studentProfile.findOne({ userId: userData._id }, (error, user) => {
         if (error) {
             console.log(error)
-        } else if (user.account_address) {
-            console.log('you have an account');
-            console.log(user);
-        } else {
+        }
+        // else if (user.account_address) {
+        //     console.log('you have an account');
+        //     console.log(user);
+        // }
+        else {
             console.log('create');
             if (!web3.isConnected()) {
                 // res.json({
@@ -240,6 +340,7 @@ router.post('/create', verifyToken, (req, res) => {
                 console.log('not running');
             } else {
                 console.log('running');
+
                 web3.personal.newAccount(userData.password, (err, result) => {
                     if (err) {
                         console.log('error');
@@ -247,16 +348,37 @@ router.post('/create', verifyToken, (req, res) => {
                         // console.log(result);
                         user.account_address = result;
                         user.state = "saved";
+
+                        try {
+                            web3.personal.unlockAccount("0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7", "Accion")
+                        }
+                        catch (e) {
+                            console.log(e);
+                            return;
+                        }
+                        web3.eth.sendTransaction({
+                            from: "0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7",
+                            to: result,
+                            value: web3.toWei("25", 'ether')
+                        }, (error, res) => {
+                            if (error) {
+                                console.log(error)
+                            } else {
+                                console.log(res);
+                            }
+                        })
+
                         console.log(user.account_address)
                         user.save((error, data) => {
                             console.log('save');
                             if (error) {
                                 console.log(error);
                             } else {
-                                console.log(data);
+                                res.status(200).json("saved");
                             }
                         })
                     }
+
                 })
 
 
@@ -444,23 +566,67 @@ router.put('/requester/:id', verifyToken, (req, res) => {
             else { console.log('error' + JSON.stringify(err, undefined, 2)); }
         });
 });
+// api to grant the permission
 
-
-router.post('/reqpermit', (req, res) => {
+router.post('/grant', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
     let status = req.body.Status;
-
+    console.log(req.body);
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
     var newvalues = { $set: { Status: status } };
-    permission.updateOne(myquery, newvalues, function (err, user) {
-        if (err) {
-            throw err;
+    Profile.findOne({ userId: requesterID }, (error, requester) => {
+        if (error) {
+            console.log(error)
         } else {
-            console.log(user);
-            res.json({ res: user.nModified });
+            console.log(requester);
         }
-    });
+    })
+    //         studentProfile.findOne({ userId:studentID }, (error, student) => {
+    //             if (error) {
+    //                 console.log(error)
+    //             } else {
+    //                 if (!web3.isConnected()) {
+    //                     console.log("please run the node")
+    //                 } else {
+    //                     console.log('unlocking the geth account')
+    //                     try {
+    //                         web3.personal.unlockAccount(student.account_address, userData.password);
+    //                     } catch (e) {
+    //                         console.log(e);
+    //                         return;
+    //                     }
+    //                     console.log(student.contract_address);
+    //                     const tempContract = web3.eth.contract(HelloWorldABI);
+    //                     var tempContractInstance = tempContract.at(student.contract_address);
+    //                     tempContractInstance.grantPermission(requester.account_address, {
+    //                         from: student.account_address,
+    //                         gas: 4000000
+    //                     }, function (error, transactionHash) {
+    //                         if (!error) {
+    //                             console.log(transactionHash);
+    //                             // permission.updateOne(myquery, newvalues, function (err, user) {
+    //                             //     if (err) {
+    //                             //         throw err;
+    //                             //     } else {
+    //                             //         console.log(user);
+    //                             //         res.json({ res: user.nModified });
+    //                             //     }
+    //                             // });
+    //                             console.log(tempContractInstance.getPermissionStatus.call(requester.account_address, { from: student.account_address }).toString())
+    //                         } else {
+    //                             console.log(error);
+    //                         }
+    //                     });
+    //                 }
+    //             }
+    //         })
+    //     }
+    // })
+
+
+
+
 
     // permission.findOne({ $and: [{ requesterID: requesterID }, { studentID: studentID }] }, (error, user) => {
     //     if (error) {
@@ -477,6 +643,66 @@ router.post('/reqpermit', (req, res) => {
 
     // })
 })
+// api to deny the permission 
+
+router.post('/deny', (req, res) => {
+    let requesterID = req.body.requesterID;
+    let studentID = req.body.studentID;
+    let status = req.body.Status;
+    var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
+    var newvalues = { $set: { Status: status } };
+    Profile.findOne({ userId: userData._reqid }, (error, requester) => {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(requester.account_address);
+            studentProfile.findOne({ userId: userData._id }, (error, student) => {
+                if (error) {
+                    console.log(error)
+                } else {
+                    if (!web3.isConnected()) {
+                        console.log("please run the node")
+                    } else {
+                        console.log('unlocking the geth account')
+                        try {
+                            web3.personal.unlockAccount(student.account_address, userData.password);
+                        } catch (e) {
+                            console.log(e);
+                            return;
+                        }
+                        console.log(student.contract_address);
+                        const tempContract = web3.eth.contract(HelloWorldABI);
+                        var tempContractInstance = tempContract.at(student.contract_address);
+                        tempContractInstance.grantPermission(requester.account_address, {
+                            from: student.account_address,
+                            gas: 4000000
+                        }, function (error, transactionHash) {
+                            if (!error) {
+                                console.log(transactionHash);
+                                permission.updateOne(myquery, newvalues, function (err, user) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log(user);
+                                        res.json({ res: user.nModified });
+                                    }
+                                });
+                                //console.log(tempContractInstance.getPermissionStatus.call(requester.account_address, { from: student.account_address }).toString())
+                            } else {
+                                console.log(error);
+                            }
+                        });
+                    }
+                }
+            })
+        }
+    })
+
+})
+
+
+
+
 // Student Part
 
 // Student Part
@@ -705,18 +931,57 @@ router.post('/grantedlist', (req, res) => {
 })
 
 router.post('/request', verifyToken, (req, res) => {
-    console.log(JSON.stringify(res.body))
+    // console.log(JSON.stringify(res.body))
     let permissionData = req.body;
+    console.log(permissionData)
     let permissionObject = new permission(permissionData)
-    // console.log(profile);
-    permissionObject.save((err, user) => {
-        if (err) {
-            res.send("not saved")
+    Profile.findOne({ userId: permissionData.requesterID }, (error, requester) => {
+        if (error) {
+            console.log(error)
         } else {
-            res.json({
-                message: "added successfully",
-                user: user
-            })
+            if (!web3.isConnected()) {
+                console.log("please run the node")
+            } else {
+                console.log(requester.account_address);
+                console.log('unlocking the get account')
+                try {
+                    web3.personal.unlockAccount(requester.account_address, "Accion");
+                } catch (e) {
+                    console.log(e);
+                    return;
+                }
+                studentProfile.findOne({ userId: permissionData.studentID }, (error, student) => {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        console.log(student.contract_address);
+
+                        const tempContract = web3.eth.contract(HelloWorldABI);
+                        var tempContractInstance = tempContract.at(student.contract_address);
+                        tempContractInstance.requestPermission(requester.name, 100, {
+                            from: requester.account_address,
+                            gas: 4000000
+                        }, function (error, result) {
+                            if (!error) {
+                                console.log(result);
+                                permissionObject.save((err, user) => {
+                                    if (err) {
+                                        res.send("not saved")
+                                    } else {
+                                        res.json({
+                                            message: "added successfully",
+                                            user: user
+                                        })
+                                    }
+                                })
+
+                            } else {
+                                console.log(error);
+                            }
+                        });
+                    }
+                })
+            }
         }
     })
 })
@@ -764,7 +1029,7 @@ router.post('/commit', (req, response) => {
             response.json({ message: 'you already deployed the contract' });
         }
         else {
-             console.log(user.name);
+            console.log(user.name);
             console.log('Compiling Contract...');
             const output = solc.compile(input.toString(), 1);
             for (var contractName in output.contracts) {
@@ -788,7 +1053,7 @@ router.post('/commit', (req, response) => {
                     return;
                 }
                 console.log("Deploying the contract");
-                const helloWorldContractInstance = helloWorldContract.new(user.name,{
+                const helloWorldContractInstance = helloWorldContract.new(user.name, {
                     data: '0x' + bytecode,
                     from: user.account_address,
                     gas: 2000000

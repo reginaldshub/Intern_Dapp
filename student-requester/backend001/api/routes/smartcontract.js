@@ -18,14 +18,14 @@ const input = fs.readFileSync('api/routes/PermissionList.sol');
 router.post('/commit', (req, response) => {
     userData = req.body;
     console.log(userData);
-    studentProfile.findOne({ userId: userData._id }, (error, user) => {
+    studentProfile.findOne({ userId: userData._id }, (error, student) => {
         if (error) {
-            console.log(error)
-        } else if (user.contract_address) {
+            console.log(error);
+        } else if (student.contract_address) {
             response.status(200).json({ message: 'you already deployed the contract' });
         }
         else {
-            console.log(user.name);
+            console.log(student.name);
             console.log('Compiling Contract...');
             const output = solc.compile(input.toString(), 1);
             for (var contractName in output.contracts) {
@@ -42,15 +42,15 @@ router.post('/commit', (req, response) => {
                 const helloWorldContract = web3.eth.contract(JSON.parse(abi));
                 console.log('unlocking local geth account');
                 try {
-                    web3.personal.unlockAccount(user.account_address, userData.password);
+                    web3.personal.unlockAccount(student.account_address, userData.password);
                 } catch (e) {
                     console.log(e);
                     return;
                 }
                 console.log("Deploying the contract");
-                const helloWorldContractInstance = helloWorldContract.new(user.name, {
+                const helloWorldContractInstance = helloWorldContract.new(student.name, {
                     data: '0x' + bytecode,
-                    from: user.account_address,
+                    from: student.account_address,
                     gas: 2000000
                 }, (err, res) => {
                     if (err) {
@@ -61,9 +61,9 @@ router.post('/commit', (req, response) => {
                     if (res.address) {
                         console.log("contract addres");
                         console.log('Contract address: ' + res.address);
-                        user.contract_address = res.address;
-                        user.State = "committed"
-                        user.save((error, data) => {
+                        student.contract_address = res.address;
+                        student.State = "committed"
+                        student.save((error, data) => {
                             if (error) {
                                 console.log(error);
                                 response.json({ message: "deployed and but contract_address is not saved" })

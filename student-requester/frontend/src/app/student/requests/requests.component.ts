@@ -63,7 +63,7 @@ requester_status = {
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
     this.requester_status.Status = status;
-    this.service.requesterPermit(this.requester_status).subscribe((res:any)=>{ 
+    this.service.grant(this.requester_status).subscribe((res:any)=>{ 
       console.log(res);
       this.disable[i] = false;
       this.search();
@@ -77,7 +77,7 @@ requester_status = {
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
     this.requester_status.Status = status;
-    this.service.requesterPermit(this.requester_status).subscribe((res:any)=>{ 
+    this.service.deny(this.requester_status).subscribe((res:any)=>{ 
       console.log(res)
     this.disable[i] = false;
     this.search();

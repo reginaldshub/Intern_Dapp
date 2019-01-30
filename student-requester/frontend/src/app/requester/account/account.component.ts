@@ -22,24 +22,11 @@ export class AccountComponent implements OnInit {
     { value: 'ropston', viewValue: 'Ropston' },
     { value: 'rinkbey', viewValue: 'Rinkeby' }
   ];
- 
-  ;
-// // disable input box
-// disableInput(): void {
-//    this.disabled = true;
-// }
-
-// // enable input box
-// enableInput(): void {
-//    this.disabled = false;
-// }
-// private disabled: boolean = true
- 
   
   Create: FormGroup = new FormGroup({
     password: new FormControl('', Validators.required)
   })
-  
+
   Account: FormGroup= new FormGroup({
     network: new FormControl('', Validators.required),
     accountNumber: new FormControl('', Validators.required)
@@ -50,12 +37,10 @@ export class AccountComponent implements OnInit {
     }
 
   ngOnInit() {
-    
-    
   }
+  
   onSubmit() {
    console.log(this.Account.value);
-   debugger;  
     this.Service.attach(this.Account.value).subscribe((res) => {
     }, err => {
       if (err instanceof HttpErrorResponse) {

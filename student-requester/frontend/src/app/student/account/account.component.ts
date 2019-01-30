@@ -34,8 +34,11 @@ export class AccountComponent implements OnInit {
   constructor(private service: ServiceService, private router: Router) { }
 
   ngOnInit() {
+    this.Account.controls['network'].disable();
+    this.Account.controls['accountNumber'].disable();
   }
   onSubmit() {
+    console.log(this.Account.value);
     this.service.attach(this.Account.value).subscribe((res) => {
     }, err => {
       if (err instanceof HttpErrorResponse) {
@@ -47,6 +50,7 @@ export class AccountComponent implements OnInit {
   }
 
   onCreate() {
+    console.log(this.Create.value);
     this.service.newaccount(this.Create.value).subscribe((res) => {
       if (res['result']) {
         this.account = res['result'];
