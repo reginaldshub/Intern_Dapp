@@ -226,6 +226,7 @@ router.post('/register', (req, res) => {
 router.post('/reqcreate', verifyToken, (req, res) => {
     let userData = req.body;
     console.log(userData._id);
+    console.log(req.body);
     Profile.findOne({ userId: userData._id }, (error, requester) => {
         if (error) {
             console.log(error)
@@ -283,7 +284,7 @@ router.post('/reqcreate', verifyToken, (req, res) => {
                         })
                     }
 
-                })
+           })
 
 
             }
@@ -291,32 +292,7 @@ router.post('/reqcreate', verifyToken, (req, res) => {
         }
 
     })
-    // let account = new Accounts(userData)
-    // if (!web3.isConnected()) {
-    //     res.json({
-    //         message: "geth is not running please run the geth"
-    //     })
-    // } else {
-    //     web3.personal.newAccount(account.password, (err, result) => {
-    //         if (err) {
-    //             res.send(err);
-    //         } else {
-    //             account.network = 'local';
-    //             account.accountNumber = result;
-    //             account.save((err, user) => {
-    //                 if (err) {
-    //                     res.send("not saved")
-    //                 } else {
-    //                     res.json({
-    //                         message: "created successfully",
-    //                         result: result
-    //                     })
-    //                 }
-    //             })
-    //             //res.json({account:result});
-    //         }
-    //     })
-    // }
+   
 })
 
 // api to create local network account
@@ -580,68 +556,48 @@ router.post('/grant', (req, res) => {
             console.log(error)
         } else {
             console.log(requester);
+     
+            studentProfile.findOne({ userId:studentID }, (error, student) => {
+                if (error) {
+                    console.log(error)
+                } else {
+                    if (!web3.isConnected()) {
+                        console.log("please run the node")
+                    } else {
+                        console.log('unlocking the geth account')
+                        try {
+                            web3.personal.unlockAccount(student.account_address, "Accion");
+                        } catch (e) {
+                            console.log(e);
+                            return;
+                        }
+                        console.log(student.contract_address);
+                        const tempContract = web3.eth.contract(HelloWorldABI);
+                        var tempContractInstance = tempContract.at(student.contract_address);
+                        tempContractInstance.grantPermission(requester.account_address, {
+                            from: student.account_address,
+                            gas: 4000000
+                        }, function (error, transactionHash) {
+                            if (!error) {
+                                console.log(transactionHash);
+                                permission.updateOne(myquery, newvalues, function (err, user) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log(user);
+                                        res.json({ res: user.nModified });
+                                    }
+                                });
+                                console.log(tempContractInstance.getPermissionStatus.call(requester.account_address, { from: student.account_address }).toString())
+                            } else {
+                                console.log(error);
+                            }
+                        });
+                    }
+                }
+            })
         }
     })
-    //         studentProfile.findOne({ userId:studentID }, (error, student) => {
-    //             if (error) {
-    //                 console.log(error)
-    //             } else {
-    //                 if (!web3.isConnected()) {
-    //                     console.log("please run the node")
-    //                 } else {
-    //                     console.log('unlocking the geth account')
-    //                     try {
-    //                         web3.personal.unlockAccount(student.account_address, userData.password);
-    //                     } catch (e) {
-    //                         console.log(e);
-    //                         return;
-    //                     }
-    //                     console.log(student.contract_address);
-    //                     const tempContract = web3.eth.contract(HelloWorldABI);
-    //                     var tempContractInstance = tempContract.at(student.contract_address);
-    //                     tempContractInstance.grantPermission(requester.account_address, {
-    //                         from: student.account_address,
-    //                         gas: 4000000
-    //                     }, function (error, transactionHash) {
-    //                         if (!error) {
-    //                             console.log(transactionHash);
-    //                             // permission.updateOne(myquery, newvalues, function (err, user) {
-    //                             //     if (err) {
-    //                             //         throw err;
-    //                             //     } else {
-    //                             //         console.log(user);
-    //                             //         res.json({ res: user.nModified });
-    //                             //     }
-    //                             // });
-    //                             console.log(tempContractInstance.getPermissionStatus.call(requester.account_address, { from: student.account_address }).toString())
-    //                         } else {
-    //                             console.log(error);
-    //                         }
-    //                     });
-    //                 }
-    //             }
-    //         })
-    //     }
-    // })
-
-
-
-
-
-    // permission.findOne({ $and: [{ requesterID: requesterID }, { studentID: studentID }] }, (error, user) => {
-    //     if (error) {
-    //         console.log(error)
-    //     }
-    //     else {
-    //         console.log(user);
-    //         permission.findOneAndUpdate(user._id, { $set: status }, { new: true },
-    //             (err, doc) => {
-    //                 if (!err) { res.send({ message: "updated success", doc: doc }) }
-    //                 else { console.log('error' + JSON.stringify(err, undefined, 2)); }
-    //             });
-    //     }
-
-    // })
 })
 // api to deny the permission 
 
