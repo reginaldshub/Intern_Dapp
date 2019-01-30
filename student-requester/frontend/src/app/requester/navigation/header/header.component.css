@@ -69,5 +69,56 @@ ul {
   }
   
   .active {
-    background-color: #4CAF50;
+    background-color: #344a98;
+  }
+
+  /* drop down */
+  .dropbtn {
+    background-color: #3C55B0;
+    color: white;
+    /* padding-right: 50px; */
+    font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    font-weight:400;
+    font-size:20px;
+    color:#ffffff;
+    border: none;
+    cursor: pointer;
+    justify-content: space-between;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    margin-top:5px;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    text-align: center;
+    /* margin-top:5px; */
+    background-color: #3C55B0;
+    min-width: 160px;
+    /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+    z-index: 1;
+  }
+  
+  .dropdown-content a {
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {
+    opacity: 0.6;      
+}
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown:hover .dropbtn {
+    opacity: 0.6;
+    /* background-color: #344a98; */
   }

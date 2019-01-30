@@ -61,8 +61,8 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.getProfile();
     this.profileDetails = this.fb.group({
-      'Id': [{ value: '', disabled: true }],
-      'userId': [{ value: '', disabled: true }],
+      'Id': [''],
+      'userId': [''],
       'name': [{ value: '', disabled: true }],
       'address': [''],
       'city': [''],
@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit {
       'email': [{ value: '', disabled: true }],
       'country': [''],
       'phone': ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      'account_address':[{ value: '', disabled: true }]
+      'account_address': [{ value: '', disabled: true }]
     });
 
     this.profileForm = this.fb.group({
@@ -96,11 +96,15 @@ export class ProfileComponent implements OnInit {
     this.locemail = localStorage.getItem('email');
     this.session.userId = this.sessionValue;
     this.authService.getProfile(this.session).subscribe((res: any) => {
+      console.log(res);
       if (res.hide) {
         this.profileHider = true;
       } else {
         this.profileHider = false;
         this.data = res;
+        if (this.data.user.account_address == null)
+          this.data.user.account_address = "no account added"
+
 
         this.profileDetails.setValue({
           Id: this.data.user._id,
@@ -114,7 +118,7 @@ export class ProfileComponent implements OnInit {
           email: this.data.user.email,
           country: this.data.user.country,
           phone: this.data.user.phone,
-          account_address:this.data.user.account_address
+          account_address: this.data.user.account_address
         })
       }
     }, err => {
@@ -127,10 +131,10 @@ export class ProfileComponent implements OnInit {
   }
 
   setProfile() {
-    this.sessionValue = sessionStorage.getItem('_id');
     this.profileForm.value.userId = this.sessionValue;
     this.profileForm.value.name = this.username;
     this.profileForm.value.email = this.locemail;
+    console.log(this.profileForm.value);
     this.authService.setProfile(this.profileForm.value).subscribe(res => {
       if ((res['message'])) {
         swal("", "" + res['message'], "success");
@@ -145,6 +149,10 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile() {
+    this.profileDetails.value.userId = this.sessionValue;
+    this.profileDetails.value.name = this.username;
+    this.profileDetails.value.email = this.locemail;
+
     this.authService.updateProfile(this.profileDetails.value).subscribe(res => {
       if ((res['message'])) {
         swal("", "" + res['message'], "success");

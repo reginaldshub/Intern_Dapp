@@ -45,11 +45,15 @@ export class StudentProfileComponent implements OnInit {
   dob: Date;
   country: string = '';
   phone: number;
+  username: string;
+  locemail: string;
+  account_address: string;
 
   GENDER: Gender[] = [
     { value: 'male', viewValue: 'Male' },
     { value: 'female', viewValue: 'Female' }
   ];
+
 
   constructor(private fb: FormBuilder,
     private authService: ServiceService,
@@ -72,7 +76,8 @@ export class StudentProfileComponent implements OnInit {
       'gender': ['', [Validators.required]],
       'dob': ['', [Validators.required]],
       'country': ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
-      'phone': ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
+      'phone': ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      'account_address': [{ value: '', disabled: true }]
     });
 
     this.profileForm = this.fb.group({
@@ -92,12 +97,16 @@ export class StudentProfileComponent implements OnInit {
   getProfile() {
     this.sessionValue = sessionStorage.getItem('_id');
     this.session.userId = this.sessionValue;
+    this.username = sessionStorage.getItem('name');
+    this.locemail = localStorage.getItem('email');
     this.authService.getStudentProfile(this.session).subscribe((res: any) => {
       if (res.hide) {
         this.profileHider = true;
       } else {
         this.profileHider = false;
         this.data = res;
+        if (this.data.user.account_address == null)
+          this.data.user.account_address = "no account added"
 
         this.profileDetails.setValue({
           Id: this.data.user._id,
@@ -110,7 +119,8 @@ export class StudentProfileComponent implements OnInit {
           gender: this.data.user.gender,
           dob: this.data.user.dob,
           country: this.data.user.country,
-          phone: this.data.user.phone
+          phone: this.data.user.phone,
+          account_address: this.data.user.account_address
         })
       }
     }, err => {
@@ -123,7 +133,9 @@ export class StudentProfileComponent implements OnInit {
   }
 
   setProfile() {
-    this.sessionValue = sessionStorage.getItem('_id');
+    this.profileForm.value.userId = this.sessionValue;
+    this.profileForm.value.name = this.username;
+    this.profileForm.value.email = this.locemail;
     this.profileForm.value.userId = this.sessionValue;
     this.authService.setStudentProfile(this.profileForm.value).subscribe(res => {
       if ((res['message'])) {
@@ -139,6 +151,9 @@ export class StudentProfileComponent implements OnInit {
   }
 
   updateProfile() {
+    this.profileDetails.value.userId = this.sessionValue;
+    this.profileDetails.value.name = this.username;
+    this.profileDetails.value.email = this.locemail;
     this.authService.updateStudentProfile(this.profileDetails.value).subscribe(res => {
       if ((res['message'])) {
         swal("", "" + res['message'], "success");

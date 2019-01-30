@@ -21,7 +21,8 @@ export class AccountComponent implements OnInit {
     { value: 'ropston', viewValue: 'Ropston' },
     { value: 'rinkbey', viewValue: 'Rinkeby' }
   ];
-
+  createButton;
+  attachButton;
   Account: FormGroup = new FormGroup({
     network: new FormControl('', Validators.required),
     accountNumber: new FormControl('', Validators.required)
@@ -45,7 +46,20 @@ export class AccountComponent implements OnInit {
       }
     })
   }
-
+  create() {
+    this.Account.controls['accountNumber'].disable();
+    this.Account.controls['network'].disable();
+    this.createButton = true;
+    this.attachButton = false;
+    this.Create.controls['password'].enable();
+  }
+  attach() {
+    this.Create.controls['password'].disable();
+    this.createButton = false;
+    this.attachButton = true;
+    this.Account.controls['network'].enable();
+    this.Account.controls['accountNumber'].enable();
+  }
   onCreate() {
     this.service.newaccount(this.Create.value).subscribe((res) => {
       if (res['result']) {

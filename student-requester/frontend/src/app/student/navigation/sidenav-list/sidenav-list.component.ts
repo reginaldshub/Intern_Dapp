@@ -12,6 +12,7 @@ export class SidenavListComponent implements OnInit {
   constructor(
     private service: ServiceService) { }
 
+    panelOpenState = false;
   ngOnInit() {
     this.username = sessionStorage.getItem('name');
   }
