@@ -440,8 +440,7 @@ router.post('/marks', (req, res) => {
         if (err) {
             res.send("not saved")
         } else {
-            console.log(user);
-
+        res.status(200).json("added sucessfully");
         }
     })
 })
@@ -607,12 +606,12 @@ router.post('/deny', (req, res) => {
     let status = req.body.Status;
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
     var newvalues = { $set: { Status: status } };
-    Profile.findOne({ userId: userData._reqid }, (error, requester) => {
+    Profile.findOne({ userId: requesterID }, (error, requester) => {
         if (error) {
             console.log(error)
         } else {
             console.log(requester.account_address);
-            studentProfile.findOne({ userId: userData._id }, (error, student) => {
+            studentProfile.findOne({ userId: studentID }, (error, student) => {
                 if (error) {
                     console.log(error)
                 } else {
@@ -621,7 +620,7 @@ router.post('/deny', (req, res) => {
                     } else {
                         console.log('unlocking the geth account')
                         try {
-                            web3.personal.unlockAccount(student.account_address, userData.password);
+                            web3.personal.unlockAccount(student.account_address, "Accion");
                         } catch (e) {
                             console.log(e);
                             return;
