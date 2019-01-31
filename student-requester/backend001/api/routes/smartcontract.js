@@ -226,7 +226,7 @@ router.post('/statusofreq', (req, res) => {
     console.log(userData);
     const tempContract = web3.eth.contract(HelloWorldABI);
     var tempContractInstance = tempContract.at("0xb4f62b00b9a58e3079d22c72c2c51ec8ac0be6e9");
-    console.log(tempContractInstance.getPermissionStatus.call("0x2463f4c2404ac36ebe5da89bfe788ddfa8d11c47", { from: "0xbe5126597392442f2a802537dfe1c735ec56b579" }).toString())
+console.log(tempContractInstance.getPermissionStatus.call("0x2463f4c2404ac36ebe5da89bfe788ddfa8d11c47", { from: "0xbe5126597392442f2a802537dfe1c735ec56b579" }).toString())
     // console.log(tempContractInstance.getPermissionStatus.call({from:"0x2463f4c2404ac36ebe5da89bfe788ddfa8d11c47"}).toString())
 })
 
