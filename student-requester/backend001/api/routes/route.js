@@ -543,7 +543,7 @@ router.put('/requester/:id', verifyToken, (req, res) => {
 });
 // api to grant the permission
 
-router.post('/grant', (req, res) => {
+router.post('/grantT', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
     let status = req.body.Status;
@@ -620,7 +620,7 @@ router.post('/grant', (req, res) => {
 
 // api to deny the permission 
 
-router.post('/deny', (req, res) => {
+router.post('/denyT', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
     let status = req.body.Status;
@@ -925,7 +925,7 @@ router.post('/grantedlist', (req, res) => {
     // }
 })
 
-router.post('/request', verifyToken, (req, res) => {
+router.post('/requestT', verifyToken, (req, res) => {
     // console.log(JSON.stringify(res.body))
     let permissionData = req.body;
     console.log(permissionData)
@@ -1100,5 +1100,167 @@ router.post('/commit', (req, response) => {
 //     });
 // }
 // waitForReceipt("0xee6e940491895b5f5adf4feb34b0ea98eac0c230a5b216a3b64ada65d0821c03")
+
+router.post('/checkstatus',(req,res)=>{
+    let requesterID = req.body.requesterID;
+    let studentID = req.body.studentID;
+    console.log(req.body);
+    var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
+    Profile.findOne({ userId: requesterID }, (error, requester) => {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(requester);
+            studentProfile.findOne({ userId: studentID }, (error, student) => {
+                if (error) {
+                    console.log(error)
+                } else {
+                    if (!web3.isConnected()) {
+                        console.log("please run the node")
+                    } else {
+                        console.log('unlocking the geth account')
+                        try {
+                            web3.personal.unlockAccount(student.account_address, "Accion");
+                        } catch (e) {
+                            console.log(e);
+                            return;
+                        }
+                        console.log(student.contract_address);
+                        const tempContract = web3.eth.contract(HelloWorldABI);
+                        var tempContractInstance = tempContract.at(student.contract_address);
+                        tempContractInstance.getPermissionStatus(requester.account_address, {
+                            from: student.account_address
+                        }, function (error, status) {
+                            if (!error) {
+                                console.log( status.toString()); 
+                            } else {
+                                console.log(error);
+                            }
+                        });
+                        
+                    }
+                }
+            })
+        }
+    })
+})
+
+
+router.post('/grant', (req, res) => {
+    let requesterID = req.body.requesterID;
+    let studentID = req.body.studentID;
+    let status = req.body.Status;
+    console.log(req.body);
+    var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
+    // var newvalues = { $set: { Status: status } };
+    Profile.findOne({ userId: requesterID }, (error, requester) => {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(requester);
+
+            studentProfile.findOne({ userId: studentID }, (error, student) => {
+                if (error) {
+                    console.log(error)
+                } else {
+                    if (!web3.isConnected()) {
+                        console.log("please run the node")
+                    } else {
+                        console.log('unlocking the geth account')
+                        try {
+                            web3.personal.unlockAccount(student.account_address, "Accion");
+                        } catch (e) {
+                            console.log(e);
+                            return;
+                        }
+                        console.log(student.contract_address);
+                        const tempContract = web3.eth.contract(HelloWorldABI);
+                        var tempContractInstance = tempContract.at(student.contract_address);
+                        tempContractInstance.grantPermission(requester.account_address, {
+                            from: student.account_address,
+                            gas: 4000000
+                        }, function (error, transactionHash) {
+                            if (!error) {
+                                transaction.findOne(myquery, function (err, contract) {
+                                    contract.grantTransactionHash=transactionHash
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log(contract);
+                                    }
+                                });
+                            } else {
+                                console.log(error);   
+                            }
+                        });                        
+                    }
+                }
+            })
+        }
+    })
+})
+
+router.post('/request', verifyToken, (req, res) => {
+    // console.log(JSON.stringify(res.body))
+    let permissionData = req.body;
+    console.log(permissionData)
+    let transactionobject = new transaction(permissionData);
+    let permissionObject = new permission(permissionData)
+    Profile.findOne({ userId: permissionData.requesterID }, (error, requester) => {
+        if (error) {
+            console.log(error)
+        } else {
+            if (!web3.isConnected()) {
+                console.log("please run the node")
+            } else {
+                console.log(requester.account_address);
+                console.log('unlocking the get account')
+                try {
+                    web3.personal.unlockAccount(requester.account_address, "Accion");
+                } catch (e) {
+                    console.log(e);
+                    return;
+                }
+                studentProfile.findOne({ userId: permissionData.studentID }, (error, student) => {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        console.log(student.contract_address);
+                        const tempContract = web3.eth.contract(HelloWorldABI);
+                        var tempContractInstance = tempContract.at(student.contract_address);
+                        tempContractInstance.requestPermission(requester.name, 100, {
+                            from: requester.account_address,
+                            gas: 4000000
+                        }, function (error, result) {
+                            if (!error) {
+                                console.log(result);
+                                transactionobject.save((err,contract)=>{
+                                    if(err){
+                                        console.log(err);
+                                    }else{
+                                        console.log(contract);
+                                    }
+                                })
+                                permissionObject.save((err, user) => {
+                                    if (err) {
+                                        res.send("not saved")
+                                    } else {
+                                        res.json({
+                                            message: "added successfully",
+                                            user: user
+                                        })
+                                    }
+                                })
+
+                            } else {
+                                console.log(error);
+                            }
+                        });
+                    }
+                })
+            }
+        }
+    })
+})
 
 module.exports = router;
