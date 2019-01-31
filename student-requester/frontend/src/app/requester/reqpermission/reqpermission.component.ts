@@ -55,7 +55,6 @@ export class ReqpermissionComponent implements OnInit {
 
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
     { 
-      console.log(res);
       let temp = res.students;
       let array = [];
       for( var i = 0; i < temp.length; i++){
@@ -64,6 +63,7 @@ export class ReqpermissionComponent implements OnInit {
         }
       }
       this.dataSource = array;
+      console.log(this.dataSource.length);
     })
   }
   sendData(name:string){
@@ -72,5 +72,4 @@ export class ReqpermissionComponent implements OnInit {
 
     this.router.navigate([`/edudetails/${name}`]);
   }
-
 }

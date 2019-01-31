@@ -17,6 +17,7 @@ export class EdudetailsComponent implements OnInit {
   public pucdataSource: any = null;
   public degreedataSource: any = null;
   response;
+  showSpinner: boolean = false;
   Name = {
     name: String,
     Endyear: Number,
@@ -24,47 +25,51 @@ export class EdudetailsComponent implements OnInit {
   };
   ngOnInit() {
     {
-      this.route.params.subscribe(params=>{
-        this.Name.name=params.name;
+      this.route.params.subscribe(params => {
+        this.showSpinner = true;
+        this.Name.name = params.name;
         this.Name.Endyear = null;
-    this.Name.Startyear = null;
+        this.Name.Startyear = null;
         console.log(this.Name)
-    
+
         this.service.getCertificate(this.Name).subscribe((res: any) => {
-                this.response = res.certificate;
-                // console.log(this.response);
-              })
+
+          this.showSpinner = false;
+          this.response = res.certificate;
+
+          // console.log(this.response);
+        })
       })
     }
   }
-      
-//     this.response = null;
-//     this.Name.name = null;
-//     this.Name.Endyear = null;
-//     this.Name.Startyear = null;
 
-//     this._interactionsrvice.Message$
-//       .subscribe(
-//         (message: any) => {
-//           if (message != null) {
-//             this.Name.name = message;
-//             this.getCertificate();
-//             // alert(message);
-//           }
-//           else {
-//             console.log('no message');
-//             alert("nothing");
-//           }
-//         }
-//       )
-//   }
+  //     this.response = null;
+  //     this.Name.name = null;
+  //     this.Name.Endyear = null;
+  //     this.Name.Startyear = null;
+
+  //     this._interactionsrvice.Message$
+  //       .subscribe(
+  //         (message: any) => {
+  //           if (message != null) {
+  //             this.Name.name = message;
+  //             this.getCertificate();
+  //             // alert(message);
+  //           }
+  //           else {
+  //             console.log('no message');
+  //             alert("nothing");
+  //           }
+  //         }
+  //       )
+  //   }
 
   displayedColumns: string[] = ['Subject_name', 'Subject_marks'];
 
-//   getCertificate() {
-//     this.service.getCertificate(this.Name).subscribe((res: any) => {
-//       this.response = res.certificate;
-//       console.log(this.response);
-//     })
-//   }
+  //   getCertificate() {
+  //     this.service.getCertificate(this.Name).subscribe((res: any) => {
+  //       this.response = res.certificate;
+  //       console.log(this.response);
+  //     })
+  //   }
 }

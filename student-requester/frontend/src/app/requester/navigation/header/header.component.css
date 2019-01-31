@@ -76,7 +76,7 @@ ul {
   .dropbtn {
     background-color: #3C55B0;
     color: white;
-    padding-right: 30px;
+    /* padding-right: 30px; */
     font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     font-weight:400;
     font-size:20px;
@@ -91,6 +91,11 @@ ul {
     display: inline-block;
     margin-top:5px;
   }
+
+  div, button {
+    outline:none;
+    border:none;
+  }
   
   .dropdown-content {
     display: none;
@@ -101,6 +106,7 @@ ul {
     min-width: 160px;
     /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
     z-index: 1;
+    right:0;
   }
   
   .dropdown-content a {
@@ -123,3 +129,8 @@ ul {
     opacity: 0.6;
     /* background-color: #344a98; */
   }
+  mat-toolbar{
+  position: fixed;
+  z-index: 1;
+  margin-top: 0px;
+}

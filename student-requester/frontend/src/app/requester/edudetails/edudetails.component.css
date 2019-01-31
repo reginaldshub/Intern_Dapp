@@ -10,13 +10,19 @@ table{
     justify-content: center;
 } 
 
+mat-spinner{
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    margin: auto;
+}
 
 .container {
     display: grid;
     grid-gap: 30px;
     grid-row-gap:0px;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-template-rows:400px 400px;     
+    grid-template-rows:repeat(auto-fill, minmax(450px, 500px));   
     /* justify-content: space-evenly; */
     /* grid-auto-rows: 500px; */
 }

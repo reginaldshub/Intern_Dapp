@@ -1,5 +1,5 @@
-<div class="granted-list">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<div *ngIf="dataSource.length != 0" class="granted-list">
+    <table mat-table [dataSource]="dataSource" id="requests-table" class="mat-elevation-z8">
 
 
         <ng-container matColumnDef="name">
@@ -42,3 +42,9 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 </div>
+
+
+<div *ngIf="dataSource.length == 0" class="granted-list">
+    No Requests Yet!! <br/> Come Again...<br/>
+</div>
+<mat-spinner *ngIf="showSpinner" class="granted-list"></mat-spinner>

@@ -45,7 +45,9 @@
     #red{
         color:red;
     }
-
+.mat-raised-button{
+    padding:0%;
+}
     .login{
         display: grid;
         /* grid-template-columns: 400px; */
@@ -56,7 +58,7 @@
     @media screen and (max-width: 480px) {
         mat-card{
             
-            width:300px;
+            /* width:300px; */
         }
         mat-form-field{
             width: 280px;
@@ -73,7 +75,7 @@
         @media screen and (min-width: 480px) {
         mat-card{
             
-            width:330px;
+            /* width:330px; */
         }
         mat-form-field{
             width: 320px;

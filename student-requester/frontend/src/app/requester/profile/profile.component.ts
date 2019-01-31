@@ -13,12 +13,49 @@ export interface Role {
   viewValue: string;
 }
 
+export interface State {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  state: State[] = [
+    {value: 'Andhra Pradesh', viewValue: 'Andhra Pradesh'},
+    {value: 'Arunachal Pradesh', viewValue: 'Arunachal Pradesh'},
+    {value: 'Assam', viewValue: 'Assam'},
+    {value: 'Bihar', viewValue: 'Bihar'},
+    {value: 'Goa', viewValue: 'Goa'},
+    {value: 'Gujarat', viewValue: 'Gujarat'},
+    {value: 'Haryana', viewValue: 'Haryana'},
+    {value: 'Himachal Pradesh', viewValue: 'Himachal Pradesh'},
+    {value: 'Jammu & Kashmir', viewValue: 'Jammu & Kashmir'},
+    {value: 'Karnataka', viewValue: 'Karnataka'},
+    {value: 'Kerala', viewValue: 'Kerala'},
+    {value: 'Madhya Pradesh', viewValue: 'Madhya Pradesh'},
+    {value: 'Maharashtra', viewValue: 'Maharashtra'},
+    {value: 'Manipur', viewValue: 'Manipur'},
+    {value: 'Meghalaya', viewValue: 'Meghalaya'},
+    {value: 'Mizoram', viewValue: 'Mizoram'},
+    {value: 'Nagaland', viewValue: 'Nagaland'},
+    {value: 'Orissa', viewValue: 'Orissa'},
+    {value: 'Punjab', viewValue: 'Punjab'},
+    {value: 'Rajasthan', viewValue: 'Rajasthan'},
+    {value: 'Sikkim', viewValue: 'Sikkim'},
+    {value: 'Tamil Nadu', viewValue: 'Tamil Nadu'},
+    {value: 'Tripura', viewValue: 'Tripura'},
+    {value: 'Uttar Pradesh', viewValue: 'Uttar Pradesh'},
+    {value: 'West Bengal', viewValue: 'West Bengal'},
+    {value: 'Chhattisgarh', viewValue: 'Chhattisgarh'},
+    {value: 'Uttarakhand', viewValue: 'Uttarakhand'},
+    {value: 'Jharkhand', viewValue: 'Jharkhand'},
+    {value: 'Telangana', viewValue: 'Telangana'}
+  ];
+
   cookieValue;
   sessionValue;
   profileHider: boolean;
@@ -40,7 +77,7 @@ export class ProfileComponent implements OnInit {
   name: string = '';
   address: string = '';
   city: string = '';
-  state: string = '';
+  // states: string = '';
   pincode: number;
   url: string = '';
   email: string = '';

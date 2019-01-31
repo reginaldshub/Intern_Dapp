@@ -45,6 +45,9 @@ export class AccountComponent implements OnInit{
 
  
     ngOnInit() {
+      this.Account.controls['accountNumber'].disable();
+    this.Account.controls['network'].disable();
+    this.CreateForm.controls['password'].disable();
       // this.generateForm();
       // this.onChanges();
     }

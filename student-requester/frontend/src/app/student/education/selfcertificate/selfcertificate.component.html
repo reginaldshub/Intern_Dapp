@@ -35,10 +35,9 @@
 
 </div> -->
 
-<h1 *ngIf="response != null">Certificates</h1>
-<h3>Student Name: <i>{{Name.name}}</i></h3>
+<h3 >Name: <i>{{Name.name}}</i></h3>
 <hr />
-<div class="container">
+<div *ngIf="response" class="container">
     <div class="card-element" *ngFor="let data of response">
 
         <mat-card class="example-card">
@@ -86,3 +85,9 @@
         </mat-card>
     </div>
 </div>
+
+<div *ngIf="!response" class="granted-list">
+    Please Fill up your Education Details in the Education section.<br/>
+    <br/>
+</div>
+<mat-spinner *ngIf="showSpinner"></mat-spinner>

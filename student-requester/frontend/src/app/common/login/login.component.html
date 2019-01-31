@@ -15,7 +15,8 @@
           <mat-error>enter valid email</mat-error>
         </mat-form-field><br/><br />
         <mat-form-field>
-          <input type="password" formControlName="password" matInput placeholder="Password">
+          <input type="password" formControlName="password" matInput placeholder="Password" [type]="hide ? 'text':'password'">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
           <mat-error>enter valid password</mat-error>
         </mat-form-field><br /><br /><br />
         <button id="sign" mat-raised-button type="submit" color="primary" [disabled]="proliform.invalid">Sign in</button>

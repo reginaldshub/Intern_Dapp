@@ -17,11 +17,13 @@ export class SelfcertificateComponent implements OnInit {
     Startyear: Number
   };
   response: any;
+  showSpinner: boolean = false;
 
   constructor(private authservice: ServiceService, private router: Router,
     private service: RequesterService) { }
 
   ngOnInit() {
+    this.showSpinner = true;
     this.Name.Endyear = null;
     this.Name.Startyear = null;
     this.Name.name = null;
@@ -40,7 +42,8 @@ export class SelfcertificateComponent implements OnInit {
     let sessionValue: any = sessionStorage.getItem('name');
     this.Name.name = sessionValue;
     this.service.getCertificate(this.Name).subscribe((res: any) => {
-      console.log(res.certificate);
+      // console.log(res.certificate);
+      this.showSpinner = false;
       this.response = res.certificate;
     })
   }
