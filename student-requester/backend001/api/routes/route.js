@@ -251,8 +251,8 @@ router.post('/reqcreate', verifyToken, (req, res) => {
                         console.log('error');
                     } else {
                         // console.log(result);
-                    requester.account_address = result;
-                    requester.state = "saved";
+                        requester.account_address = result;
+                        requester.state = "saved";
 
                         try {
                             web3.personal.unlockAccount("0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7", "Accion")
@@ -284,7 +284,7 @@ router.post('/reqcreate', verifyToken, (req, res) => {
                         })
                     }
 
-           })
+                })
 
 
             }
@@ -292,7 +292,7 @@ router.post('/reqcreate', verifyToken, (req, res) => {
         }
 
     })
-   
+
 })
 
 // api to create local network account
@@ -440,7 +440,7 @@ router.post('/marks', (req, res) => {
         if (err) {
             res.send("not saved")
         } else {
-        res.status(200).json("added sucessfully");
+            res.status(200).json("added sucessfully");
         }
     })
 })
@@ -521,7 +521,7 @@ router.post('/setprofile', verifyToken, (req, res) => {
 
 router.put('/requester/:id', verifyToken, (req, res) => {
     console.log("params post" + req.body.name + JSON.stringify(req.body.Id))
-    console.log("req" +  JSON.stringify(req.params.id))
+    console.log("req" + JSON.stringify(req.params.id))
     console.log("body" + JSON.stringify(req.body))
     var profile = {
         name: req.body.name,
@@ -555,8 +555,8 @@ router.post('/grant', (req, res) => {
             console.log(error)
         } else {
             console.log(requester);
-     
-            studentProfile.findOne({ userId:studentID }, (error, student) => {
+
+            studentProfile.findOne({ userId: studentID }, (error, student) => {
                 if (error) {
                     console.log(error)
                 } else {
@@ -578,26 +578,46 @@ router.post('/grant', (req, res) => {
                             gas: 4000000
                         }, function (error, transactionHash) {
                             if (!error) {
-                                console.log(transactionHash);
-                                permission.updateOne(myquery, newvalues, function (err, user) {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        console.log(user);
-                                        res.json({ res: user.nModified });
-                                    }
-                                });
-                                console.log(tempContractInstance.getPermissionStatus.call(requester.account_address, { from: student.account_address }).toString())
+                                console.log(transactionHash); 
+                                waitForReceipt(transactionHash);
                             } else {
                                 console.log(error);
                             }
                         });
+
+                        function waitForReceipt(hash) {
+                            web3.eth.getTransactionReceipt(hash, function (err, receipt) {
+                                if (err) {
+                                    error(err);
+                                }
+
+                                if (receipt !== null) {
+                                    // Transaction went through
+                                    console.log(receipt);
+                                    console.log(tempContractInstance.getPermissionStatus.call(requester.account_address, { from: student.account_address }).toString())
+                                    permission.updateOne(myquery, newvalues, function (err, user) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            res.json({ res: user.nModified });
+                                        }
+                                    });
+                                } else {
+                                    // Try again in 1 second
+                                    setTimeout(() => {
+                                        waitForReceipt(hash);
+                                    }, 1000);
+                                }
+                            });
+                        }
+                        
                     }
                 }
             })
         }
     })
 })
+
 // api to deny the permission 
 
 router.post('/deny', (req, res) => {
@@ -628,25 +648,44 @@ router.post('/deny', (req, res) => {
                         console.log(student.contract_address);
                         const tempContract = web3.eth.contract(HelloWorldABI);
                         var tempContractInstance = tempContract.at(student.contract_address);
-                        tempContractInstance.grantPermission(requester.account_address, {
+                        tempContractInstance.denyPermission(requester.account_address, {
                             from: student.account_address,
                             gas: 4000000
                         }, function (error, transactionHash) {
                             if (!error) {
                                 console.log(transactionHash);
-                                permission.updateOne(myquery, newvalues, function (err, user) {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        console.log(user);
-                                        res.json({ res: user.nModified });
-                                    }
-                                });
-                                //console.log(tempContractInstance.getPermissionStatus.call(requester.account_address, { from: student.account_address }).toString())
+
+                                waitForReceipt(transactionHash);
                             } else {
                                 console.log(error);
                             }
                         });
+
+                        function waitForReceipt(hash) {
+                            web3.eth.getTransactionReceipt(hash, function (err, receipt) {
+                                if (err) {
+                                    error(err);
+                                }
+
+                                if (receipt !== null) {
+                                    // Transaction went through
+                                    console.log(receipt);
+                                    console.log(tempContractInstance.getPermissionStatus.call(requester.account_address, { from: student.account_address }).toString())
+                                    permission.updateOne(myquery, newvalues, function (err, user) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            res.json({ res: user.nModified });
+                                        }
+                                    });
+                                } else {
+                                    // Try again in 1 second
+                                    setTimeout(() => {
+                                        waitForReceipt(hash);
+                                    }, 1000);
+                                }
+                            });
+                        }
                     }
                 }
             })
@@ -654,6 +693,7 @@ router.post('/deny', (req, res) => {
     })
 
 })
+
 
 
 
@@ -979,7 +1019,7 @@ router.post('/commit', (req, response) => {
     studentProfile.findOne({ userId: userData._id }, (error, user) => {
         if (error) {
             console.log(error)
-        
+
         } else if (user.contract_address) {
             response.json({ message: 'you already deployed the contract' });
         }
@@ -1040,5 +1080,25 @@ router.post('/commit', (req, response) => {
         }
     })
 })
+
+
+// function waitForReceipt(hash) {
+//     web3.eth.getTransactionReceipt(hash, function (err, receipt) {
+//         if (err) {
+//             error(err);
+//         }
+
+//         if (receipt !== null) {
+//             // Transaction went through
+//             console.log(receipt);
+//         } else {
+//             // Try again in 1 second
+//             setTimeout(() => {
+//                 waitForReceipt(hash);
+//             }, 1000);
+//         }
+//     });
+// }
+// waitForReceipt("0xee6e940491895b5f5adf4feb34b0ea98eac0c230a5b216a3b64ada65d0821c03")
 
 module.exports = router;
