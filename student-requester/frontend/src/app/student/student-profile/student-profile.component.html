@@ -21,10 +21,14 @@
       <br />
 
       <mat-form-field>
-        <input matInput placeholder="State" formControlName="state">
-        <mat-error>Enter state</mat-error>
-      </mat-form-field>
-      <br />
+          <mat-select placeholder="State" formControlName="state">
+            <mat-option *ngFor="let state of state" [value]="state.value">
+              {{state.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>Select State</mat-error>
+        </mat-form-field>
+        <br />
 
       <mat-form-field>
         <input matInput placeholder="Pincode" formControlName="pincode">
@@ -99,8 +103,12 @@
       <br />
 
       <mat-form-field>
-        <input matInput placeholder="State" formControlName="state">
-        <mat-error>Enter state</mat-error>
+        <mat-select placeholder="State" formControlName="state">
+          <mat-option *ngFor="let state of state" [value]="state.value">
+            {{state.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error>Select State</mat-error>
       </mat-form-field>
       <br />
 
@@ -141,6 +149,10 @@
       </mat-form-field>
       <br />
 
+      <mat-form-field>
+          <input matInput style="font-size: 13px" placeholder="account_address" formControlName="account_address">
+        </mat-form-field>
+        <br />
 
       <div class="wrapper">
         <button class="submit-button" mat-raised-button type="submit" [disabled]="profileDetails.invalid" color="primary">Update</button>

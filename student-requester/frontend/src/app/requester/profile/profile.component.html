@@ -30,8 +30,12 @@
       <br />
 
       <mat-form-field>
-        <input matInput placeholder="State" formControlName="state">
-        <mat-error>Enter state</mat-error>
+        <mat-select placeholder="State" formControlName="state">
+          <mat-option *ngFor="let state of state" [value]="state.value">
+            {{state.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error>Select State</mat-error>
       </mat-form-field>
       <br />
 
@@ -101,8 +105,12 @@
       <br />
 
       <mat-form-field>
-        <input matInput placeholder="State" formControlName="state">
-        <mat-error>Enter state</mat-error>
+        <mat-select placeholder="State" formControlName="state">
+          <mat-option *ngFor="let state of state" [value]="state.value">
+            {{state.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error>Select State</mat-error>
       </mat-form-field>
       <br />
 

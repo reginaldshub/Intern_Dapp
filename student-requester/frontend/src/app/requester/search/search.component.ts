@@ -1,8 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from '../interactionService/interaction.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn,} from '@angular/forms';
 import { RequesterService } from '../service/service.service';
 import {MatSort, MatTableDataSource} from '@angular/material';
+
+
+export const atLeastOne = (validator: ValidatorFn) => (
+  group: FormGroup,
+): ValidationErrors | null => {
+  const hasAtLeastOne = group && group.controls && Object.keys(group.controls)
+    .some(k => !validator(group.controls[k]));
+
+  return hasAtLeastOne ? null : {
+    atLeastOne: true,
+  };
+};
 
 // export interface searchElement {
 //   name: String;
@@ -49,6 +61,7 @@ export class SearchComponent implements OnInit {
   searchString = {
     requesterName: String,
     studentName: String,
+    email: String,
     status: String,
     id: String
   }
@@ -59,6 +72,7 @@ export class SearchComponent implements OnInit {
   }
   searchDataSourceValue: any;
   @ViewChild(MatSort) sort: MatSort;
+  showSpinner: boolean = false;
   constructor(private fb: FormBuilder,
     private requesterService: RequesterService,
     private _interactionservice: InteractionService) { }
@@ -66,9 +80,11 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
     this.username = sessionStorage.getItem('name');
     this.searchForm = this.fb.group({
-      'search': ['', [Validators.required, ]]
+      'name': [''],
+      'email': ['', [Validators.email ]]
       // Validators.pattern('^[A-Za-z]+$')
-    });
+    }, { validator: atLeastOne(Validators.required) });
+
     this.getRequests();
   }
 
@@ -91,14 +107,17 @@ export class SearchComponent implements OnInit {
 // }
 
   search() {
+    this.showSpinner = true;
     this.sessionValue = sessionStorage.getItem('_id');
     this.searchString.id = this.sessionValue;
     this.sessionValue = sessionStorage.getItem('name');
     this.searchString.requesterName = this.sessionValue;
-    this.searchString.studentName = this.searchForm.value.search;
+    this.searchString.studentName = this.searchForm.value.name;
+    this.searchString.email = this.searchForm.value.email;
     this.requesterService.checkAccess(this.searchString).subscribe((res: any) => {
       let array = [];
       console.log(res)
+      this.showSpinner = false;
       if (res.status == "request") {
         this.getRequests();
         this.searchDataSourceValue = true;
@@ -109,12 +128,12 @@ export class SearchComponent implements OnInit {
         // this.dataSource = array;
       }
        else if (res.status === "student not registered") {
-        this.getRequests();
+        // this.getRequests();
         this.searchDataSourceValue = true;
         this.searchDataSourceName = this.searchString.studentName;
         this.searchDataSourceStatus = res.status;
       } else if (res.status == "not student") {
-        this.getRequests();
+        // this.getRequests();
         this.searchDataSourceValue = true;
         this.searchDataSourceName = this.searchString.studentName;
         this.searchDataSourceStatus = res.status;
@@ -166,7 +185,6 @@ export class SearchComponent implements OnInit {
 
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
     { 
-      // console.log(res);
       let temp = res.students;
       let array = [];
       for( var i = 0; i < temp.length; i++){
@@ -174,6 +192,9 @@ export class SearchComponent implements OnInit {
       }
 
       this.dataSource = new MatTableDataSource(array);
+      console.log(this.dataSource.data.length);
+
+      // console.log(JSON.(this.dataSource));
       // this.dataSource = array;
       // console.log(this.dataSource);
     })

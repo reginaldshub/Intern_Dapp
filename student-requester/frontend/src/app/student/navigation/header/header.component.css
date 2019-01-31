@@ -81,8 +81,11 @@ ul {
    .dropbtn {
     background-color: #3C55B0;
     color: white;
-    padding-right: 50px;
-    font-size: 16px;
+    /* padding-right: 30px; */
+    font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    font-weight:400;
+    font-size:20px;
+    color:#ffffff;
     border: none;
     cursor: pointer;
     justify-content: space-between;

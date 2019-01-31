@@ -1,6 +1,9 @@
-<h1 *ngIf="response != null">Certificates</h1>
-<h3>Student Name: <i>{{Name.name}}</i></h3>
+<!-- <h1 *ngIf="response != null">Certificates</h1> -->
+
+<h3 *ngIf="response != null">Student Name: <i>{{Name.name}}</i></h3>
 <hr />
+<mat-spinner *ngIf="showSpinner"></mat-spinner>
+
 <div class="container">
     <div class="card-element" *ngFor="let data of response">
 

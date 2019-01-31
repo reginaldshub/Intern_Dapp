@@ -250,8 +250,8 @@ router.post('/reqcreate', verifyToken, (req, res) => {
                         console.log('error');
                     } else {
                         // console.log(result);
-                    requester.account_address = result;
-                    requester.state = "saved";
+                        requester.account_address = result;
+                        requester.state = "saved";
 
                         try {
                             web3.personal.unlockAccount("0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7", "Accion")
@@ -544,28 +544,6 @@ router.post('/setprofile', verifyToken, (req, res) => {
 
 })
 
-router.put('/requester/:id', verifyToken, (req, res) => {
-    console.log("params post" + req.body.name + JSON.stringify(req.body.Id))
-    console.log("req" +  JSON.stringify(req.params.id))
-    console.log("body" + JSON.stringify(req.body))
-    var profile = {
-        name: req.body.name,
-        address: req.body.address,
-        city: req.body.city,
-        state: req.body.state,
-        pincode: req.body.pincode,
-        url: req.body.url,
-        email: req.body.email,
-        country: req.body.country,
-        phone: req.body.phone
-    };
-
-    Profile.findOneAndUpdate(req.body.Id, { $set: profile }, { new: true },
-        (err, doc) => {
-            if (!err) { res.send({ message: "updated success", doc: doc }) }
-            else { console.log('error' + JSON.stringify(err, undefined, 2)); }
-        });
-});
 // api to grant the permission
 
 router.post('/grant', (req, res) => {
@@ -709,6 +687,7 @@ router.post('/deny', (req, res) => {
 
 router.post('/getstudentprofile', verifyToken, (req, res) => {
     let userData = req.body;
+    console.log(userData)
     let profile = new studentProfile(userData)
     studentProfile.findOne({ userId: profile.userId }, (error, user) => {
         if (error) {
@@ -747,10 +726,34 @@ router.post('/setstudentprofile', verifyToken, (req, res) => {
     })
 })
 
-router.put('/student/:id', verifyToken, (req, res) => {
-    console.log("params post" + req.body.name + req.body.Id)
-    console.log("req" + req.params.id)
+
+router.put('/requester/:id', verifyToken, (req, res) => {
+    console.log("params post" + req.body.name + JSON.stringify(req.body.Id))
+    console.log("req" + JSON.stringify(req.params.id))
     console.log("body" + JSON.stringify(req.body))
+    var profile = {
+        name: req.body.name,
+        address: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        pincode: req.body.pincode,
+        url: req.body.url,
+        email: req.body.email,
+        country: req.body.country,
+        phone: req.body.phone
+    };
+
+    Profile.updateOne({userId:req.body.userId}, { $set: profile }, { new: true },
+        (err, doc) => {
+            if (!err) { res.send({ message: "updated success", doc: doc }) }
+            else { console.log('error' + JSON.stringify(err, undefined, 2)); }
+        });
+});
+
+router.put('/student/:id', verifyToken, (req, res) => {
+    console.log("params post" + req.body.name + JSON.stringify(req.body.userId))
+    console.log("req" + req.params.id)
+    // console.log("body" + JSON.stringify(req.body))
     var profile = {
         name: req.body.name,
         address: req.body.address,
@@ -763,33 +766,43 @@ router.put('/student/:id', verifyToken, (req, res) => {
         phone: req.body.phone
     };
 
-    studentProfile.findOneAndUpdate(req.body.Id, { $set: profile }, { new: true },
+    studentProfile.updateOne({userId: req.body.userId}, { $set: profile }, { new: true },
         (err, doc) => {
+            console.log(doc);
             if (!err) { res.send({ message: "updated success", doc: doc }) }
             else { console.log('error' + JSON.stringify(err, undefined, 2)); }
         });
 });
 
 router.post('/checkaccess', verifyToken, (req, res) => {
-    let searchData = req.body;
-    // Profile.findOne({ name: searchData.studentName }, (error, profile_data) => {
-    //     if (error) {
-    //         console.log(error)
-    //     }else if(profile_data.STATE == 'committed'){
+    // let searchData = req.body;
+    var studentEmail = { email:req.body.email};
+    var studentName = { name: req.body.studentName};
+    var id = req.body.id;
+    var query;
+    if (studentEmail.email != '' && studentName.name != '') {
+        query = { $and: [studentEmail, studentName] };
+    } else if (studentEmail.email != '') {
+        console.log('only studentEmail');
+        query = studentEmail;
+    }else if (studentName.name != '') {
+        console.log('only studentName');
+        query = studentName;
+    } else {
+        console.log("either of them");
+        query = null;
+    }
+   console.log(query);
 
-    //     }else{
-
-    //     }
-    // })
-    Register.findOne({ name: searchData.studentName }, (error, reg_user) => {
+    Register.findOne(query, (error, reg_user) => {
         if (error) {
             console.log(error)
         }
         else if (reg_user) {
             if (reg_user.Roles == "student") {
-                permission.findOne({ studentID: reg_user._id, requesterID: searchData.id }, (error, User) => {
+                permission.findOne({ studentID: reg_user._id, requesterID: id }, (error, User) => {
                     if (User) {
-                        res.json({ status: User.Status, name: searchData.studentName, user: User })
+                        res.json({ status: User.Status, name: studentName.name, user: User })
                     } else {
                         res.json({ status: "request", user: reg_user })
                     }
@@ -1024,7 +1037,7 @@ router.post('/commit', (req, response) => {
     studentProfile.findOne({ userId: userData._id }, (error, user) => {
         if (error) {
             console.log(error)
-        
+
         } else if (user.contract_address) {
             response.json({ message: 'you already deployed the contract' });
         }

@@ -12,8 +12,8 @@ export class ServiceService {
     return this.http.post("http://localhost:3000/products/setstudentprofile", data);
   }
 
-  getStudentProfile(id) {
-    return this.http.post("http://localhost:3000/products/getstudentprofile", id);
+  getStudentProfile(data) {
+    return this.http.post("http://localhost:3000/products/getstudentprofile", data);
   }
 
   updateStudentProfile(data) {

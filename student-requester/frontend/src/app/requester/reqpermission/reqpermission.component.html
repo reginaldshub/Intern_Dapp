@@ -1,4 +1,4 @@
-<div class="granted-list">
+<div *ngIf = "dataSource.length != 0" class="granted-list">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
 
@@ -38,4 +38,8 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+</div>
+
+<div class="granted-list" *ngIf = "dataSource.length == 0">
+Sorry! No Student has granded you Access...<br/> 
 </div>

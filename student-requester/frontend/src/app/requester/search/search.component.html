@@ -12,15 +12,20 @@
 <div class="search-bar">
   <form class="Profile-form" [formGroup]='searchForm' (submit)="search()">
     <mat-form-field>
-      <input matInput placeholder="Search" formControlName="search">
+      <input matInput placeholder="Name" formControlName="name">
       <mat-error>Enter valid name</mat-error>
     </mat-form-field>
+    <mat-form-field class="email-input">
+        <input matInput placeholder="Email" formControlName="email">
+        <mat-error>Enter valid email</mat-error>
+      </mat-form-field>
 
     <span class="search-button">
       <button mat-raised-button type="submit" [disabled]="searchForm.invalid" color="primary">Search</button>
     </span>
   </form>
 </div>
+
 
 <div class="search-results" *ngIf="searchDataSourceValue">
     <p style="padding-right: 20px">{{searchDataSourceName}}</p>
@@ -31,7 +36,7 @@
   <br />
   <br />
 
-<div class="granted-list">
+<div *ngIf="dataSource.data.length != 0" class="granted-list">
   <!-- <mat-card>
         <h2>Search Results</h2>
         
@@ -80,3 +85,8 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
+
+<div *ngIf="dataSource.data.length == 0" class="granted-list">
+  No Requests made yet!!!!
+</div>
+

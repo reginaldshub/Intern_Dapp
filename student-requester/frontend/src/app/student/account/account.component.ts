@@ -35,6 +35,7 @@ export class AccountComponent implements OnInit {
   constructor(private service: ServiceService, private router: Router) { }
 
   ngOnInit() {
+    this.Create.controls['password'].disable();
     this.Account.controls['network'].disable();
     this.Account.controls['accountNumber'].disable();
   }

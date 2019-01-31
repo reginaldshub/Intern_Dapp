@@ -1,4 +1,4 @@
-<div class="container"> 
+<!-- <div class="container"> 
 
     <mat-radio-group>
         <mat-radio-button value="1" (click) = "create()">Create Account</mat-radio-button>
@@ -39,4 +39,52 @@
       {{account}}
     </mat-card>
   </div>
+</div> -->
+
+<div class="grant">
+  <table>
+    <tr>
+      <th>
+        <mat-radio-button value="1" (click)="attach()"></mat-radio-button>
+      </th>
+      <th>
+        <mat-card class="account">
+          <form [formGroup]="Account" (submit)="onSubmit()">
+            <h3>Select Network</h3>
+            <mat-form-field>
+              <mat-select placeholder="Select network" formControlName="network">
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let network of networks" [value]="network.value">
+                  {{network.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <h3>Account Address</h3>
+            <mat-form-field>
+              <input formControlName="accountNumber" matInput placeholder="Account number">
+            </mat-form-field><br />
+            <button *ngIf="attachButton" mat-raised-button type="submit" color="primary" [disabled]="Account.invalid">Attach</button>
+          </form>
+        </mat-card>
+      </th>
+    </tr>
+    <tr>
+      <th>
+        <mat-radio-button value="2" (click)="create()"></mat-radio-button>
+      </th>
+      <th>
+        <mat-card class="new-account">
+          <form [formGroup]="Create" (submit)="onCreate()">
+            <h3>Create New Account (Local Network)</h3>
+            <mat-form-field>
+              <input formControlName="password" matInput placeholder="Password">
+              <mat-error>enter password</mat-error>
+            </mat-form-field><br />
+            <button *ngIf="createButton" mat-raised-button type="submit" color="primary" [disabled]="Create.invalid">Create</button>
+          </form>
+          {{account}}
+        </mat-card>
+      </th>
+    </tr>
+  </table>
 </div>
