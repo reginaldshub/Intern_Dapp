@@ -739,7 +739,7 @@ router.put('/requester/:id', verifyToken, (req, res) => {
         phone: req.body.phone
     };
 
-    Profile.updateOne({ userId: req.body.userId }, { $set: profile }, { new: true },
+    Profile.updateOne({userId:req.body.userId}, { $set: profile }, { new: true },
         (err, doc) => {
             if (!err) { res.send({ message: "updated success", doc: doc }) }
             else { console.log('error' + JSON.stringify(err, undefined, 2)); }
@@ -762,7 +762,7 @@ router.put('/student/:id', verifyToken, (req, res) => {
         phone: req.body.phone
     };
 
-    studentProfile.updateOne({ userId: req.body.userId }, { $set: profile }, { new: true },
+    studentProfile.updateOne({userId: req.body.userId}, { $set: profile }, { new: true },
         (err, doc) => {
             console.log(doc);
             if (!err) { res.send({ message: "updated success", doc: doc }) }
@@ -772,8 +772,8 @@ router.put('/student/:id', verifyToken, (req, res) => {
 
 router.post('/checkaccess', verifyToken, (req, res) => {
     // let searchData = req.body;
-    var studentEmail = { email: req.body.email };
-    var studentName = { name: req.body.studentName };
+    var studentEmail = { email:req.body.email};
+    var studentName = { name: req.body.studentName};
     var id = req.body.id;
     var query;
     if (studentEmail.email != '' && studentName.name != '') {
@@ -781,14 +781,14 @@ router.post('/checkaccess', verifyToken, (req, res) => {
     } else if (studentEmail.email != '') {
         console.log('only studentEmail');
         query = studentEmail;
-    } else if (studentName.name != '') {
+    }else if (studentName.name != '') {
         console.log('only studentName');
         query = studentName;
     } else {
         console.log("either of them");
         query = null;
     }
-    console.log(query);
+   console.log(query);
 
     Register.findOne(query, (error, reg_user) => {
         if (error) {

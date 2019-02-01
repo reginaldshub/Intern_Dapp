@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { InteractionService } from '../interactionService/interaction.service';
-import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn,} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidationErrors, ValidatorFn, } from '@angular/forms';
 import { RequesterService } from '../service/service.service';
-import {MatSort, MatTableDataSource} from '@angular/material';
+import { MatSort, MatTableDataSource } from '@angular/material';
 
 
 export const atLeastOne = (validator: ValidatorFn) => (
@@ -16,12 +16,6 @@ export const atLeastOne = (validator: ValidatorFn) => (
   };
 };
 
-// export interface searchElement {
-//   name: String;
-//   status: String;
-// }
-
-// let SearchData: searchElement[];
 export interface UserData {
   Created_time: Date;
   Status: String;
@@ -38,10 +32,10 @@ export interface UserData {
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  
+
   searchForm: FormGroup;
   status;
-  searchResponse= {
+  searchResponse = {
     id: String,
     studentName: String
   };
@@ -70,7 +64,7 @@ export class SearchComponent implements OnInit {
   permissionReq = {
     requesterID: String,
   }
-  searchDataSourceValue: any;
+  searchDataSourceValue: boolean = false;
   @ViewChild(MatSort) sort: MatSort;
   showSpinner: boolean = false;
   constructor(private fb: FormBuilder,
@@ -81,30 +75,13 @@ export class SearchComponent implements OnInit {
     this.username = sessionStorage.getItem('name');
     this.searchForm = this.fb.group({
       'name': [''],
-      'email': ['', [Validators.email ]]
-      // Validators.pattern('^[A-Za-z]+$')
+      'email': ['', [Validators.email]]
     }, { validator: atLeastOne(Validators.required) });
 
     this.getRequests();
   }
 
   displayedColumns: string[] = ['name', 'status'];
-
-  // searchName(name, array){
-  //   for (let i=0; i < array.length; i++) {
-  //   if(array[i].studentName == name){
-  //     console.log(array[i])
-  //     this.dataSource = null;
-  //     var a = [];
-  //     a.push(array[i])
-  //     this.dataSource = null;
-  //     this.dataSource = a;
-  //     console.log("if")
-  //   }else{
-  //     console.log("else")
-  //   }
-  // }
-// }
 
   search() {
     this.showSpinner = true;
@@ -125,40 +102,26 @@ export class SearchComponent implements OnInit {
         this.searchResponse.studentName = res.user.name;
         this.searchDataSourceName = res.user.name;
         this.searchDataSourceStatus = res.status;
-        // this.dataSource = array;
       }
-       else if (res.status === "student not registered") {
-        // this.getRequests();
+      else if (res.status === "student not registered") {
         this.searchDataSourceValue = true;
         this.searchDataSourceName = this.searchString.studentName;
         this.searchDataSourceStatus = res.status;
       } else if (res.status == "not student") {
-        // this.getRequests();
         this.searchDataSourceValue = true;
         this.searchDataSourceName = this.searchString.studentName;
         this.searchDataSourceStatus = res.status;
-      } 
+      }
       else {
         this.searchDataSourceValue = false;
         let name: any = this.searchString.studentName;
         this.dataSource.filter = name.trim();
-        // this.searchName(this.searchString.studentName, this.dataSource);
-        // console.log(res)
-        // this.requestdata.studentName = res.user.studentName;
-        // this.requestdata.requesterName = res.user.requesterName;
-        // this.requestdata.requesterID = res.user.requesterID;
-        // this.requestdata.studentID = res.user.studentID;
-        // this.requestdata.Created_time = res.user.Created_time;
-        // this.requestdata.Status = res.user.Status;
-        // array.push(this.requestdata);
-        // this.dataSource = array;
       }
     })
   }
 
   sendData(name) {
     this.searchDataSourceValue = false;
-    // this._interactionservice.sendMessage(name);
     let sessionValue: any = sessionStorage.getItem('_id');
     let sessionNameValue: any = sessionStorage.getItem('name');
     let date: any = new Date();
@@ -171,37 +134,26 @@ export class SearchComponent implements OnInit {
     this.requestdata.Status = temp;
 
     this.requesterService.request(this.requestdata).subscribe((res: any) => {
-      // console.log(res);
       this.search();
       this.getRequests();
     })
   }
 
 
-  getRequests(){
- 
+  getRequests() {
+
     this.sessionValue = sessionStorage.getItem('_id');
     this.permissionReq.requesterID = this.sessionValue;
 
-    this.requesterService.getGrantedList(this.permissionReq).subscribe((res:any)=>
-    { 
+    this.requesterService.getGrantedList(this.permissionReq).subscribe((res: any) => {
       let temp = res.students;
       let array = [];
-      for( var i = 0; i < temp.length; i++){
-         array.push(temp[i]);
+      for (var i = 0; i < temp.length; i++) {
+        array.push(temp[i]);
       }
 
       this.dataSource = new MatTableDataSource(array);
       console.log(this.dataSource.data.length);
-
-      // console.log(JSON.(this.dataSource));
-      // this.dataSource = array;
-      // console.log(this.dataSource);
     })
   }
-
 }
-//   applyFilter(filterValue: string) {
-//     this.dataSource.filter = filterValue.trim().toLowerCase();
-//   }
-// }

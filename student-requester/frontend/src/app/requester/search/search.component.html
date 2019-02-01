@@ -1,13 +1,3 @@
-<!-- <mat-toolbar color="primary">
-    <button mat-button color="warn" [routerLink]="['/account']">Account</button>
-    <button mat-button class="profile" [routerLink]="['/requester/search']">Search</button>
-    <button mat-button class="profile" [routerLink]="['/requester/requests']">Requests</button>
-    <button mat-button class="profile" [routerLink]="['/requester/profile']">Profile</button>
-    <button mat-button class="profile" [routerLink]="['/requester/dashboard']">Dashboard</button>
-    <button class="logout" mat-button [routerLink]="['/login']" (click)="authService.logoutUser()">Logout</button>
-    <mat-icon>person</mat-icon>
-    <p><strong>{{username}}</strong></p>
-</mat-toolbar> -->
 <br />
 <div class="search-bar">
   <form class="Profile-form" [formGroup]='searchForm' (submit)="search()">
@@ -16,9 +6,9 @@
       <mat-error>Enter valid name</mat-error>
     </mat-form-field>
     <mat-form-field class="email-input">
-        <input matInput placeholder="Email" formControlName="email">
-        <mat-error>Enter valid email</mat-error>
-      </mat-form-field>
+      <input matInput placeholder="Email" formControlName="email">
+      <mat-error>Enter valid email</mat-error>
+    </mat-form-field>
 
     <span class="search-button">
       <button mat-raised-button type="submit" [disabled]="searchForm.invalid" color="primary">Search</button>
@@ -28,41 +18,18 @@
 
 
 <div class="search-results" *ngIf="searchDataSourceValue">
-    <p style="padding-right: 20px">{{searchDataSourceName}}</p>
- <button style="padding-left: 20px" *ngIf = "searchDataSourceStatus == 'request'" class="request-btn" (click) = "sendData(searchDataSourceName)" mat-raised-button matTooltip="request">{{searchDataSourceStatus}}</button>
-    <p *ngIf = "searchDataSourceStatus != 'request'" style="padding-left: 10px">{{searchDataSourceStatus}}</p>
-    
-  </div>
-  <br />
-  <br />
+  <p style="padding-right: 20px">{{searchDataSourceName}}</p>
+  <button style="padding-left: 20px" *ngIf="searchDataSourceStatus == 'request'" class="request-btn" (click)="sendData(searchDataSourceName)"
+    mat-raised-button matTooltip="request">{{searchDataSourceStatus}}</button>
+  <p *ngIf="searchDataSourceStatus != 'request'" style="padding-left: 10px">{{searchDataSourceStatus}}</p>
+
+</div>
+<br />
+<br />
 
 <div *ngIf="dataSource.data.length != 0" class="granted-list">
-  <!-- <mat-card>
-        <h2>Search Results</h2>
-        
-        <mat-form-field>
-          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-        </mat-form-field>
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-        
-         <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef><h3> Name</h3> </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-        
-        
-          <ng-container matColumnDef="status">  
-            <th mat-header-cell *matHeaderCellDef><h3>Status</h3> </th>
-            <td mat-cell *matCellDef="let element">{{element.status}}</td>
-          </ng-container>
-        
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-        </mat-card> -->
 
-  <table mat-table [dataSource]="dataSource"  class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
 
     <ng-container matColumnDef="name">
@@ -75,8 +42,6 @@
     <ng-container class="status" matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef> Status </th>
       <td mat-cell *matCellDef="let element">
-        <!-- <button *ngIf = "status == 'request'" class="request-btn" (click) = "sendData(element.studentName)" mat-raised-button matTooltip="request">{{status}}</button> -->
-        <!-- <p *ngIf = "status != 'request'">{{element.Status}}</p> -->
         {{element.Status}}
       </td>
     </ng-container>
@@ -89,4 +54,3 @@
 <div *ngIf="dataSource.data.length == 0" class="granted-list">
   No Requests made yet!!!!
 </div>
-

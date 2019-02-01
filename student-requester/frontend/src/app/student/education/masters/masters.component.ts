@@ -27,8 +27,8 @@ export class MastersComponent implements OnInit {
   }
   addSubjectGroup() {
     return this.fb.group({
-      subjectname: [],
-      subjectmarks: []
+      subjectname: ['', Validators.required],
+      subjectmarks: ['', Validators.required]
     });
   }
 
@@ -43,6 +43,7 @@ export class MastersComponent implements OnInit {
   }
 
   Remove(index) {
+    if(index >  1)
     this.subjectArray.removeAt(index);
   }
 

@@ -42,11 +42,10 @@
 
 ul {
     list-style-type: none;
-    margin: 0;
+    /* margin: 0; */
     padding: 0;
     overflow: hidden;
     background-color: #3C55B0;
-    width:100%
   }
   
   li {
@@ -84,12 +83,23 @@ ul {
     border: none;
     cursor: pointer;
     justify-content: space-between;
+    padding: 12px 0;
+
+    margin-top:5px;
   }
   
   .dropdown {
-    position: relative;
+    /* position: relative; */
     display: inline-block;
-    margin-top:5px;
+    width:25%;
+    float:left;
+    padding: 12px 0;
+    text-align: right;
+  }
+
+  div, button {
+    outline:none;
+    border:none;
   }
 
   div, button {
@@ -132,5 +142,16 @@ ul {
   mat-toolbar{
   position: fixed;
   z-index: 1;
-  margin-top: 0px;
+  /* margin-top: 0px; */
 }
+
+.outer-container{
+  width: 99%;
+}
+
+.header{
+  width: 75%;
+  float: left;
+}
+
+

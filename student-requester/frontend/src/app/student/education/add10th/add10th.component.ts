@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { StudentService } from '../../student.service';
+
+import { NgForm } from "@angular/forms";
 @Component({
   selector: 'app-add10th',
   templateUrl: './add10th.component.html',
@@ -25,8 +27,8 @@ export class Add10thComponent implements OnInit {
   }
   addSubjectGroup() {
     return this.fb.group({
-      subjectname: [],
-      subjectmarks: []
+      subjectname: ['', Validators.required],
+      subjectmarks: ['', Validators.required]
     });
   }
 
@@ -41,6 +43,7 @@ export class Add10thComponent implements OnInit {
   }
 
   Remove(index) {
+    if(index >  1)
     this.subjectArray.removeAt(index);
   }
 
