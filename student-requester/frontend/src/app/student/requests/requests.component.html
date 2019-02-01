@@ -37,6 +37,13 @@
 
             </td>
         </ng-container>
+        <ng-container class="status" matColumnDef="checkstatus">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element; let i = index;">
+                <button color="warn" (click) = "checkstatus(element.requesterID,element.studentID, i)" mat-raised-button>checkstatus</button>
+
+            </td>
+        </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

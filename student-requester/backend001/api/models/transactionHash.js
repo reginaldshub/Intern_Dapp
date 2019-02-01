@@ -1,4 +1,4 @@
-
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
@@ -11,7 +11,7 @@ const userSchema = new Schema({
         required: true
     },
     requestTransactionHash:{
-       type:String
+        type:String
     },
     grantTransactionHash:{
         type:String

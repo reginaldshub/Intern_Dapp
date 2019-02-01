@@ -25,5 +25,8 @@ export class ServiceService {
   deny(data) {
     return this.http.post("http://localhost:3000/products/deny", data);
   }
+  checkstatus(data){
+    return this.http.post("http://localhost:3000/products/checkstatus",data);
+  }
 
 }
