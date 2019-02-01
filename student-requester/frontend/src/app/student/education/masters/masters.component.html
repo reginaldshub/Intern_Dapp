@@ -1,34 +1,25 @@
-<!-- 
-<div class="sidenav">
-  <button mat-button color="warn" [routerLink]="['/student/puc']">PUC</button>
-  <button mat-button color="warn" [routerLink]="['/student/add10th']">SSLC</button>
-  <button mat-button color="warn" [routerLink]="['/student/degree']">DEGREE</button>
-  <button mat-button color="warn" [routerLink]="['/student/masters']">MASTERS</button>
-  </div> -->
+
 <div class="container">
   <mat-card>
     <form [formGroup]="masters">
       <!-- <h2>Fill masters Details:</h2> -->
-      <mat-form-field>
+      <mat-form-field class="input-textfield">
         <input matInput placeholder="Student Id" formControlName="id">
         <mat-error>Enter name</mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="input-textfield">
         <input matInput placeholder="Education Category" formControlName="ecategory">
       </mat-form-field>
-      <br />
-      <mat-form-field>
+      <mat-form-field class="input-textfield">
         <input matInput placeholder="Start Year" formControlName="Startyear">
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="input-textfield">
         <input matInput placeholder="End Year" formControlName="Endyear">
       </mat-form-field>
-      <br />
-      <mat-form-field>
+      <mat-form-field class="input-textfield">
           <input matInput placeholder="Branch Name" formControlName="Branchname">
         </mat-form-field>
         <br>
-      <button mat-raised-button color="primary" (click)="Add()">AddSubject</button>
       <div class="wrapper">
         <div formArrayName="addsubjects">
           <div *ngFor="let group of subjectArray.controls; let i= index;" [formGroupName]="i">
@@ -39,8 +30,12 @@
               <input matInput placeholder="Subject Marks" formControlName="subjectmarks">
             </mat-form-field>
 
-            <button class="remove-btn" mat-raised-button color="primary" (click)="Remove(i)">Remove</button>
-          </div>
+            <button mat-button color="primary" [disabled]="masters.invalid" (click)="Add()">
+                <mat-icon>add_circle_outline</mat-icon>
+              </button>
+              <button *ngIf="i > 1" class="remove-btn" mat-button color="primary" (click)="Remove(i)">
+                <mat-icon>remove_circle_outline</mat-icon>
+              </button>          </div>
         </div>
       </div>
       <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="masters.invalid" color="primary">Save</button>

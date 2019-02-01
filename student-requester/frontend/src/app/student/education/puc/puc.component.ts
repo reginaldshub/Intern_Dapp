@@ -26,8 +26,8 @@ export class PucComponent implements OnInit {
   }
   addSubjectGroup() {
     return this.fb.group({
-      subjectname: [],
-      subjectmarks: []
+      subjectname: ['', Validators.required],
+      subjectmarks: ['', Validators.required]
     });
   }
 
@@ -42,6 +42,7 @@ export class PucComponent implements OnInit {
   }
 
   Remove(index) {
+    if(index >  1)
     this.subjectArray.removeAt(index);
   }
 
