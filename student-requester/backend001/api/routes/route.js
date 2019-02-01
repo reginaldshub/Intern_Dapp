@@ -15,6 +15,7 @@ const Certificates = require('../models/certificates.js')
 const HelloWorldABI = require("../../HelloWorldABI.json");
 const perm_register_join = require('../models/permregJoin.js')
 const transaction = require('../models/transactionHash.js')
+const permission_status = require('../models/Permission_status');
 // const PUC = require('../models/puc.js')
 // const DEGREE = require('../models/degree.js')
 
@@ -1119,6 +1120,7 @@ router.post('/checkstatus', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
     console.log(req.body);
+   
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
     Profile.findOne({ userId: requesterID }, (error, requester) => {
         if (error) {
@@ -1140,7 +1142,22 @@ router.post('/checkstatus', (req, res) => {
                             from: student.account_address
                         }, function (error, status) {
                             if (!error) {
-                                console.log(status.toString());
+                                let status1;
+                                let statusName;
+                                status1=status.toString()
+                                console.log(status1);
+                                permission_status.find({ID:status1},(err,result1)=>{
+                                    console.log(statusName=result1['0'].Name);
+                                    var newvalues = { $set: { Status: statusName } };
+                                        console.log(newvalues);
+                                    permission.updateOne(myquery, newvalues, function (err, user) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            res.status(200).json({ res:statusName});
+                                        }
+                                    });
+                                })
                             } else {
                                 console.log(error);
                             }
@@ -1170,7 +1187,7 @@ router.post('/grant', (req, res) => {
             studentProfile.findOne({ userId: studentID }, (error, student) => {
                 if (error) {
                     console.log(error)
-                } else {
+                } else { 
                     if (!web3.isConnected()) {
                         console.log("please run the node")
                     } else {
@@ -1188,6 +1205,10 @@ router.post('/grant', (req, res) => {
                             from: student.account_address,
                             gas: 4000000
                         }, function (error, transactionHash) {
+                            // let studentaccount=student.account_address;
+                            // let requestaccount=requester.account_address;
+                            // let contractaddress=student.contract_address;
+                //    getandUpdateStatus(transactionHash,myquery,requester.account_address,student.contract_address,student.account_address)
                             if (!error) {
                                 transaction.findOne(myquery, function (err, contract) {
                                     contract.grantTransactionHash = transactionHash
@@ -1348,5 +1369,48 @@ router.post('/deny', (req, res) => {
         }
     })
 })
+
+function getandUpdateStatus(transactionHash, myquery, requesteraccount, contractaddress, studentaccount) {
+    const tempContract = web3.eth.contract(HelloWorldABI);
+    var tempContractInstance = tempContract.at(contractaddress);
+    function Receipt(transactionHash) {
+        web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
+            if (err) {
+                error(err);
+            }
+            if (receipt !== null) {
+                tempContractInstance.getPermissionStatus(requesteraccount, {
+                    from: studentaccount
+                }, function (error, status) {
+                    if (!error) {
+                        let status1;
+                        let statusName;
+                        status1 = status.toString()
+                        console.log(status1);
+                        permission_status.find({ ID: status1 }, (err, result1) => {
+                            console.log(statusName = result1['0'].Name);
+                            var newvalues = { $set: { Status: statusName } };
+                            console.log(newvalues);
+                            permission.updateOne(myquery, newvalues, function (err, user) {
+                                if (err) {
+                                    throw err;
+                                } else {
+                                    console.log(user);
+                                }
+                            });
+                        })
+                    } else {
+                        console.log(error);
+                    }
+                });
+            } else {
+                setTimeout(() => {
+                Receipt(transactionHash);
+                }, 1000);
+            }
+        })
+    }
+    Receipt(transactionHash);
+}
 
 module.exports = router;
