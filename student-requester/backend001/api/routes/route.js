@@ -803,11 +803,11 @@ router.post('/checkaccess', verifyToken, (req, res) => {
                     }
                 })
             } else {
-                res.json({ status: "not student" })
+                res.json({ status: "Not Found" })
             }
         }
         else {
-            res.json({ status: "student not registered" })
+            res.json({ status: "Not Found" })
         }
     })
 })

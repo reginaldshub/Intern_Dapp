@@ -10,19 +10,34 @@ export class DegreeComponent implements OnInit {
 
   degree: FormGroup
   id: string;
+  disableBtn: boolean;
   constructor(private fb: FormBuilder, private service: StudentService) {
     this.degree = this.fb.group({
       id:[],
       studentid: [],
-      ecategory: [],
-      Startyear: [],
-      Endyear: [],
-      Branchname:[],
+      ecategory: ['', Validators.required],
+      Startyear: ['', Validators.required],
+      Endyear: ['', Validators.required],
+      Branchname:['', Validators.required],
       addsubjects: this.fb.array([this.addSubjectGroup()])
     });
   }
   ngOnInit() {
     this.id = sessionStorage.getItem('_id');
+    this.degree.valueChanges.subscribe((changedObj: any) => {
+
+      // console.log(changedObj.addsubjects.length)
+      for (let i = 0; i < changedObj.addsubjects.length; i++) {
+        console.log(changedObj.addsubjects[i])
+        if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
+          this.disableBtn = false;
+        }else {
+          this.disableBtn = true;
+          break;
+        }
+      }
+
+    });
   }
   addSubjectGroup() {
     return this.fb.group({
@@ -42,7 +57,7 @@ export class DegreeComponent implements OnInit {
   }
 
   Remove(index) {
-    if(index >  1)
+    if ((this.degree.value.addsubjects.length) > 1)
     this.subjectArray.removeAt(index);
   }
 

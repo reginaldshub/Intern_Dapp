@@ -20,7 +20,7 @@
   <p style="padding-right: 20px">{{searchDataSourceName}}</p>
   <button style="padding-left: 20px" *ngIf="searchDataSourceStatus == 'request'" class="request-btn" (click)="sendData(searchDataSourceName)"
     mat-raised-button matTooltip="request">{{searchDataSourceStatus}}</button>
-  <p *ngIf="searchDataSourceStatus != 'request'" style="padding-left: 10px">{{searchDataSourceStatus}}</p>
+  <p *ngIf="searchDataSourceStatus != 'request'">{{searchDataSourceStatus}}</p>
 
 </div>
 <br />
@@ -50,6 +50,6 @@
   </table>
 </div>
 
-<div *ngIf="dataSource.data.length == 0" class="granted-list">
+<!-- <div *ngIf="dataSource.data.length == 0" class="granted-list">
   No Requests made yet!!!!
-</div>
+</div> -->

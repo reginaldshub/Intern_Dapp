@@ -38,7 +38,7 @@
             <button mat-button color="primary" [disabled]="degree.invalid" (click)="Add()">
               <mat-icon>add_circle_outline</mat-icon>
             </button>
-            <button *ngIf="i > 1" class="remove-btn" mat-button color="primary" (click)="Remove(i)">
+            <button *ngIf="i > 1" class="remove-btn" mat-button color="primary" [disabled]="disableBtn" (click)="Remove(i)">
               <mat-icon>remove_circle_outline</mat-icon>
             </button>
           </div>

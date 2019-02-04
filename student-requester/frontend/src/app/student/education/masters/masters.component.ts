@@ -11,6 +11,7 @@ export class MastersComponent implements OnInit {
 
   masters: FormGroup;
   id: string;
+  disableBtn: boolean;
   constructor(private fb: FormBuilder, private service: StudentService) {
     this.masters = this.fb.group({
       id: [],
@@ -24,6 +25,21 @@ export class MastersComponent implements OnInit {
   }
   ngOnInit() {
     this.id = sessionStorage.getItem('_id');
+
+    this.masters.valueChanges.subscribe((changedObj: any) => {
+
+      // console.log(changedObj.addsubjects.length)
+      for (let i = 0; i < changedObj.addsubjects.length; i++) {
+        console.log(changedObj.addsubjects[i])
+        if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
+          this.disableBtn = false;
+        }else {
+          this.disableBtn = true;
+          break;
+        }
+      }
+
+    });
   }
   addSubjectGroup() {
     return this.fb.group({
@@ -43,7 +59,7 @@ export class MastersComponent implements OnInit {
   }
 
   Remove(index) {
-    if(index >  1)
+    if ((this.masters.value.addsubjects.length) > 1)
     this.subjectArray.removeAt(index);
   }
 

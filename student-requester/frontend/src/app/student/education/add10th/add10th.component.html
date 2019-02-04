@@ -25,10 +25,10 @@
             <mat-form-field>
               <input matInput placeholder="Subject Marks" formControlName="subjectmarks">
             </mat-form-field>
-            <button mat-button color="primary" [disabled]="add10th.invalid" (click)="Add()">
+            <button mat-button color="primary" [disabled]="disableBtn" (click)="Add()">
               <mat-icon>add_circle_outline</mat-icon>
             </button>
-            <button *ngIf="i > 1" class="remove-btn" mat-button color="primary" (click)="Remove(i)">
+            <button class="remove-btn" mat-button color="primary" (click)="Remove(i)">
               <mat-icon>remove_circle_outline</mat-icon>
             </button>
           </div>

@@ -1,12 +1,3 @@
-<!-- <div class="sidenav">
-<button mat-button color="warn" [routerLink]="['/student/puc']">PUC</button>
-<button mat-button color="warn" [routerLink]="['/student/add10th']">SSLC</button>
-<button mat-button color="warn" [routerLink]="['/student/degree']">DEGREE</button>
-<button mat-button color="warn" [routerLink]="['/student/masters']">MASTERS</button>
-<button mat-button color="warn" [routerLink]="['/student/commit']">COMMIT</button>
-<div>
-<router-outlet></router-outlet> -->
-
 <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
         <mat-expansion-panel-header>
@@ -18,13 +9,7 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
         <app-add10th></app-add10th>
-        <!-- <mat-form-field>
-            <input matInput placeholder="First name">
-          </mat-form-field>
-      
-          <mat-form-field>
-            <input matInput type="number" min="1" placeholder="Age">
-          </mat-form-field> -->
+       
 
 
 

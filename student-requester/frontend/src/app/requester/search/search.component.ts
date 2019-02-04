@@ -103,15 +103,16 @@ export class SearchComponent implements OnInit {
         this.searchDataSourceName = res.user.name;
         this.searchDataSourceStatus = res.status;
       }
-      else if (res.status === "student not registered") {
-        this.searchDataSourceValue = true;
-        this.searchDataSourceName = this.searchString.studentName;
-        this.searchDataSourceStatus = res.status;
-      } else if (res.status == "not student") {
+      else if (res.status === "Not Found") {
         this.searchDataSourceValue = true;
         this.searchDataSourceName = this.searchString.studentName;
         this.searchDataSourceStatus = res.status;
       }
+      //  else if (res.status == "not student") {
+      //   this.searchDataSourceValue = true;
+      //   this.searchDataSourceName = this.searchString.studentName;
+      //   this.searchDataSourceStatus = res.status;
+      // }
       else {
         this.searchDataSourceValue = false;
         let name: any = this.searchString.studentName;
