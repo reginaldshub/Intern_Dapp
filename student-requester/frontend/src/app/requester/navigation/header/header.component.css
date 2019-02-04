@@ -101,6 +101,11 @@ ul {
     outline:none;
     border:none;
   }
+
+  div, button {
+    outline:none;
+    border:none;
+  }
   
   .dropdown-content {
     display: none;
