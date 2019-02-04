@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequesterService } from 'src/app/requester/service/service.service';
 import { ServiceService } from '../service/service.service';
 import { Router } from '@angular/router';
+import { MaterialModule } from '../../material/material.module';
 
 @Component({
   selector: 'app-requests',
@@ -28,11 +29,10 @@ export class RequestsComponent implements OnInit {
   showSpinner: boolean = false;
 
   constructor(private requesterService: RequesterService,
-    private service: ServiceService, private router: Router) { }
+    private service: ServiceService, private router: Router,
+    private bottomSheet: MaterialModule) { }
   public disable = [];
   public disablestatus = [];
-
-
 
   ngOnInit() {
     this.showSpinner = true;
@@ -94,7 +94,8 @@ export class RequestsComponent implements OnInit {
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
      this.service.checkstatus(this.requester_status).subscribe((res: any) => {
-      console.log(res)
+      console.log(res.res)
+      alert(res.res)
       this.search();
     })
   }

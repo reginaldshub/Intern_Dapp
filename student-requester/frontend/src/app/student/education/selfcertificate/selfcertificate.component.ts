@@ -1,7 +1,6 @@
-import { RequesterService } from './../../../requester/service/service.service';
 import { Component, OnInit } from '@angular/core';
-import { ServiceService } from '../../../common/service.service';
 import { Router } from '@angular/router';
+import { ServiceService } from '../../service/service.service';
 
 @Component({
   selector: 'app-selfcertificate',
@@ -12,21 +11,20 @@ export class SelfcertificateComponent implements OnInit {
 
   public dataSource: any = null;
   Name = {
-    name: String,
+    studentId: String,
     Endyear: Number,
     Startyear: Number
   };
   response: any;
   showSpinner: boolean = false;
 
-  constructor(private authservice: ServiceService, private router: Router,
-    private service: RequesterService) { }
+  constructor(private service: ServiceService, private router: Router) { }
 
   ngOnInit() {
     this.showSpinner = true;
     this.Name.Endyear = null;
     this.Name.Startyear = null;
-    this.Name.name = null;
+    this.Name.studentId = null;
    this.getCertificate();
   }
 
@@ -39,11 +37,12 @@ export class SelfcertificateComponent implements OnInit {
     this.router.navigate(['/student/profile']);
   }
   getCertificate(){
-    let sessionValue: any = sessionStorage.getItem('name');
-    this.Name.name = sessionValue;
+    let sessionValue: any = sessionStorage.getItem('_id');
+    this.Name.studentId = sessionValue;
     this.service.getCertificate(this.Name).subscribe((res: any) => {
-      // console.log(res.certificate);
+      console.log(res);
       this.showSpinner = false;
+      console.log(res);
       this.response = res.certificate;
     })
   }

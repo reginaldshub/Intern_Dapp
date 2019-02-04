@@ -233,10 +233,10 @@ router.post('/reqcreate', verifyToken, (req, res) => {
         if (error) {
             console.log(error)
         }
-        // else if (requester.account_address) {
-        //     console.log('you have an account');
-        //     console.log(requester);
-        // }
+        else if (requester.account_address) {
+            console.log('you have an account');
+            res.status(200).json({ accountNo: 'already you have an account' });
+        }
         else {
             console.log(requester);
             console.log('create');
@@ -254,17 +254,17 @@ router.post('/reqcreate', verifyToken, (req, res) => {
                     } else {
                         // console.log(result);
                         requester.account_address = result;
-                        requester.state = "saved";
+                        requester.State = "saved";
 
                         try {
-                            web3.personal.unlockAccount("0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7", "Accion")
+                            web3.personal.unlockAccount("0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d", "password")
                         }
                         catch (e) {
                             console.log(e);
                             return;
                         }
                         web3.eth.sendTransaction({
-                            from: "0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7",
+                            from: "0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d",
                             to: result,
                             value: web3.toWei("25", 'ether')
                         }, (error, res) => {
@@ -281,18 +281,13 @@ router.post('/reqcreate', verifyToken, (req, res) => {
                             if (error) {
                                 console.log(error);
                             } else {
-                                res.status(200).json("saved");
+                                res.status(200).json({ accountNo: result });
                             }
                         })
                     }
-
                 })
-
-
             }
-
         }
-
     })
 
 })
@@ -305,10 +300,10 @@ router.post('/create', verifyToken, (req, res) => {
         if (error) {
             console.log(error)
         }
-        // else if (user.account_address) {
-        //     console.log('you have an account');
-        //     console.log(user);
-        // }
+        else if (user.account_address) {
+            console.log('you have an account');
+            res.status(200).json({ accountNo: 'already you have an account' });
+        }
         else {
             console.log('create');
             if (!web3.isConnected()) {
@@ -325,17 +320,17 @@ router.post('/create', verifyToken, (req, res) => {
                     } else {
                         // console.log(result);
                         user.account_address = result;
-                        user.state = "saved";
+                        user.State = "saved";
 
                         try {
-                            web3.personal.unlockAccount("0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7", "Accion")
+                            web3.personal.unlockAccount("0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d", "password")
                         }
                         catch (e) {
                             console.log(e);
                             return;
                         }
                         web3.eth.sendTransaction({
-                            from: "0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7",
+                            from: "0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d",
                             to: result,
                             value: web3.toWei("25", 'ether')
                         }, (error, res) => {
@@ -352,7 +347,7 @@ router.post('/create', verifyToken, (req, res) => {
                             if (error) {
                                 console.log(error);
                             } else {
-                                res.status(200).json("saved");
+                                res.status(200).json({ accountNo: result });
                             }
                         })
                     }
@@ -545,7 +540,7 @@ router.post('/grantT', (req, res) => {
                     } else {
                         console.log('unlocking the geth account')
                         try {
-                            web3.personal.unlockAccount(student.account_address, "Accion");
+                            web3.personal.unlockAccount(student.account_address, "password");
                         } catch (e) {
                             console.log(e);
                             return;
@@ -620,7 +615,7 @@ router.post('/denyT', (req, res) => {
                     } else {
                         console.log('unlocking the geth account')
                         try {
-                            web3.personal.unlockAccount(student.account_address, "Accion");
+                            web3.personal.unlockAccount(student.account_address, "password");
                         } catch (e) {
                             console.log(e);
                             return;
@@ -740,7 +735,7 @@ router.put('/requester/:id', verifyToken, (req, res) => {
         phone: req.body.phone
     };
 
-    Profile.updateOne({userId:req.body.userId}, { $set: profile }, { new: true },
+    Profile.updateOne({ userId: req.body.userId }, { $set: profile }, { new: true },
         (err, doc) => {
             if (!err) { res.send({ message: "updated success", doc: doc }) }
             else { console.log('error' + JSON.stringify(err, undefined, 2)); }
@@ -763,7 +758,7 @@ router.put('/student/:id', verifyToken, (req, res) => {
         phone: req.body.phone
     };
 
-    studentProfile.updateOne({userId: req.body.userId}, { $set: profile }, { new: true },
+    studentProfile.updateOne({ userId: req.body.userId }, { $set: profile }, { new: true },
         (err, doc) => {
             console.log(doc);
             if (!err) { res.send({ message: "updated success", doc: doc }) }
@@ -773,8 +768,8 @@ router.put('/student/:id', verifyToken, (req, res) => {
 
 router.post('/checkaccess', verifyToken, (req, res) => {
     // let searchData = req.body;
-    var studentEmail = { email:req.body.email};
-    var studentName = { name: req.body.studentName};
+    var studentEmail = { email: req.body.email };
+    var studentName = { name: req.body.studentName };
     var id = req.body.id;
     var query;
     if (studentEmail.email != '' && studentName.name != '') {
@@ -782,15 +777,16 @@ router.post('/checkaccess', verifyToken, (req, res) => {
     } else if (studentEmail.email != '') {
         console.log('only studentEmail');
         query = studentEmail;
-    }else if (studentName.name != '') {
+    } else if (studentName.name != '') {
         console.log('only studentName');
         query = studentName;
     } else {
         console.log("either of them");
         query = null;
     }
-   console.log(query);
-
+    console.log(query);
+    studentProfile.findOne(query, (error, profileData) => {
+        if(profileData.State == 'committed'){
     Register.findOne(query, (error, reg_user) => {
         if (error) {
             console.log(error)
@@ -812,6 +808,8 @@ router.post('/checkaccess', verifyToken, (req, res) => {
             res.json({ status: "Not Found" })
         }
     })
+}
+})
 })
 
 
@@ -955,7 +953,7 @@ router.post('/requestT', verifyToken, (req, res) => {
                 console.log(requester.account_address);
                 console.log('unlocking the get account')
                 try {
-                    web3.personal.unlockAccount(requester.account_address, "Accion");
+                    web3.personal.unlockAccount(requester.account_address, "password");
                 } catch (e) {
                     console.log(e);
                     return;
@@ -996,6 +994,20 @@ router.post('/requestT', verifyToken, (req, res) => {
     })
 })
 
+router.post('/studentSelfCertificate', verifyToken, (req, res) => {
+    let searchData = req.body;
+    Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
+        if (sslc) {
+            console.log(sslc)
+            res.json({ certificate: sslc })
+        } else {
+            res.json({ status: "noEntry Found" })
+        }
+
+    })
+})
+
+
 router.post('/certificate', verifyToken, (req, res) => {
     let searchData = req.body;
     Register.findOne({ name: searchData.name }, (error, reg_user) => {
@@ -1033,10 +1045,10 @@ router.post('/commit', (req, response) => {
     console.log(userData);
     studentProfile.findOne({ userId: userData._id }, (error, student) => {
         if (error) {
-            console.log(error)
-
-        } else if (student.contract_address) {
-            response.json({ message: 'you already deployed the contract' });
+            console.log(error);
+        } 
+        else if (student.contract_address) {
+            response.status(200).json({ message: 'you already deployed the contract' });
         }
         else {
             console.log(student.name);
@@ -1055,7 +1067,6 @@ router.post('/commit', (req, response) => {
                 });
                 const helloWorldContract = web3.eth.contract(JSON.parse(abi));
                 console.log('unlocking local geth account');
-                const password = "30";
                 try {
                     web3.personal.unlockAccount(student.account_address, userData.password);
                 } catch (e) {
@@ -1077,6 +1088,8 @@ router.post('/commit', (req, response) => {
                         console.log("contract addres");
                         console.log('Contract address: ' + res.address);
                         student.contract_address = res.address;
+                        student.State = "committed";
+                        console.log(student.State)
                         student.save((error, data) => {
                             if (error) {
                                 console.log(error);
@@ -1084,13 +1097,12 @@ router.post('/commit', (req, response) => {
                             } else {
                                 console.log(data)
 
-                                response.json({ message: "deployed contract" });
+                                response.status(200).json({ message: "deployed contract" });
                             }
                         })
                     }
 
                 });
-                // console.log(helloWorldContractInstance);
             }
         }
     })
@@ -1120,12 +1132,13 @@ router.post('/checkstatus', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
     console.log(req.body);
-   
+
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
     Profile.findOne({ userId: requesterID }, (error, requester) => {
         if (error) {
             console.log(error)
         } else {
+            
             console.log(requester);
             studentProfile.findOne({ userId: studentID }, (error, student) => {
                 if (error) {
@@ -1144,17 +1157,17 @@ router.post('/checkstatus', (req, res) => {
                             if (!error) {
                                 let status1;
                                 let statusName;
-                                status1=status.toString()
+                                status1 = status.toString()
                                 console.log(status1);
-                                permission_status.find({ID:status1},(err,result1)=>{
-                                    console.log(statusName=result1['0'].Name);
+                                permission_status.find({ ID: status1 }, (err, result1) => {
+                                    console.log(statusName = result1['0'].Name);
                                     var newvalues = { $set: { Status: statusName } };
-                                        console.log(newvalues);
+                                    console.log(newvalues);
                                     permission.updateOne(myquery, newvalues, function (err, user) {
                                         if (err) {
                                             throw err;
                                         } else {
-                                            res.status(200).json({ res:statusName});
+                                            res.status(200).json({ res: statusName });
                                         }
                                     });
                                 })
@@ -1187,13 +1200,13 @@ router.post('/grant', (req, res) => {
             studentProfile.findOne({ userId: studentID }, (error, student) => {
                 if (error) {
                     console.log(error)
-                } else { 
+                } else {
                     if (!web3.isConnected()) {
                         console.log("please run the node")
                     } else {
                         console.log('unlocking the geth account')
                         try {
-                            web3.personal.unlockAccount(student.account_address, "Accion");
+                            web3.personal.unlockAccount(student.account_address, "password");
                         } catch (e) {
                             console.log(e);
                             return;
@@ -1208,7 +1221,7 @@ router.post('/grant', (req, res) => {
                             // let studentaccount=student.account_address;
                             // let requestaccount=requester.account_address;
                             // let contractaddress=student.contract_address;
-                //    getandUpdateStatus(transactionHash,myquery,requester.account_address,student.contract_address,student.account_address)
+                            //    getandUpdateStatus(transactionHash,myquery,requester.account_address,student.contract_address,student.account_address)
                             if (!error) {
                                 transaction.findOne(myquery, function (err, contract) {
                                     contract.grantTransactionHash = transactionHash
@@ -1255,7 +1268,7 @@ router.post('/request', verifyToken, (req, res) => {
                 console.log(requester.account_address);
                 console.log('unlocking the get account')
                 try {
-                    web3.personal.unlockAccount(requester.account_address, "Accion");
+                    web3.personal.unlockAccount(requester.account_address, "password");
                 } catch (e) {
                     console.log(e);
                     return;
@@ -1330,7 +1343,7 @@ router.post('/deny', (req, res) => {
                     } else {
                         console.log('unlocking the geth account')
                         try {
-                            web3.personal.unlockAccount(student.account_address, "Accion");
+                            web3.personal.unlockAccount(student.account_address, "password");
                         } catch (e) {
                             console.log(e);
                             return;
@@ -1405,7 +1418,7 @@ function getandUpdateStatus(transactionHash, myquery, requesteraccount, contract
                 });
             } else {
                 setTimeout(() => {
-                Receipt(transactionHash);
+                    Receipt(transactionHash);
                 }, 1000);
             }
         })

@@ -120,10 +120,8 @@ export class AccountComponent implements OnInit{
     this.Account.controls['accountNumber'].enable();
   }
   onCreate() {
-    this.Service.newaccount(this.CreateForm.value).subscribe((res) => {
-      if (res['result']) {
-        this.account = res['result'];
-      }
+    this.Service.newaccount(this.CreateForm.value).subscribe((res:any) => {
+        this.account = res.accountNo;
     },
       err => {
         if (err instanceof HttpErrorResponse) {

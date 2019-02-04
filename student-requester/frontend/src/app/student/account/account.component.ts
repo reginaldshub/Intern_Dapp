@@ -66,10 +66,9 @@ export class AccountComponent implements OnInit {
   }
   onCreate() {
     console.log(this.Create.value);
-    this.service.newaccount(this.Create.value).subscribe((res) => {
-      if (res['result']) {
-        this.account = res['result'];
-      }
+    this.service.newaccount(this.Create.value).subscribe((res:any) => {
+      console.log(res)
+        this.account = res.accountNo;
     },
       err => {
         if (err instanceof HttpErrorResponse) {
