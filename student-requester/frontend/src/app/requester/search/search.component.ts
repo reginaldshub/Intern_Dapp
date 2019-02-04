@@ -32,7 +32,7 @@ export interface UserData {
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-
+   disable= [];
   searchForm: FormGroup;
   status;
   searchResponse = {
@@ -57,12 +57,17 @@ export class SearchComponent implements OnInit {
     studentName: String,
     email: String,
     status: String,
-    id: String
+    id: String,
+  
   }
   sessionValue: any;
   username: string;
   permissionReq = {
     requesterID: String,
+  }
+  checkStatus={
+    studentID:String,
+    requesterID:String
   }
   searchDataSourceValue: boolean = false;
   @ViewChild(MatSort) sort: MatSort;
@@ -81,7 +86,7 @@ export class SearchComponent implements OnInit {
     this.getRequests();
   }
 
-  displayedColumns: string[] = ['name', 'status'];
+  displayedColumns: string[] = ['name', 'status','checkstatus'];
 
   search() {
     this.showSpinner = true;
@@ -93,7 +98,7 @@ export class SearchComponent implements OnInit {
     this.searchString.email = this.searchForm.value.email;
     this.requesterService.checkAccess(this.searchString).subscribe((res: any) => {
       let array = [];
-      console.log(res)
+      console.log("response",+res);
       this.showSpinner = false;
       if (res.status == "request") {
         this.getRequests();
@@ -101,7 +106,6 @@ export class SearchComponent implements OnInit {
         this.searchResponse.id = res.user._id;
         this.searchResponse.studentName = res.user.name;
         this.searchDataSourceName = res.user.name;
-        this.searchDataSourceStatus = res.status;
       }
       else if (res.status === "Not Found") {
         this.searchDataSourceValue = true;
@@ -147,14 +151,25 @@ export class SearchComponent implements OnInit {
     this.permissionReq.requesterID = this.sessionValue;
 
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res: any) => {
+    
       let temp = res.students;
       let array = [];
       for (var i = 0; i < temp.length; i++) {
         array.push(temp[i]);
+        console.log(res.students[i].Status)
       }
 
       this.dataSource = new MatTableDataSource(array);
       console.log(this.dataSource.data.length);
     })
   }
+
+  Checkstatus(requestid,studentid){
+    this.checkStatus.requesterID=requestid;
+    this.checkStatus.studentID=studentid
+    console.log(this.checkStatus);
+    this.requesterService.checkstatus(this.checkStatus).subscribe((res: any) => {
+      console.log(res)
+  })
+}
 }

@@ -66,5 +66,8 @@ export class RequesterService {
     user.email = localStorage.getItem('email');
     return this.http.post("http://localhost:3000/products/reqset", user)
   }
+  checkstatus(data){
+    return this.http.post("http://localhost:3000/products/checkstatus",data);
+  }
   
 }
