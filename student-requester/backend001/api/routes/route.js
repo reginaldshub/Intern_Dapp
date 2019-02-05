@@ -28,9 +28,10 @@ const input = fs.readFileSync('api/routes/PermissionList.sol');
 // const output = solc.compile(input.toString(), 1);
 // console.log(output);
 
+//mongo connection using mongoose (mlab)
 const mongoose = require('mongoose')
-// const db = "mongodb://santhosh123:santhosh123@ds133533.mlab.com:33533/eventsdb"
-const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester"
+// const db = "mongodb://santhosh123:santhosh123@ds133533.mlab.com:33533/eventsdb" //santhosh's mlab
+const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester" //regi's mlab
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if (err) {
         console.log("the error" + err)
@@ -40,9 +41,9 @@ mongoose.connect(db, { useNewUrlParser: true }, err => {
 
 })
 
+//token verification
 function verifyToken(req, res, next) {
     // check header or url parameters or post parameters for token 
-
     var token = req.headers.authorization.slice(7);
     // decode token 
     if (token) {
@@ -52,7 +53,6 @@ function verifyToken(req, res, next) {
                 return res.status(401).send('Unauthorized request')
             }
             else {
-
                 req.decoded = decoded;
                 next();
                 // if everything is good, save to request for use in other routes 
@@ -107,7 +107,7 @@ router.post('/login', (req, res) => {
 })
 
 
-
+//Registration
 router.post('/register', (req, res) => {
 
     let userData = req.body;
@@ -141,7 +141,7 @@ router.post('/register', (req, res) => {
 })
 
 
-// api to create local network account
+// api to create local network account (requester)
 router.post('/reqcreate', verifyToken, (req, res) => {
     let userData = req.body;
     console.log(userData._id);
@@ -209,7 +209,7 @@ router.post('/reqcreate', verifyToken, (req, res) => {
 
 })
 
-// api to create local network account
+// api to create local network account (student)
 router.post('/create', verifyToken, (req, res) => {
     let userData = req.body;
     console.log(userData._id);
@@ -268,18 +268,13 @@ router.post('/create', verifyToken, (req, res) => {
                             }
                         })
                     }
-
                 })
-
-
             }
-
         }
-
     })
-
 })
-//set the account address
+
+//set the account address (student)
 router.post('/set', verifyToken, (req, res) => {
     let userData = req.body;
     let account = new Accounts(userData)
@@ -294,6 +289,8 @@ router.post('/set', verifyToken, (req, res) => {
     })
 })
 
+
+//set the account address (requester)
 router.post('/reqset', verifyToken, (req, res) => {
     let userData = req.body;
     console.log(userData)
@@ -320,6 +317,7 @@ router.post('/reqset', verifyToken, (req, res) => {
     })
 })
 
+// adding marks details(Certificates) of student to Certificates collection
 router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
@@ -334,8 +332,7 @@ router.post('/marks', (req, res) => {
     })
 })
 
-
-
+//returns Requester profile details
 router.post('/getprofile', verifyToken, (req, res) => {
     let userData = req.body;
     let profile = new Profile(userData)
@@ -361,7 +358,7 @@ router.post('/getprofile', verifyToken, (req, res) => {
     })
 })
 
-
+//setting profile details for the first time(requester)
 router.post('/setprofile', verifyToken, (req, res) => {
     let profileData = req.body;
 
@@ -380,9 +377,33 @@ router.post('/setprofile', verifyToken, (req, res) => {
 
 })
 
+//updating requester profile details
+router.put('/requester/:id', verifyToken, (req, res) => {
+    console.log("params post" + req.body.name + JSON.stringify(req.body.Id))
+    console.log("req" + JSON.stringify(req.params.id))
+    console.log("body" + JSON.stringify(req.body))
+    var profile = {
+        name: req.body.name,
+        address: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        pincode: req.body.pincode,
+        url: req.body.url,
+        email: req.body.email,
+        country: req.body.country,
+        phone: req.body.phone
+    };
 
-// Student Part
+    Profile.updateOne({ userId: req.body.userId }, { $set: profile }, { new: true },
+        (err, doc) => {
+            if (!err) { res.send({ message: "updated success", doc: doc }) }
+            else { console.log('error' + JSON.stringify(err, undefined, 2)); }
+        });
+});
 
+// Student Part Follows
+
+//returns Student profile details
 router.post('/getstudentprofile', verifyToken, (req, res) => {
     let userData = req.body;
     console.log(userData)
@@ -407,6 +428,7 @@ router.post('/getstudentprofile', verifyToken, (req, res) => {
     })
 })
 
+//setting profile details for the first time(student)
 router.post('/setstudentprofile', verifyToken, (req, res) => {
     let profileData = req.body;
 
@@ -424,34 +446,10 @@ router.post('/setstudentprofile', verifyToken, (req, res) => {
     })
 })
 
-
-router.put('/requester/:id', verifyToken, (req, res) => {
-    console.log("params post" + req.body.name + JSON.stringify(req.body.Id))
-    console.log("req" + JSON.stringify(req.params.id))
-    console.log("body" + JSON.stringify(req.body))
-    var profile = {
-        name: req.body.name,
-        address: req.body.address,
-        city: req.body.city,
-        state: req.body.state,
-        pincode: req.body.pincode,
-        url: req.body.url,
-        email: req.body.email,
-        country: req.body.country,
-        phone: req.body.phone
-    };
-
-    Profile.updateOne({ userId: req.body.userId }, { $set: profile }, { new: true },
-        (err, doc) => {
-            if (!err) { res.send({ message: "updated success", doc: doc }) }
-            else { console.log('error' + JSON.stringify(err, undefined, 2)); }
-        });
-});
-
+//updating student profile details
 router.put('/student/:id', verifyToken, (req, res) => {
     console.log("params post" + req.body.name + JSON.stringify(req.body.userId))
     console.log("req" + req.params.id)
-    // console.log("body" + JSON.stringify(req.body))
     var profile = {
         name: req.body.name,
         address: req.body.address,
@@ -472,8 +470,8 @@ router.put('/student/:id', verifyToken, (req, res) => {
         });
 });
 
+//returns with status (api for search results)
 router.post('/checkaccess', verifyToken, (req, res) => {
-    // let searchData = req.body;
     var studentEmail = { email: req.body.email };
     var studentName = { name: req.body.studentName };
     var id = req.body.id;
@@ -490,37 +488,40 @@ router.post('/checkaccess', verifyToken, (req, res) => {
         console.log("either of them");
         query = null;
     }
-    console.log(query);
-    studentProfile.findOne(query, (error, profileData) => {
-        if(profileData.State == 'committed'){
+
     Register.findOne(query, (error, reg_user) => {
         if (error) {
-            console.log(error)
-        }
-        else if (reg_user) {
-            if (reg_user.Roles == "student") {
-                permission.findOne({ studentID: reg_user._id, requesterID: id }, (error, User) => {
-                    if (User) {
-                        res.json({ status: User.Status, name: studentName.name, user: User })
+            console.log("error");
+        } else if (reg_user) {
+            studentProfile.findOne({ userId: reg_user._id }, (error, studentProfileData) => {
+                console.log(studentProfileData);
+                if (error) {
+                    console.log(error)
+                }
+                else if (studentProfileData.State == 'committed') {
+                    if (reg_user.Roles == "student") {
+                        permission.findOne({ studentID: reg_user._id, requesterID: id }, (error, User) => {
+                            if (User) {
+                                res.json({ status: User.Status, name: studentName.name, user: User })
+                            } else {
+                                res.json({ status: "request", user: reg_user })
+                            }
+                        })
                     } else {
-                        res.json({ status: "request", user: reg_user })
+                        res.json({ status: "Not Found" })
                     }
-                })
-            } else {
-                res.json({ status: "Not Found" })
-            }
-        }
-        else {
+                } else {
+                    res.json({ status: "Not Found" })
+                }
+            })
+        } else {
+            console.log("error");
             res.json({ status: "Not Found" })
         }
     })
-}
-})
 })
 
-
-
-
+//list of all requests and status
 router.post('/grantedlist', (req, res) => {
     var requesterID = { requesterID: req.body.requesterID };
     var studentID = { studentID: req.body.studentID };
@@ -576,9 +577,10 @@ router.post('/grantedlist', (req, res) => {
         }
     })
 
-    
+
 })
 
+//student self certificate details
 router.post('/studentSelfCertificate', verifyToken, (req, res) => {
     let searchData = req.body;
     Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
@@ -592,7 +594,7 @@ router.post('/studentSelfCertificate', verifyToken, (req, res) => {
     })
 })
 
-
+//api to post certificates of requested students
 router.post('/certificate', verifyToken, (req, res) => {
     let searchData = req.body;
     Register.findOne({ name: searchData.name }, (error, reg_user) => {
@@ -624,6 +626,7 @@ router.post('/certificate', verifyToken, (req, res) => {
         }
     })
 })
+
 //deploying the smart contract
 router.post('/commit', (req, response) => {
     userData = req.body;
@@ -631,7 +634,7 @@ router.post('/commit', (req, response) => {
     studentProfile.findOne({ userId: userData._id }, (error, student) => {
         if (error) {
             console.log(error);
-        } 
+        }
         else if (student.contract_address) {
             response.status(200).json({ message: 'you already deployed the contract' });
         }
@@ -693,6 +696,7 @@ router.post('/commit', (req, response) => {
     })
 })
 
+//to check status from geth and store to mongo and update
 router.post('/checkstatus', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
@@ -703,7 +707,7 @@ router.post('/checkstatus', (req, res) => {
         if (error) {
             console.log(error)
         } else {
-            
+
             console.log(requester);
             studentProfile.findOne({ userId: studentID }, (error, student) => {
                 if (error) {
@@ -740,7 +744,6 @@ router.post('/checkstatus', (req, res) => {
                                 console.log(error);
                             }
                         });
-
                     }
                 }
             })
@@ -748,7 +751,7 @@ router.post('/checkstatus', (req, res) => {
     })
 })
 
-
+//to grant access(smart contract)
 router.post('/grant', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
@@ -815,6 +818,7 @@ router.post('/grant', (req, res) => {
     })
 })
 
+//to request access(smart contract)
 router.post('/request', verifyToken, (req, res) => {
     // console.log(JSON.stringify(res.body))
     let permissionData = req.body;
@@ -883,6 +887,7 @@ router.post('/request', verifyToken, (req, res) => {
     })
 })
 
+//to deny access(smart contract)
 router.post('/deny', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;

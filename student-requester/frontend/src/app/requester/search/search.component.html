@@ -1,4 +1,4 @@
-<br />
+<h2>Search</h2>
 <div class="search-bar">
   <form class="Profile-form" [formGroup]='searchForm' (submit)="search()">
     <mat-form-field>
@@ -19,6 +19,7 @@
 
 <div class="search-results" *ngIf="searchDataSourceValue">
   <p style="padding-right: 20px">{{searchDataSourceName}}</p>
+  <p style="padding-right: 20px">{{searchDataSourceEmail}}</p>
   <button style="padding-left: 20px" *ngIf="searchDataSourceStatus == 'request'" class="request-btn" (click)="sendData(searchDataSourceName)"
     mat-raised-button matTooltip="request">{{searchDataSourceStatus}}</button>
   <p *ngIf="searchDataSourceStatus != 'request'">{{searchDataSourceStatus}}</p>
@@ -27,7 +28,7 @@
 <br />
 <br />
 
-<div *ngIf="dataSource.data.length != 0" class="granted-list">
+<div *ngIf="dataSourceDataLength" class="granted-list">
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 

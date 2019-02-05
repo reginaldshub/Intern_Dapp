@@ -7,8 +7,9 @@ import { StudentService } from '../../student.service';
   styleUrls: ['./commit.component.css']
 })
 export class CommitComponent implements OnInit {
+  showSpinner: boolean;
 
-  constructor(private service:StudentService) { }
+  constructor(private service: StudentService) { }
   account;
   ngOnInit() {
   }
@@ -16,10 +17,13 @@ export class CommitComponent implements OnInit {
   Create: FormGroup = new FormGroup({
     password: new FormControl('', Validators.required)
   })
-  onCreate(){
+  onCreate() {
+    this.showSpinner = true;
     console.log(this.Create.value)
-    this.service.commit(this.Create.value).subscribe((res)=>{
-      console.log(this.account=res['message']);
+    this.service.commit(this.Create.value).subscribe((res) => {
+      console.log(this.account = res['message']);
+      if (res)
+        this.showSpinner = false;
     })
   }
 }

@@ -6,12 +6,14 @@
     <br/> -->
   <form [formGroup]="Create" (submit)="onCreate()">
     <mat-form-field>
-      <input formControlName="password" matInput placeholder="Password">
-      <mat-error>enter password</mat-error>
+      <input type="password" formControlName="password" matInput placeholder="Password" [type]="hide ? 'text':'password'">
+    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+      <mat-error>enter valid password</mat-error>
     </mat-form-field>
     <br/>
     <button mat-raised-button type="submit" color="primary" [disabled]="Create.invalid">Commit</button>
-    <br/>{{account}}
+    <br/><strong>{{account}}</strong>
+    <mat-spinner *ngIf="showSpinner"></mat-spinner>
   </form>
   
 </mat-card>

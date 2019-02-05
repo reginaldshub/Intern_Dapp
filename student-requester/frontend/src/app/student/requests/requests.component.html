@@ -1,3 +1,4 @@
+<h2>Requests</h2>
 <div class="granted-list">
     <table mat-table [dataSource]="dataSource" id="requests-table" class="mat-elevation-z8">
 
@@ -51,7 +52,7 @@
 </div>
 
 
-<div *ngIf="dataSource.length == 0" class="granted-list">
+<div *ngIf="dataSourceLength" class="granted-list">
     <br/>
     <h3 style="color:red">No Requests Found </h3>
 </div>

@@ -68,6 +68,8 @@ export class MastersComponent implements OnInit {
     console.log("student id",this.masters.value.studentid);
      this.service.add(this.masters.value).subscribe((res)=>{
        console.log(res);
+       swal("", "" + res, "success");
+     this.masters.reset();
      })
   }
 }

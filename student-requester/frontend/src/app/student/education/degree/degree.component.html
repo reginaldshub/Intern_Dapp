@@ -25,7 +25,8 @@
       <mat-form-field class="input-textfield">
         <input matInput placeholder="Branch Name" formControlName="Branchname">
       </mat-form-field>
-      <br>
+      <br />
+
       <div class="wrapper">
         <div formArrayName="addsubjects">
           <div *ngFor="let group of subjectArray.controls; let i= index;" [formGroupName]="i">
@@ -35,10 +36,10 @@
             <mat-form-field>
               <input matInput placeholder="Subject Marks" formControlName="subjectmarks">
             </mat-form-field>
-            <button mat-button color="primary" [disabled]="degree.invalid" (click)="Add()">
+            <button mat-button color="primary" [disabled]="disableBtn" (click)="Add()">
               <mat-icon>add_circle_outline</mat-icon>
             </button>
-            <button *ngIf="i > 1" class="remove-btn" mat-button color="primary" [disabled]="disableBtn" (click)="Remove(i)">
+            <button class="remove-btn" mat-button color="primary" (click)="Remove(i)">
               <mat-icon>remove_circle_outline</mat-icon>
             </button>
           </div>

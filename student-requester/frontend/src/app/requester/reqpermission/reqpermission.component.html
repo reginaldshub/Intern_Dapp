@@ -1,3 +1,4 @@
+<h2>Certificates</h2>
 <div class="granted-list">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
@@ -40,6 +41,6 @@
   </table>
 </div>
 
-<div class="granted-list" *ngIf = "dataSource.length == 0">
+<div class="granted-list" *ngIf = "dataSourceLength">
 <h3 style="color:red">No Records found</h3><br/> 
 </div>

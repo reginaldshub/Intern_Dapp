@@ -10,11 +10,11 @@ export class DegreeComponent implements OnInit {
 
   degree: FormGroup
   id: string;
-  disableBtn: boolean;
+  disableBtn: boolean = true;
   constructor(private fb: FormBuilder, private service: StudentService) {
     this.degree = this.fb.group({
       id:[],
-      studentid: [],
+      studentid: [''],
       ecategory: ['', Validators.required],
       Startyear: ['', Validators.required],
       Endyear: ['', Validators.required],
@@ -66,6 +66,8 @@ export class DegreeComponent implements OnInit {
     console.log("student id",this.degree.value.studentid);
      this.service.add(this.degree.value).subscribe((res)=>{
        console.log(res);
+       swal("", "" + res, "success");
+       this.degree.reset();
      })
   }
 

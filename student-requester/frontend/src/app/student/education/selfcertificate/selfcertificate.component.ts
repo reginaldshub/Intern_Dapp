@@ -11,6 +11,7 @@ export class SelfcertificateComponent implements OnInit {
 
   public dataSource: any = null;
   Name = {
+    name:String,
     studentId: String,
     Endyear: Number,
     Startyear: Number
@@ -39,6 +40,8 @@ export class SelfcertificateComponent implements OnInit {
   getCertificate(){
     let sessionValue: any = sessionStorage.getItem('_id');
     this.Name.studentId = sessionValue;
+    let sessionValueName: any = sessionStorage.getItem('name');
+    this.Name.name = sessionValueName;
     this.service.getCertificate(this.Name).subscribe((res: any) => {
       console.log(res);
       this.showSpinner = false;

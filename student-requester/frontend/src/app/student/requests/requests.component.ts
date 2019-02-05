@@ -27,6 +27,7 @@ export class RequestsComponent implements OnInit {
     status: String
   }]
   showSpinner: boolean = false;
+  dataSourceLength: boolean = false;
 
   constructor(private requesterService: RequesterService,
     private service: ServiceService, private router: Router,
@@ -38,7 +39,7 @@ export class RequestsComponent implements OnInit {
     this.showSpinner = true;
     this.search();
   }
-  displayedColumns: string[] = ['name', 'Created_time', 'status', 'accept', 'reject','checkstatus'];
+  displayedColumns: string[] = ['name', 'Created_time', 'status', 'accept', 'reject', 'checkstatus'];
   search() {
 
     this.sessionValue = sessionStorage.getItem('_id');
@@ -57,6 +58,10 @@ export class RequestsComponent implements OnInit {
 
       this.showSpinner = false;
       this.dataSource = array;
+      if (this.dataSource.length == 0)
+        this.dataSourceLength = true;
+      else
+        this.dataSourceLength = false;
       console.log(this.dataSource)
     })
   }
@@ -93,12 +98,12 @@ export class RequestsComponent implements OnInit {
     console.log(i);
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
-     this.service.checkstatus(this.requester_status).subscribe((res: any) => {
+    this.service.checkstatus(this.requester_status).subscribe((res: any) => {
       console.log(res.res)
       alert(res.res)
       this.search();
     })
   }
- 
+
 
 }

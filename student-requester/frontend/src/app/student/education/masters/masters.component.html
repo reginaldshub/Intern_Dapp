@@ -1,8 +1,6 @@
-
 <div class="container">
   <mat-card>
     <form [formGroup]="masters">
-      <!-- <h2>Fill masters Details:</h2> -->
       <mat-form-field class="input-textfield">
         <input matInput placeholder="Student Id" formControlName="id">
         <mat-error>Enter name</mat-error>
@@ -19,7 +17,7 @@
       <mat-form-field class="input-textfield">
           <input matInput placeholder="Branch Name" formControlName="Branchname">
         </mat-form-field>
-        <br>
+        <br />
       <div class="wrapper">
         <div formArrayName="addsubjects">
           <div *ngFor="let group of subjectArray.controls; let i= index;" [formGroupName]="i">
@@ -33,7 +31,7 @@
             <button mat-button color="primary" [disabled]="disableBtn" (click)="Add()">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
-              <button *ngIf="i > 1" class="remove-btn" mat-button color="primary" (click)="Remove(i)">
+              <button class="remove-btn" mat-button color="primary" (click)="Remove(i)">
                 <mat-icon>remove_circle_outline</mat-icon>
               </button>          </div>
         </div>
