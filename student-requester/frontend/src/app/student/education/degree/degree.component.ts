@@ -124,7 +124,7 @@ export class DegreeComponent implements OnInit {
     this.degree = this.fb.group({
       id:[],
       studentid: ['', [ Validators.pattern('^[a-zA-Z0-9]+$')]],
-      ecategory: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')] ],
+      ecategory: ['', Validators.required],
       Startyear: ['', Validators.required],
       Endyear: ['', [Validators.required, EndYearValidator]],
       Branchname:['', Validators.required],

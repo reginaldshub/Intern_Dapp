@@ -19,20 +19,20 @@ export interface Year {
 })
 export class Add10thComponent implements OnInit {
   months: Year[] = [
-  { value: "january",  viewValue: "Jan" },
-  { value: "February", viewValue: "Feb" },
-  { value: "March", viewValue: "Mar" },
-  { value: "April", viewValue: "Apr" },
-  { value: "May", viewValue: "May" },
-  { value: "June", viewValue: "Jun" },
-  { value: "July", viewValue: "Jul" },
-  { value: "August", viewValue: "Aug" },
-  { value: "September", viewValue: "Sep" },
-  { value: "October", viewValue: "Oct" },
-  { value: "November", viewValue: "Nov" },
-  { value: "December", viewValue: "Dec" }
+    { value: "january", viewValue: "Jan" },
+    { value: "February", viewValue: "Feb" },
+    { value: "March", viewValue: "Mar" },
+    { value: "April", viewValue: "Apr" },
+    { value: "May", viewValue: "May" },
+    { value: "June", viewValue: "Jun" },
+    { value: "July", viewValue: "Jul" },
+    { value: "August", viewValue: "Aug" },
+    { value: "September", viewValue: "Sep" },
+    { value: "October", viewValue: "Oct" },
+    { value: "November", viewValue: "Nov" },
+    { value: "December", viewValue: "Dec" }
   ]
-  
+
 
   years: Year[] = [
     { value: "1940", viewValue: "1940" },
@@ -120,19 +120,19 @@ export class Add10thComponent implements OnInit {
   level: any = "1";
   add10th: FormGroup
   id: any;
-  constructor(private fb: FormBuilder, private service: StudentService, 
+  constructor(private fb: FormBuilder, private service: StudentService,
     private studentService: ServiceService) {
     this.add10th = this.fb.group({
       id: [''],
-      studentid: ['', [ Validators.pattern('^[a-zA-Z0-9]+$')]],
-      ecategory: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')] ],
+      studentid: ['', [Validators.pattern('^[a-zA-Z0-9]+$')]],
+      ecategory: ['', Validators.required],
       Startyear: ['', [Validators.required]],
       Endyear: ['', [Validators.required, EndYearValidator]],
       level: [''],
       addsubjects: this.fb.array([this.addSubjectGroup()])
     });
   }
-  
+
   categories: any;
 
   ngOnInit() {
@@ -141,13 +141,13 @@ export class Add10thComponent implements OnInit {
     this.add10th.valueChanges.subscribe((changedObj: any) => {
 
       // console.log(changedObj.addsubjects.length)
-    //   if(changedObj.Startyear && changedObj.Endyear)
-    //   if(changedObj.Startyear >= changedObj.Endyear){
-    //     this.add10th.invalid();
-    // }
+      //   if(changedObj.Startyear && changedObj.Endyear)
+      //   if(changedObj.Startyear >= changedObj.Endyear){
+      //     this.add10th.invalid();
+      // }
 
       for (let i = 0; i < changedObj.addsubjects.length; i++) {
-        console.log(changedObj)
+        // console.log(changedObj)
         if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
           this.disableBtn = false;
         } else {
@@ -158,7 +158,7 @@ export class Add10thComponent implements OnInit {
 
     });
     let edu = {
-      level : String 
+      level: String
     }
     edu.level = this.level;
     this.studentService.educationCategory(edu).subscribe((res: any) => {
@@ -167,22 +167,22 @@ export class Add10thComponent implements OnInit {
     })
   }
 
-//   dateLessThan(Startyear: string, Endyear: string) {
+  //   dateLessThan(Startyear: string, Endyear: string) {
 
-//     return (group: FormGroup): {[key: string]: any} => {
-//       let f = group.controls[Startyear];
-//       let t = group.controls[Endyear];
-//       if (f.value > t.value) {
-//         return null
-//       }
-//       return true;
-//     }
-// }
+  //     return (group: FormGroup): {[key: string]: any} => {
+  //       let f = group.controls[Startyear];
+  //       let t = group.controls[Endyear];
+  //       if (f.value > t.value) {
+  //         return null
+  //       }
+  //       return true;
+  //     }
+  // }
 
   addSubjectGroup() {
     return this.fb.group({
       subjectname: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
-      subjectmarks: ['', [Validators.required,Validators.pattern('^[0-9]+$')]]
+      subjectmarks: ['', [Validators.required, Validators.pattern('^[0-9]+$')]]
     });
   }
 
@@ -208,29 +208,51 @@ export class Add10thComponent implements OnInit {
     console.log("student id", this.add10th.value.studentid);
     this.service.add(this.add10th.value).subscribe((res) => {
       console.log(res);
-      if(res == "Duplicate Found")
-      swal("", "" + res, "error");
+      if (res == "Duplicate Found")
+        swal("", "" + res, "error");
       else
-      swal("", "" + res, "success");
+        swal("", "" + res, "success");
       this.add10th.reset();
 
     })
   }
 
 
-  getCertificates(){
+  getCertificates() {
     let data = {
       id: String,
       level: String
     }
-    var temp:any =  sessionStorage.getItem('_id');
+    var temp: any = sessionStorage.getItem('_id');
     var temp1: any = "1";
-    data.id =temp;
+    data.id = temp;
     data.level = temp1;
     // debugger;
     this.studentService.getCertificate(data).subscribe((res) => {
-      console.log(res.certificate);
+      console.log(res.certificate[0]);
+      this.add10th.patchValue({
+        id: res.certificate[0].id,
+        ecategory: res.certificate[0].ecategory,
+        Startyear: res.certificate[0].Startyear,
+        Endyear: res.certificate[0].Endyear,
+
+      })
+
+      for (let i = 0; i < res.certificate[0].addsubjects.length; i++) {
+        console.log("res.certificate[0].addsubjects.length", i);
+        console.log(res.certificate[0].addsubjects[i].subjectname);
+        
+        const addSub = <FormArray>this.add10th.controls['addsubjects'];
+        addSub.controls.forEach((field) => {
+         
+          field.get('subjectname').patchValue(res.certificate[0].addsubjects[i].subjectname);
+          field.get('subjectmarks').patchValue(res.certificate[0].addsubjects[i].subjectmarks);
+        });
+        this.Add();
+        // this.add10th.setValue({
+        // addsubjects: res.certificate[0].addsubjects[i]
+        // })
+      }
     })
   }
-
 }
