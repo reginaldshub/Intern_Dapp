@@ -227,8 +227,9 @@ export class Add10thComponent implements OnInit {
     var temp1: any = "1";
     data.id =temp;
     data.level = temp1;
-    debugger;
+    // debugger;
     this.studentService.getCertificate(data).subscribe((res) => {
+      console.log(res.certificate);
     })
   }
 

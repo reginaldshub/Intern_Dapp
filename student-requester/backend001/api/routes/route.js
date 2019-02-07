@@ -617,28 +617,31 @@ router.post('/grantedlist', (req, res) => {
 //student self certificate details
 router.post('/studentSelfCertificate',  (req, res) => {
     let searchData = req.body;
-    console.log(searchData)
+    // console.log(searchData)
     if ((searchData.level != "" && searchData.level != null && searchData.level != undefined) &&
         (searchData.id != "" && searchData.id != null && searchData.id != undefined)) {
-        Certificates.find({ $and: [{ studentid: searchData.id}, {level: searchData.level}] }, (error, sslc) => {
-            if (sslc) {
-                console.log(sslc)
-                // res.json({ certificate: sslc })
+        Certificates.find({ $and: [{ studentid: searchData.id}, {level: searchData.level}] }, (error, certi) => {
+            if (certi) {
+                // console.log(certi)
+                res.json({ certificate: certi })
             } else {
                 res.json({ status: "noEntry Found" })
             }
 
         })
     }
-    // Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
-    //     if (sslc) {
-    //         console.log(sslc)
-    //         res.json({ certificate: sslc })
-    //     } else {
-    //         res.json({ status: "noEntry Found" })
-    //     }
+    if((searchData.studentId != "" && searchData.studentId != null && searchData.studentId != undefined) &&
+    (searchData.name != "" && searchData.name != null && searchData.name != undefined)){
+    Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
+        if (sslc) {
+            console.log(sslc)
+            res.json({ certificate: sslc })
+        } else {
+            res.json({ status: "noEntry Found" })
+        }
 
-    // })
+    })
+}
 })
 
 //api to post certificates of requested students
@@ -1009,7 +1012,7 @@ router.post('/educationCategory', verifyToken, (req, res) => {
             console.log(error)
         }
         else {
-            console.log(streams);
+            // console.log(streams);
             res.json({ streams: streams });
         }
     })
