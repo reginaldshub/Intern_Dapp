@@ -1,14 +1,12 @@
 .wrapper {
     text-align: center;
-}
-
-mat-form-field{
-    padding-left: 20px;
+    overflow: auto;
+    height: 70px;
 }
 
 mat-card{
     width:auto;
-        max-height:auto;
+    max-height:auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,18 +14,21 @@ mat-card{
 
 mat-form-field{
     width:auto;
-        height:60px;
-        padding-bottom: 30px;
+    /* height:60px; */
+    padding-left: 20px;
 }
 
-.container, .submit-button{
+.container{
     display: flex;
     align-items: center;
     justify-content: center;
     margin: auto;
 }
 
-
-  .input-textfield{
+.input-textfield{
       width: auto
   }
+
+ .submit-button{   
+      margin-left: 81%;
+}

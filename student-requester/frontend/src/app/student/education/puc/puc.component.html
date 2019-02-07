@@ -1,21 +1,43 @@
-
 <div class="container">
-  <mat-card>
+  <!-- <mat-card> -->
     <form [formGroup]="puc">
-      <!-- <h2>Fill PUC Details:</h2> -->
       <mat-form-field class="input-textfield">
-        <input matInput placeholder="Student Id" formControlName="id">
+        <input matInput placeholder="Registration No." formControlName="id">
         <mat-error>Enter name</mat-error>
       </mat-form-field>
+
       <mat-form-field class="input-textfield">
-        <input matInput placeholder="Education Category" formControlName="ecategory">
-      </mat-form-field>
-      <mat-form-field class="input-textfield">
-        <input matInput placeholder="Start Year" formControlName="Startyear">
-      </mat-form-field>
-      <mat-form-field class="input-textfield">
-        <input matInput placeholder="End Year" formControlName="Endyear">
-      </mat-form-field>
+          <mat-select placeholder="Education Category" formControlName="ecategory">
+            <mat-option *ngFor="let category of categories" [value]="category.name">
+              {{category.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <!-- <mat-form-field class="input-textfield">
+          <input matInput placeholder="Start Year" formControlName="Startyear">
+        </mat-form-field> -->
+  
+        <mat-form-field class="input-textfield">
+          <mat-select placeholder="Start Year" formControlName="Startyear">
+            <mat-option *ngFor="let year of years" [value]="year.value">
+              {{year.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <!-- <mat-form-field class="input-textfield">
+          <input matInput placeholder="End Year" formControlName="Endyear">
+        </mat-form-field> -->
+        <mat-form-field class="input-textfield">
+          <mat-select placeholder="End Year" formControlName="Endyear">
+            <mat-option *ngFor="let year of years" [value]="year.value">
+              {{year.viewValue}}
+            </mat-option>
+          </mat-select>
+          <mat-error>Endyear less than Startyear</mat-error>
+        </mat-form-field>
+
       <mat-form-field class="input-textfield">
           <input matInput placeholder="Group Name" formControlName="Groupname">
         </mat-form-field>
@@ -29,11 +51,10 @@
             <mat-form-field>
               <input matInput placeholder="Subject Marks" formControlName="subjectmarks">
             </mat-form-field>
-
-             <button mat-button color="primary" [disabled]="disableBtn" (click)="Add()">
+             <button mat-button color="primary" [disabled]="isButtonDisabled" matTooltip="Add" (click)="Add()">
               <mat-icon>add_circle_outline</mat-icon>
             </button>
-            <button class="remove-btn" mat-button color="primary" (click)="Remove(i)">
+            <button class="remove-btn" mat-button color="primary" matTooltip="Remove" (click)="Remove(i)">
               <mat-icon>remove_circle_outline</mat-icon>
             </button>
           </div>
@@ -41,5 +62,5 @@
       </div>
       <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="puc.invalid" color="primary">Save</button>
     </form>
-  </mat-card>
+  <!-- </mat-card> -->
 </div>

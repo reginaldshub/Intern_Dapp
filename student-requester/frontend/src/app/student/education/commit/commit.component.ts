@@ -22,8 +22,15 @@ export class CommitComponent implements OnInit {
     console.log(this.Create.value)
     this.service.commit(this.Create.value).subscribe((res) => {
       console.log(this.account = res['message']);
-      if (res)
+      if (res){
         this.showSpinner = false;
+        this.resetForms();
+      }
+    })
+  }
+  resetForms() {
+    this.Create.setValue({
+      password: '',
     })
   }
 }

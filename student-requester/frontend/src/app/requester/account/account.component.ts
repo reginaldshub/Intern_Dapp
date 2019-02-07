@@ -124,8 +124,10 @@ export class AccountComponent implements OnInit{
     this.showSpinner = true;
     this.Service.newaccount(this.CreateForm.value).subscribe((res:any) => {
         this.account = res.accountNo;
-        if(res)
+        if(res){
         this.showSpinner = false;
+        this.resetForms();
+      }
     },
       err => {
         if (err instanceof HttpErrorResponse) {
@@ -134,5 +136,14 @@ export class AccountComponent implements OnInit{
           }
         }
       })
+  }
+  resetForms() {
+    this.Account.setValue({
+      network: '',
+      accountNumber: ''
+    })
+    this.CreateForm.setValue({
+      password: '',
+    })
   }
 }

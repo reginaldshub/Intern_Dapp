@@ -29,7 +29,11 @@ export class ServiceService {
     return this.http.post("http://localhost:3000/products/checkstatus",data);
   }
   getCertificate(data){
+    
     return this.http.post("http://localhost:3000/products/studentSelfCertificate",data);
   }
-
+  educationCategory(data){
+    debugger;
+    return this.http.post("http://localhost:3000/products/educationCategory",data);
+  }
 }

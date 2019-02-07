@@ -102,6 +102,7 @@ ul {
     position: relative;
     display: inline-block;
     margin-top:5px;
+    z-index: 1;
   }
   
   .dropdown-content {

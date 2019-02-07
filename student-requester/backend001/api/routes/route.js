@@ -16,6 +16,9 @@ const HelloWorldABI = require("../../HelloWorldABI.json");
 const perm_register_join = require('../models/permregJoin.js')
 const transaction = require('../models/transactionHash.js')
 const permission_status = require('../models/Permission_status');
+const Education = require('../models/education');
+const EducationStreams = require('../models/educationStreams');
+
 // const PUC = require('../models/puc.js')
 // const DEGREE = require('../models/degree.js')
 
@@ -152,7 +155,7 @@ router.post('/reqcreate', verifyToken, (req, res) => {
         }
         else if (requester.account_address) {
             console.log('you have an account');
-            res.status(200).json({ accountNo: 'already you have an account' });
+            res.status(200).json({ accountNo: requester.account_address });
         }
         else {
             console.log(requester);
@@ -219,7 +222,7 @@ router.post('/create', verifyToken, (req, res) => {
         }
         else if (user.account_address) {
             console.log('you have an account');
-            res.status(200).json({ accountNo: 'already you have an account' });
+            res.status(200).json({ accountNo: user.account_address });
         }
         else {
             console.log('create');
@@ -321,15 +324,46 @@ router.post('/reqset', verifyToken, (req, res) => {
 router.post('/marks', (req, res) => {
     let userData = req.body;
     console.log(userData);
-    let certificates = new Certificates(userData)
-    console.log(certificates);
-    certificates.save((err, user) => {
-        if (err) {
-            res.send("not saved")
-        } else {
-            res.status(200).json("added sucessfully");
+    // query = { $and: [studentEmail, studentName] };
+    let certificates = new Certificates(userData);
+
+    Certificates.findOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, (error, certres) => {
+        if (error) {
+            console.log(error)
+        }
+        else if (certres) {
+            res.status(200).json("Duplicate Found");
+        }
+        else {
+            console.log("Else")
+            certificates.save((err, user) => {
+                if (err) {
+                    console.log("not saved")
+                } else {
+                    console.log("added sucessfully")
+                    res.status(200).json("added sucessfully");
+                }
+            })
         }
     })
+
+    // Certificates.findOne({ $and: [{studentid: userData.studentid},{level: userData.level}] }, (error, certres) => {
+    //     if (error) {
+    //         console.log(error)
+    //     } else if (certres) {
+    //         console.log(certres)
+    //         // res.status(400).json({ status: "Duplicate Exists" });
+    //     } 
+    //     else {
+    //         // certificates.save((err, user) => {
+    //         //     if (err) {
+    //         //         res.send("not saved")
+    //         //     } else {
+    //         //         res.status(200).json("added sucessfully");
+    //         //     }
+    //         // })
+    //     }
+    // })
 })
 
 //returns Requester profile details
@@ -581,17 +615,30 @@ router.post('/grantedlist', (req, res) => {
 })
 
 //student self certificate details
-router.post('/studentSelfCertificate', verifyToken, (req, res) => {
+router.post('/studentSelfCertificate',  (req, res) => {
     let searchData = req.body;
-    Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
-        if (sslc) {
-            console.log(sslc)
-            res.json({ certificate: sslc })
-        } else {
-            res.json({ status: "noEntry Found" })
-        }
+    console.log(searchData)
+    if ((searchData.level != "" && searchData.level != null && searchData.level != undefined) &&
+        (searchData.id != "" && searchData.id != null && searchData.id != undefined)) {
+        Certificates.find({ $and: [{ studentid: searchData.id}, {level: searchData.level}] }, (error, sslc) => {
+            if (sslc) {
+                console.log(sslc)
+                // res.json({ certificate: sslc })
+            } else {
+                res.json({ status: "noEntry Found" })
+            }
 
-    })
+        })
+    }
+    // Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
+    //     if (sslc) {
+    //         console.log(sslc)
+    //         res.json({ certificate: sslc })
+    //     } else {
+    //         res.json({ status: "noEntry Found" })
+    //     }
+
+    // })
 })
 
 //api to post certificates of requested students
@@ -636,7 +683,7 @@ router.post('/commit', (req, response) => {
             console.log(error);
         }
         else if (student.contract_address) {
-            response.status(200).json({ message: 'you already deployed the contract' });
+            response.status(200).json({ message: student.contract_address });
         }
         else {
             console.log(student.name);
@@ -948,6 +995,28 @@ router.post('/deny', (req, res) => {
             })
         }
     })
+})
+
+
+
+//api to post education categories of requested level
+router.post('/educationCategory', verifyToken, (req, res) => {
+
+    console.log(req.body.level);
+    let level = { level: req.body.level };
+    EducationStreams.find(level, (error, streams) => {
+        if (error) {
+            console.log(error)
+        }
+        else {
+            console.log(streams);
+            res.json({ streams: streams });
+        }
+    })
+    // Education.find({}).populate('EducationStreams').exec(function(err, documents){
+    //     console.log(documents);
+    // })
+
 })
 
 function getandUpdateStatus(transactionHash, myquery, requesteraccount, contractaddress, studentaccount) {
