@@ -5,6 +5,8 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  MatBottomSheet, 
+  MatBottomSheetRef,
   MatAutocompleteModule,
   MatBadgeModule,
   MatBottomSheetModule,

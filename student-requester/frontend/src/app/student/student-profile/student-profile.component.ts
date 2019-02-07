@@ -91,6 +91,7 @@ export class StudentProfileComponent implements OnInit {
     { value: 'male', viewValue: 'Male' },
     { value: 'female', viewValue: 'Female' }
   ];
+  isEditBtn: boolean;
 
 
   constructor(private fb: FormBuilder,
@@ -139,10 +140,13 @@ export class StudentProfileComponent implements OnInit {
     this.locemail = localStorage.getItem('email');
     console.log(this.session);
     this.authService.getStudentProfile(this.session).subscribe((res: any) => {
+      console.log("response"+res);
       if (res.hide) {
         this.profileHider = true;
+        this.isEditBtn = false;
       } else {
         this.profileHider = false;
+        this.isEditBtn = true;
         this.data = res;
         if (this.data.user.account_address == null)
           this.data.user.account_address = "no account added";
@@ -161,6 +165,7 @@ export class StudentProfileComponent implements OnInit {
           account_address: this.data.user.account_address
         })
       }
+
     }, err => {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
@@ -204,6 +209,11 @@ export class StudentProfileComponent implements OnInit {
         }
       }
     })
+  }
+
+
+  hideEditBtn(isEditBtn){
+    this.isEditBtn = !isEditBtn;
   }
 
 }

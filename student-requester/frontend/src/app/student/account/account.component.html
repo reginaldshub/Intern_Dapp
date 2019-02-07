@@ -40,7 +40,7 @@
     </mat-card>
   </div>
 </div> -->
-
+<h2>Account</h2>
 <div class="grant">
   <table>
     <tr>
@@ -77,14 +77,18 @@
           <form [formGroup]="Create" (submit)="onCreate()">
             <h3>Create New Account (Local Network)</h3>
             <mat-form-field>
-              <input formControlName="password" matInput placeholder="Password">
-              <mat-error>enter password</mat-error>
+              <input type="password" formControlName="password" matInput placeholder="Password" [type]="hide ? 'text':'password'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+              <mat-error>enter valid password</mat-error>
             </mat-form-field><br />
             <button *ngIf="createButton" mat-raised-button type="submit" color="primary" [disabled]="Create.invalid">Create</button>
+            <br />
+            <mat-spinner *ngIf="showSpinner"></mat-spinner>
+            {{account}}
           </form>
-          {{account}}
         </mat-card>
       </th>
     </tr>
   </table>
 </div>
+<br/><br/>

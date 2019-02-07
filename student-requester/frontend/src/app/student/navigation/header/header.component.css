@@ -9,6 +9,13 @@
 /* li{
     padding: 10px;
 }  */
+
+mat-toolbar{
+  position: fixed;
+  z-index: 1;
+  /* margin-top: 0px; */
+}
+
 a:hover{
     color: lightgray;
 }
@@ -95,6 +102,7 @@ ul {
     position: relative;
     display: inline-block;
     margin-top:5px;
+    z-index: 1;
   }
   
   .dropdown-content {

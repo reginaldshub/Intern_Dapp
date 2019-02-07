@@ -72,6 +72,8 @@ export class SearchComponent implements OnInit {
   searchDataSourceValue: boolean = false;
   @ViewChild(MatSort) sort: MatSort;
   showSpinner: boolean = false;
+  dataSourceDataLength: boolean = false;
+  searchDataSourceEmail: any;
   constructor(private fb: FormBuilder,
     private requesterService: RequesterService,
     private _interactionservice: InteractionService) { }
@@ -98,25 +100,29 @@ export class SearchComponent implements OnInit {
     this.searchString.email = this.searchForm.value.email;
     this.requesterService.checkAccess(this.searchString).subscribe((res: any) => {
       let array = [];
-      console.log("response",+res);
+      console.log("response"+JSON.stringify(res));
       this.showSpinner = false;
       if (res.status == "request") {
         this.getRequests();
+        console.log("request");
         this.searchDataSourceValue = true;
         this.searchResponse.id = res.user._id;
         this.searchResponse.studentName = res.user.name;
-        this.searchDataSourceName = res.user.name;
-      }
-      else if (res.status === "student not registered") {
-        this.searchDataSourceValue = true;
-        this.searchDataSourceName = this.searchString.studentName;
-        this.searchDataSourceStatus = res.status;
-        console.log(res.status);
-      } else if (res.status == "not student") {
-        this.searchDataSourceValue = true;
-        this.searchDataSourceName = this.searchString.studentName;
+        this.searchDataSourceName = this.searchForm.value.name;
+        this.searchDataSourceEmail = this.searchForm.value.email;
         this.searchDataSourceStatus = res.status;
       }
+      else if (res.status === "Not Found") {
+        this.searchDataSourceValue = true;
+        this.searchDataSourceName = this.searchForm.value.name;
+        this.searchDataSourceEmail = this.searchForm.value.email;
+        this.searchDataSourceStatus = res.status;
+      }
+      //  else if (res.status == "not student") {
+      //   this.searchDataSourceValue = true;
+      //   this.searchDataSourceName = this.searchString.studentName;
+      //   this.searchDataSourceStatus = res.status;
+      // }
       else {
         this.searchDataSourceValue = false;
         let name: any = this.searchString.studentName;
@@ -160,6 +166,10 @@ export class SearchComponent implements OnInit {
       }
 
       this.dataSource = new MatTableDataSource(array);
+      if(this.dataSource.data.length != 0)
+      this.dataSourceDataLength = true;
+      else 
+      this.dataSourceDataLength = false;
       console.log(this.dataSource.data.length);
     })
   }

@@ -8,6 +8,7 @@
     <mat-icon>person</mat-icon>
     <p><strong>{{username}}</strong></p>
 </mat-toolbar> -->
+<h2>Profile</h2>
 <div *ngIf="profileHider" class="container">
   <mat-card class="Profile-card">
     <form class="Profile-form" [formGroup]='profileForm' (submit)="setProfile()">

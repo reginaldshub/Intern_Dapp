@@ -10,7 +10,3 @@ table{
 #requests-table tr:nth-child(even){background-color: #f2f2f2;}
 
 #requests-table tr:hover {background-color: #ddd;}
-
-mat-spinner{
-    border: 1px solid red;
-}

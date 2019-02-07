@@ -36,6 +36,7 @@ export class AccountComponent implements OnInit{
   CreateForm: FormGroup = new FormGroup({
     password: new FormControl('', Validators.required)
   })
+  showSpinner: boolean;
   
   
   constructor(private Service: RequesterService,
@@ -120,9 +121,12 @@ export class AccountComponent implements OnInit{
     this.Account.controls['accountNumber'].enable();
   }
   onCreate() {
-    this.Service.newaccount(this.CreateForm.value).subscribe((res) => {
-      if (res['result']) {
-        this.account = res['result'];
+    this.showSpinner = true;
+    this.Service.newaccount(this.CreateForm.value).subscribe((res:any) => {
+        this.account = res.accountNo;
+        if(res){
+        this.showSpinner = false;
+        this.resetForms();
       }
     },
       err => {
@@ -132,5 +136,14 @@ export class AccountComponent implements OnInit{
           }
         }
       })
+  }
+  resetForms() {
+    this.Account.setValue({
+      network: '',
+      accountNumber: ''
+    })
+    this.CreateForm.setValue({
+      password: '',
+    })
   }
 }

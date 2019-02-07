@@ -15,71 +15,73 @@ console.log('Reading Contract...');
 const input = fs.readFileSync('api/routes/PermissionList.sol');
 
 // api to deploy the contract into the ethereum network
-router.post('/commit', (req, response) => {
-    userData = req.body;
-    console.log(userData);
-    studentProfile.findOne({ userId: userData._id }, (error, student) => {
-        if (error) {
-            console.log(error);
-        } else if (student.contract_address) {
-            response.status(200).json({ message: 'you already deployed the contract' });
-        }
-        else {
-            console.log(student.name);
-            console.log('Compiling Contract...');
-            const output = solc.compile(input.toString(), 1);
-            for (var contractName in output.contracts) {
-                const bytecode = output.contracts[contractName].bytecode;
-                console.log(bytecode);
-                const abi = output.contracts[contractName].interface;
-                fs.writeFile("./HelloWorldABI.JSON", abi, function (err) {
+// router.post('/commit', (req, response) => {
+//     userData = req.body;
+//     console.log(userData);
+//     studentProfile.findOne({ userId: userData._id }, (error, student) => {
+//         if (error) {
+//             console.log(error);
+//         } 
+//         else if (student.contract_address) {
+//             response.status(200).json({ message: 'you already deployed the contract' });
+//         }
+//         else {
+//             console.log(student.name);
+//             console.log('Compiling Contract...');
+//             const output = solc.compile(input.toString(), 1);
+//             for (var contractName in output.contracts) {
+//                 const bytecode = output.contracts[contractName].bytecode;
+//                 console.log(bytecode);
+//                 const abi = output.contracts[contractName].interface;
+//                 fs.writeFile("./HelloWorldABI.JSON", abi, function (err) {
 
-                    if (err) {
-                        return console.log(err);
-                    }
-                    console.log("ABI Saved");
-                });
-                const helloWorldContract = web3.eth.contract(JSON.parse(abi));
-                console.log('unlocking local geth account');
-                try {
-                    web3.personal.unlockAccount(student.account_address, userData.password);
-                } catch (e) {
-                    console.log(e);
-                    return;
-                }
-                console.log("Deploying the contract");
-                const helloWorldContractInstance = helloWorldContract.new(student.name, {
-                    data: '0x' + bytecode,
-                    from: student.account_address,
-                    gas: 2000000
-                }, (err, res) => {
-                    if (err) {
-                        console.log(err);
-                        return;
-                    }
-                    // If we have an address property, the contract was deployed
-                    if (res.address) {
-                        console.log("contract addres");
-                        console.log('Contract address: ' + res.address);
-                        student.contract_address = res.address;
-                        student.State = "committed"
-                        student.save((error, data) => {
-                            if (error) {
-                                console.log(error);
-                                response.json({ message: "deployed and but contract_address is not saved" })
-                            } else {
-                                console.log(data)
+//                     if (err) {
+//                         return console.log(err);
+//                     }
+//                     console.log("ABI Saved");
+//                 });
+//                 const helloWorldContract = web3.eth.contract(JSON.parse(abi));
+//                 console.log('unlocking local geth account');
+//                 try {
+//                     web3.personal.unlockAccount(student.account_address, userData.password);
+//                 } catch (e) {
+//                     console.log(e);
+//                     return;
+//                 }
+//                 console.log("Deploying the contract");
+//                 const helloWorldContractInstance = helloWorldContract.new(student.name, {
+//                     data: '0x' + bytecode,
+//                     from: student.account_address,
+//                     gas: 2000000
+//                 }, (err, res) => {
+//                     if (err) {
+//                         console.log(err);
+//                         return;
+//                     }
+//                     // If we have an address property, the contract was deployed
+//                     if (res.address) {
+//                         console.log("contract addres");
+//                         console.log('Contract address: ' + res.address);
+//                         student.contract_address = res.address;
+//                         student.State = "committed";
+//                         console.log(student.State)
+//                         student.save((error, data) => {
+//                             if (error) {
+//                                 console.log(error);
+//                                 response.json({ message: "deployed and but contract_address is not saved" })
+//                             } else {
+//                                 console.log(data)
 
-                                response.status(200).json({ message: "deployed contract" });
-                            }
-                        })
-                    }
+//                                 response.status(200).json({ message: "deployed contract" });
+//                             }
+//                         })
+//                     }
 
-                });
-            }
-        }
-    })
-})
+//                 });
+//             }
+//         }
+//     })
+// })
 
 //api to request the permission from the student
 

@@ -1,4 +1,5 @@
-<div *ngIf = "dataSource.length != 0" class="granted-list">
+<h2>Certificates</h2>
+<div class="granted-list">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
 
@@ -40,6 +41,6 @@
   </table>
 </div>
 
-<div class="granted-list" *ngIf = "dataSource.length == 0">
-Sorry! No Student has granded you Access...<br/> 
+<div class="granted-list" *ngIf = "dataSourceLength">
+<h3 style="color:red">No Records found</h3><br/> 
 </div>

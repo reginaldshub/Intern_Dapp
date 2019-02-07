@@ -33,6 +33,7 @@ export class ReqpermissionComponent implements OnInit {
     status: String
   }
   username: string;
+  dataSourceLength: boolean;
   
   constructor( private fb: FormBuilder,
     private requesterService: RequesterService,
@@ -63,6 +64,10 @@ export class ReqpermissionComponent implements OnInit {
         }
       }
       this.dataSource = array;
+      if(this.dataSource.length == 0)
+      this.dataSourceLength = true;
+      else
+      this.dataSourceLength = false;
       console.log(this.dataSource.length);
     })
   }

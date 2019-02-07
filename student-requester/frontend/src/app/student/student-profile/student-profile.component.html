@@ -1,4 +1,4 @@
-
+<h2>Profile</h2>
 <div *ngIf="profileHider" class="container">
   <mat-card class="Profile-card">
     <form class="Profile-form" [formGroup]='profileForm' (submit)="setProfile()">
@@ -155,7 +155,9 @@
         <br />
 
       <div class="wrapper">
-        <button class="submit-button" mat-raised-button type="submit" [disabled]="profileDetails.invalid" color="primary">Update</button>
+        <button *ngIf="!isEditBtn" class="submit-button" mat-raised-button type="submit" [disabled]="profileDetails.invalid" color="primary">Save</button>
+        <button *ngIf="!isEditBtn" class="cancel-button" mat-raised-button type="button" color="warn" (click)="getProfile()">Cancel</button>
+        <button *ngIf="isEditBtn" class="submit-button" mat-raised-button type="button" (click)="hideEditBtn(isEditBtn)" color="primary">Edit</button>
       </div>
     </form>
   </mat-card>

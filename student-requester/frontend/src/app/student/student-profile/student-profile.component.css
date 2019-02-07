@@ -23,3 +23,9 @@ mat-form-field{
     justify-content: center;
     margin-top:50px;
 }
+.wrapper button{
+    margin-right:16px;
+}
+.wrapper button:last-child{
+    margin-right:0px;
+    }

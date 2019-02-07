@@ -9,7 +9,7 @@ export class StudentService {
 
   add(sslc) {
     console.log(sslc);
-    debugger;
+    // debugger;
     return this.http.post("http://localhost:3000/products/marks", sslc);
   }
   add1(puc) {
@@ -22,13 +22,13 @@ export class StudentService {
   }
   grantc(data){
     console.log(data)
-    debugger;
+    // debugger;
     return this.http.put('http://localhost:3000/products/grant',data);
   }
   commit(data){
     data._id= sessionStorage.getItem('_id');
     console.log(data);
-    debugger;
+    // debugger;
     return this.http.post('http://localhost:3000/products/commit',data);
   }
 }
