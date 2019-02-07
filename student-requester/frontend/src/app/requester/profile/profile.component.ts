@@ -25,35 +25,35 @@ export interface State {
 })
 export class ProfileComponent implements OnInit {
   state: State[] = [
-    {value: 'Andhra Pradesh', viewValue: 'Andhra Pradesh'},
-    {value: 'Arunachal Pradesh', viewValue: 'Arunachal Pradesh'},
-    {value: 'Assam', viewValue: 'Assam'},
-    {value: 'Bihar', viewValue: 'Bihar'},
-    {value: 'Goa', viewValue: 'Goa'},
-    {value: 'Gujarat', viewValue: 'Gujarat'},
-    {value: 'Haryana', viewValue: 'Haryana'},
-    {value: 'Himachal Pradesh', viewValue: 'Himachal Pradesh'},
-    {value: 'Jammu & Kashmir', viewValue: 'Jammu & Kashmir'},
-    {value: 'Karnataka', viewValue: 'Karnataka'},
-    {value: 'Kerala', viewValue: 'Kerala'},
-    {value: 'Madhya Pradesh', viewValue: 'Madhya Pradesh'},
-    {value: 'Maharashtra', viewValue: 'Maharashtra'},
-    {value: 'Manipur', viewValue: 'Manipur'},
-    {value: 'Meghalaya', viewValue: 'Meghalaya'},
-    {value: 'Mizoram', viewValue: 'Mizoram'},
-    {value: 'Nagaland', viewValue: 'Nagaland'},
-    {value: 'Orissa', viewValue: 'Orissa'},
-    {value: 'Punjab', viewValue: 'Punjab'},
-    {value: 'Rajasthan', viewValue: 'Rajasthan'},
-    {value: 'Sikkim', viewValue: 'Sikkim'},
-    {value: 'Tamil Nadu', viewValue: 'Tamil Nadu'},
-    {value: 'Tripura', viewValue: 'Tripura'},
-    {value: 'Uttar Pradesh', viewValue: 'Uttar Pradesh'},
-    {value: 'West Bengal', viewValue: 'West Bengal'},
-    {value: 'Chhattisgarh', viewValue: 'Chhattisgarh'},
-    {value: 'Uttarakhand', viewValue: 'Uttarakhand'},
-    {value: 'Jharkhand', viewValue: 'Jharkhand'},
-    {value: 'Telangana', viewValue: 'Telangana'}
+    { value: 'Andhra Pradesh', viewValue: 'Andhra Pradesh' },
+    { value: 'Arunachal Pradesh', viewValue: 'Arunachal Pradesh' },
+    { value: 'Assam', viewValue: 'Assam' },
+    { value: 'Bihar', viewValue: 'Bihar' },
+    { value: 'Goa', viewValue: 'Goa' },
+    { value: 'Gujarat', viewValue: 'Gujarat' },
+    { value: 'Haryana', viewValue: 'Haryana' },
+    { value: 'Himachal Pradesh', viewValue: 'Himachal Pradesh' },
+    { value: 'Jammu & Kashmir', viewValue: 'Jammu & Kashmir' },
+    { value: 'Karnataka', viewValue: 'Karnataka' },
+    { value: 'Kerala', viewValue: 'Kerala' },
+    { value: 'Madhya Pradesh', viewValue: 'Madhya Pradesh' },
+    { value: 'Maharashtra', viewValue: 'Maharashtra' },
+    { value: 'Manipur', viewValue: 'Manipur' },
+    { value: 'Meghalaya', viewValue: 'Meghalaya' },
+    { value: 'Mizoram', viewValue: 'Mizoram' },
+    { value: 'Nagaland', viewValue: 'Nagaland' },
+    { value: 'Orissa', viewValue: 'Orissa' },
+    { value: 'Punjab', viewValue: 'Punjab' },
+    { value: 'Rajasthan', viewValue: 'Rajasthan' },
+    { value: 'Sikkim', viewValue: 'Sikkim' },
+    { value: 'Tamil Nadu', viewValue: 'Tamil Nadu' },
+    { value: 'Tripura', viewValue: 'Tripura' },
+    { value: 'Uttar Pradesh', viewValue: 'Uttar Pradesh' },
+    { value: 'West Bengal', viewValue: 'West Bengal' },
+    { value: 'Chhattisgarh', viewValue: 'Chhattisgarh' },
+    { value: 'Uttarakhand', viewValue: 'Uttarakhand' },
+    { value: 'Jharkhand', viewValue: 'Jharkhand' },
+    { value: 'Telangana', viewValue: 'Telangana' }
   ];
 
   cookieValue;
@@ -86,6 +86,7 @@ export class ProfileComponent implements OnInit {
   username: string;
   locemail: string;
   account_address: string;
+  isEditBtn: boolean;
 
 
   constructor(private fb: FormBuilder,
@@ -104,7 +105,7 @@ export class ProfileComponent implements OnInit {
       'address': [''],
       'city': [''],
       'state': [''],
-      'pincode': [''],
+      'pincode': ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       'url': [''],
       'email': [{ value: '', disabled: true }],
       'country': [''],
@@ -136,8 +137,10 @@ export class ProfileComponent implements OnInit {
       console.log(res);
       if (res.hide) {
         this.profileHider = true;
+        this.isEditBtn = false;
       } else {
         this.profileHider = false;
+        this.isEditBtn = true;
         this.data = res;
         if (this.data.user.account_address == null)
           this.data.user.account_address = "no account added"
@@ -202,5 +205,7 @@ export class ProfileComponent implements OnInit {
       }
     })
   }
-
+  hideEditBtn(isEditBtn) {
+    this.isEditBtn = !isEditBtn;
+  }
 }
