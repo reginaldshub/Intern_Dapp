@@ -48,7 +48,7 @@
     <ng-container class="status" matColumnDef="checkstatus">
       <th mat-header-cell *matHeaderCellDef> checkstatus </th>
       <td mat-cell *matCellDef="let element; let i = index;">
-          <button color="warn" *ngIf="disable[i]" (click) = "Checkstatus(element.requesterID,element.studentID)" mat-raised-button>checkstatus</button>
+          <button color="warn" *ngIf=disable[i] (click) = "Checkstatus(element.requesterID,element.studentID)" mat-raised-button>checkstatus</button>
       </td>
     </ng-container>
 
