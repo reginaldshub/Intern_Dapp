@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import {
   MatBottomSheet, 
   MatBottomSheetRef,
+  MatSnackBarModule,
   MatAutocompleteModule,
   MatBadgeModule,
   MatBottomSheetModule,
@@ -34,7 +35,6 @@ import {
   MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule,
-  MatSnackBarModule,
   MatSortModule,
   MatStepperModule,
   MatTableModule,
@@ -96,6 +96,7 @@ import {
     MatTooltipModule,
     MatTreeModule,
     ScrollingModule,
+    MatSnackBarModule
   ],
   declarations: []
 })
