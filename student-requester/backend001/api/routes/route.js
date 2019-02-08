@@ -323,16 +323,26 @@ router.post('/reqset', verifyToken, (req, res) => {
 // adding marks details(Certificates) of student to Certificates collection
 router.post('/marks', (req, res) => {
     let userData = req.body;
-    console.log(userData);
     // query = { $and: [studentEmail, studentName] };
     let certificates = new Certificates(userData);
+    console.log(certificates);
+
+    console.log(certificates.addsubjects);
 
     Certificates.findOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, (error, certres) => {
         if (error) {
             console.log(error)
         }
         else if (certres) {
-            res.status(200).json("Duplicate Found");
+console.log(certres)
+            // for(let i = 0; i < certres.addsubjects.length; i++){
+            certres.updateOne({ }, { $set: {certres: userData}}, function (err, updatedres) {
+                if (err) throw err;
+                else {
+                    console.log(updatedres);
+                }
+            });
+        // }
         }
         else {
             console.log("Else")
@@ -396,9 +406,9 @@ router.post('/getprofile', verifyToken, (req, res) => {
 router.post('/setprofile', verifyToken, (req, res) => {
     let profileData = req.body;
 
-    console.log(profileData);
+    // console.log(profileData);
     let profile = new Profile(profileData)
-    console.log(profile);
+    // console.log(profile);
     profile.save((err, user) => {
         if (err) {
             res.send("not saved")
@@ -413,9 +423,9 @@ router.post('/setprofile', verifyToken, (req, res) => {
 
 //updating requester profile details
 router.put('/requester/:id', verifyToken, (req, res) => {
-    console.log("params post" + req.body.name + JSON.stringify(req.body.Id))
-    console.log("req" + JSON.stringify(req.params.id))
-    console.log("body" + JSON.stringify(req.body))
+    // console.log("params post" + req.body.name + JSON.stringify(req.body.Id))
+    // console.log("req" + JSON.stringify(req.params.id))
+    // console.log("body" + JSON.stringify(req.body))
     var profile = {
         name: req.body.name,
         address: req.body.address,
@@ -440,7 +450,7 @@ router.put('/requester/:id', verifyToken, (req, res) => {
 //returns Student profile details
 router.post('/getstudentprofile', verifyToken, (req, res) => {
     let userData = req.body;
-    console.log(userData)
+    // console.log(userData)
     let profile = new studentProfile(userData)
     studentProfile.findOne({ userId: profile.userId }, (error, user) => {
         if (error) {
@@ -466,9 +476,9 @@ router.post('/getstudentprofile', verifyToken, (req, res) => {
 router.post('/setstudentprofile', verifyToken, (req, res) => {
     let profileData = req.body;
 
-    console.log(profileData);
+    // console.log(profileData);
     let profile = new studentProfile(profileData)
-    console.log(profile);
+    // console.log(profile);
     profile.save((err, user) => {
         if (err) {
             res.send("not saved")
@@ -615,12 +625,12 @@ router.post('/grantedlist', (req, res) => {
 })
 
 //student self certificate details
-router.post('/studentSelfCertificate',  (req, res) => {
+router.post('/studentSelfCertificate', (req, res) => {
     let searchData = req.body;
     // console.log(searchData)
     if ((searchData.level != "" && searchData.level != null && searchData.level != undefined) &&
         (searchData.id != "" && searchData.id != null && searchData.id != undefined)) {
-        Certificates.find({ $and: [{ studentid: searchData.id}, {level: searchData.level}] }, (error, certi) => {
+        Certificates.find({ $and: [{ studentid: searchData.id }, { level: searchData.level }] }, (error, certi) => {
             if (certi) {
                 // console.log(certi)
                 res.json({ certificate: certi })
@@ -630,18 +640,18 @@ router.post('/studentSelfCertificate',  (req, res) => {
 
         })
     }
-    if((searchData.studentId != "" && searchData.studentId != null && searchData.studentId != undefined) &&
-    (searchData.name != "" && searchData.name != null && searchData.name != undefined)){
-    Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
-        if (sslc) {
-            console.log(sslc)
-            res.json({ certificate: sslc })
-        } else {
-            res.json({ status: "noEntry Found" })
-        }
+    if ((searchData.studentId != "" && searchData.studentId != null && searchData.studentId != undefined) &&
+        (searchData.name != "" && searchData.name != null && searchData.name != undefined)) {
+        Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
+            if (sslc) {
+                // console.log(sslc)
+                res.json({ certificate: sslc })
+            } else {
+                res.json({ status: "noEntry Found" })
+            }
 
-    })
-}
+        })
+    }
 })
 
 //api to post certificates of requested students
@@ -1005,7 +1015,7 @@ router.post('/deny', (req, res) => {
 //api to post education categories of requested level
 router.post('/educationCategory', verifyToken, (req, res) => {
 
-    console.log(req.body.level);
+    // console.log(req.body.level);
     let level = { level: req.body.level };
     EducationStreams.find(level, (error, streams) => {
         if (error) {

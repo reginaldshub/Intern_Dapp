@@ -115,7 +115,7 @@ export class Add10thComponent implements OnInit {
     { value: "2017", viewValue: "2017" },
     { value: "2018", viewValue: "2018" },
   ];
-
+  isEditBtn: boolean;
   disableBtn: boolean = true;
   level: any = "1";
   add10th: FormGroup
@@ -193,6 +193,7 @@ export class Add10thComponent implements OnInit {
   }
 
   Add() {
+    // debugger;
     this.subjectArray.push(this.addSubjectGroup())
   }
 
@@ -208,11 +209,12 @@ export class Add10thComponent implements OnInit {
     console.log("student id", this.add10th.value.studentid);
     this.service.add(this.add10th.value).subscribe((res) => {
       console.log(res);
-      if (res == "Duplicate Found")
-        swal("", "" + res, "error");
-      else
+      // if (res == "Duplicate Found")
+      //   swal("", "" + res, "error");
+      // else
         swal("", "" + res, "success");
-      this.add10th.reset();
+      // this.add10th.reset();
+      this.getCertificates();
 
     })
   }
@@ -228,33 +230,30 @@ export class Add10thComponent implements OnInit {
     data.id = temp;
     data.level = temp1;
     // debugger;
-    this.studentService.getCertificate(data).subscribe((res:any) => {
-      console.log(res.certificate[0]);
-      this.add10th.patchValue({
-        id: res.certificate[0].id,
-        ecategory: res.certificate[0].ecategory,
-        Startyear: res.certificate[0].Startyear,
-        Endyear: res.certificate[0].Endyear  
-      })
-
-      for (let i = 0; i < res.certificate[0].addsubjects.length; i++) {
-        console.log("res.certificate[0].addsubjects.length", i);
-        console.log(res.certificate[0].addsubjects[i].subjectname);
+    this.studentService.getCertificate(data).subscribe((res: any) => {
+      // console.log(res.certificate[0]);
+      if (res.status == "noEntry Found") {
+        this.isEditBtn=false;
+      } else if (res) {
+        this.isEditBtn=true;
         this.add10th.patchValue({
-        addsubjects:res.certificate[0].addsubjects
+          id: res.certificate[0].id,
+          ecategory: res.certificate[0].ecategory,
+          Startyear: res.certificate[0].Startyear,
+          Endyear: res.certificate[0].Endyear,
         })
-        // const addSub = <FormArray>this.add10th.controls['addsubjects'];
-        // addSub.controls.forEach((field) => {
-         
-        //   field.get('subjectname').patchValue(res.certificate[0].addsubjects[i].subjectname);
-        //   field.get('subjectmarks').patchValue(res.certificate[0].addsubjects[i].subjectmarks);
-        // });
-        if(i < res.certificate[0].addsubjects.length-1)
-         this.Add();
-        // this.add10th.setValue({
-        // addsubjects: res.certificate[0].addsubjects[i]
-        // })
+        for (var i = 0; i < res.certificate[0].addsubjects.length; i++) {
+          this.add10th.patchValue({
+            addsubjects: res.certificate[0].addsubjects
+          })
+          this.Add();
+        }
+        this.Remove(i);
       }
     })
+  }
+
+  hideEditBtn(isEditBtn){
+    this.isEditBtn = !isEditBtn;
   }
 }
