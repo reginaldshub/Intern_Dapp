@@ -10,7 +10,7 @@ export class StudentService {
   add(sslc) {
     console.log(sslc);
     // debugger;
-    return this.http.put("http://localhost:3000/products/marks", sslc);
+    return this.http.post("http://localhost:3000/products/marks", sslc);
   }
   add1(puc) {
     console.log(puc);

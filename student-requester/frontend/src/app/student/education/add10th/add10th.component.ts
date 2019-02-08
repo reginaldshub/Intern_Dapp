@@ -116,6 +116,7 @@ export class Add10thComponent implements OnInit {
     { value: "2018", viewValue: "2018" },
   ];
   isEditBtn: boolean;
+  isSaveBtn: boolean;
   disableBtn: boolean = true;
   level: any = "1";
   add10th: FormGroup
@@ -203,6 +204,7 @@ export class Add10thComponent implements OnInit {
   }
 
   submit() {
+    this.isEditBtn = false;
     this.add10th.value.studentid = this.id;
     this.add10th.value.level = this.level;
     console.log(this.add10th.value);
@@ -212,7 +214,7 @@ export class Add10thComponent implements OnInit {
       // if (res == "Duplicate Found")
       //   swal("", "" + res, "error");
       // else
-        swal("", "" + res, "success");
+      swal("", "" + res, "success");
       // this.add10th.reset();
       this.getCertificates();
 
@@ -232,10 +234,14 @@ export class Add10thComponent implements OnInit {
     // debugger;
     this.studentService.getCertificate(data).subscribe((res: any) => {
       // console.log(res.certificate[0]);
-      if (res.status == "noEntry Found") {
-        this.isEditBtn=false;
+      // console.log(res);
+      if (res.status === "empty") {
+        this.isSaveBtn = true;
+        this.isEditBtn = false;
       } else if (res) {
-        this.isEditBtn=true;
+        // this.isEditBtn=false;
+        this.isSaveBtn = false;
+        this.isEditBtn = false;
         this.add10th.patchValue({
           id: res.certificate[0].id,
           ecategory: res.certificate[0].ecategory,
@@ -253,7 +259,7 @@ export class Add10thComponent implements OnInit {
     })
   }
 
-  hideEditBtn(isEditBtn){
-    this.isEditBtn = !isEditBtn;
+  hideEditBtn() {
+    this.isEditBtn = !this.isEditBtn;
   }
 }

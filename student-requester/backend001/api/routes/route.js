@@ -177,14 +177,14 @@ router.post('/reqcreate', verifyToken, (req, res) => {
                         requester.State = "saved";
 
                         try {
-                            web3.personal.unlockAccount("0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d", "password")
+                            web3.personal.unlockAccount("0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7", "Accion")
                         }
                         catch (e) {
                             console.log(e);
                             return;
                         }
                         web3.eth.sendTransaction({
-                            from: "0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d",
+                            from: "0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7",
                             to: result,
                             value: web3.toWei("25", 'ether')
                         }, (error, res) => {
@@ -243,14 +243,14 @@ router.post('/create', verifyToken, (req, res) => {
                         user.State = "saved";
 
                         try {
-                            web3.personal.unlockAccount("0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d", "password")
+                            web3.personal.unlockAccount("0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7", "Accion")
                         }
                         catch (e) {
                             console.log(e);
                             return;
                         }
                         web3.eth.sendTransaction({
-                            from: "0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d",
+                            from: "0xaf01f28ecde578c0c0f2d3c303ac39e4a307d6c7",
                             to: result,
                             value: web3.toWei("25", 'ether')
                         }, (error, res) => {
@@ -631,11 +631,14 @@ router.post('/studentSelfCertificate', (req, res) => {
     if ((searchData.level != "" && searchData.level != null && searchData.level != undefined) &&
         (searchData.id != "" && searchData.id != null && searchData.id != undefined)) {
         Certificates.find({ $and: [{ studentid: searchData.id }, { level: searchData.level }] }, (error, certi) => {
-            if (certi) {
-                // console.log(certi)
-                res.json({ certificate: certi })
+            if(error){
+                throw error
+            }
+            else if (certi.length > 0) {
+                res.status(200).json({ certificate: certi })
             } else {
-                res.json({ status: "noEntry Found" })
+                console.log("else")
+                res.status(200).json({ status:"empty"})
             }
 
         })
@@ -834,7 +837,7 @@ router.post('/grant', (req, res) => {
                     } else {
                         console.log('unlocking the geth account')
                         try {
-                            web3.personal.unlockAccount(student.account_address, "password");
+                            web3.personal.unlockAccount(student.account_address, "Accion");
                         } catch (e) {
                             console.log(e);
                             return;
@@ -897,7 +900,7 @@ router.post('/request', verifyToken, (req, res) => {
                 console.log(requester.account_address);
                 console.log('unlocking the get account')
                 try {
-                    web3.personal.unlockAccount(requester.account_address, "password");
+                    web3.personal.unlockAccount(requester.account_address, "Accion");
                 } catch (e) {
                     console.log(e);
                     return;
@@ -970,7 +973,7 @@ router.post('/deny', (req, res) => {
                     } else {
                         console.log('unlocking the geth account')
                         try {
-                            web3.personal.unlockAccount(student.account_address, "password");
+                            web3.personal.unlockAccount(student.account_address, "Accion");
                         } catch (e) {
                             console.log(e);
                             return;
@@ -1075,16 +1078,38 @@ function getandUpdateStatus(transactionHash, myquery, requesteraccount, contract
     Receipt(transactionHash);
 }
 
-router.put('/marks', (req, res) => {
+router.post('/marks', (req, res) => {
     var userData = req.body;   
     console.log("user",userData);
-    Certificates.updateOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, { $set:userData }, { new: true },
-        (err, doc) => {
-            if (!err) { 
-                console.log(doc);
-                res.status(200).send({ message: "updated success", doc: doc }) }
-            else { console.log('error' + JSON.stringify(err, undefined, 2)); }
-        });
+    let certificates = new Certificates(userData);
+    Certificates.findOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, (error, certres) => {
+                if (error) {
+                    console.log(error)
+                }
+                else if (certres) {
+                    Certificates.updateOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, { $set:userData }, { new: true },
+                        (err, doc) => {
+                            if (!err) { 
+                                console.log(doc);
+                                res.status(200).send({ message: "updated success", doc: doc }) }
+                            else { console.log('error' + JSON.stringify(err, undefined, 2)); }
+                        });
+                }
+                else {
+                    console.log("Else")
+                    certificates.save((err, user) => {
+                        if (err) {
+                            console.log("not saved")
+                        } else {
+                            console.log("added sucessfully")
+                            res.status(200).json("added sucessfully");
+                        }
+                    })
+                }
+            })
+
+
+   
 });
 
 module.exports = router;
