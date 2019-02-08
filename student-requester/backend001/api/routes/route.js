@@ -321,41 +321,41 @@ router.post('/reqset', verifyToken, (req, res) => {
 })
 
 // adding marks details(Certificates) of student to Certificates collection
-router.post('/marks', (req, res) => {
-    let userData = req.body;
-    // query = { $and: [studentEmail, studentName] };
-    let certificates = new Certificates(userData);
-    console.log(certificates);
+// router.post('/marks', (req, res) => {
+//     let userData = req.body;
+//     // query = { $and: [studentEmail, studentName] };
+//     let certificates = new Certificates(userData);
+//     console.log(certificates);
 
-    console.log(certificates.addsubjects);
+//     console.log(certificates.addsubjects);
 
-    Certificates.findOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, (error, certres) => {
-        if (error) {
-            console.log(error)
-        }
-        else if (certres) {
-console.log(certres)
-            // for(let i = 0; i < certres.addsubjects.length; i++){
-            certres.updateOne({ }, { $set: {certres: userData}}, function (err, updatedres) {
-                if (err) throw err;
-                else {
-                    console.log(updatedres);
-                }
-            });
-        // }
-        }
-        else {
-            console.log("Else")
-            certificates.save((err, user) => {
-                if (err) {
-                    console.log("not saved")
-                } else {
-                    console.log("added sucessfully")
-                    res.status(200).json("added sucessfully");
-                }
-            })
-        }
-    })
+//     Certificates.findOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, (error, certres) => {
+//         if (error) {
+//             console.log(error)
+//         }
+//         else if (certres) {
+// console.log(certres)
+//             // for(let i = 0; i < certres.addsubjects.length; i++){
+//             certres.updateOne({ }, { $set: {certres: userData}}, function (err, updatedres) {
+//                 if (err) throw err;
+//                 else {
+//                     console.log(updatedres);
+//                 }
+//             });
+//         // }
+//         }
+//         else {
+//             console.log("Else")
+//             certificates.save((err, user) => {
+//                 if (err) {
+//                     console.log("not saved")
+//                 } else {
+//                     console.log("added sucessfully")
+//                     res.status(200).json("added sucessfully");
+//                 }
+//             })
+//         }
+//     })
 
     // Certificates.findOne({ $and: [{studentid: userData.studentid},{level: userData.level}] }, (error, certres) => {
     //     if (error) {
@@ -374,7 +374,7 @@ console.log(certres)
     //         // })
     //     }
     // })
-})
+// })
 
 //returns Requester profile details
 router.post('/getprofile', verifyToken, (req, res) => {
@@ -1074,5 +1074,17 @@ function getandUpdateStatus(transactionHash, myquery, requesteraccount, contract
     }
     Receipt(transactionHash);
 }
+
+router.put('/marks', (req, res) => {
+    var userData = req.body;   
+    console.log("user",userData);
+    Certificates.updateOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, { $set:userData }, { new: true },
+        (err, doc) => {
+            if (!err) { 
+                console.log(doc);
+                res.status(200).send({ message: "updated success", doc: doc }) }
+            else { console.log('error' + JSON.stringify(err, undefined, 2)); }
+        });
+});
 
 module.exports = router;

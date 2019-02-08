@@ -51,7 +51,7 @@ export class RequestsComponent implements OnInit {
         // if(temp[i].Status == 'pending'){
         array.push(temp[i]);
         this.disable[i] = temp[i].Status != 'pending' ? false : true;
-        // this.disablestatus[i]=temp[i].Status != 'pending' ? true : false;
+        this.disablestatus[i]=temp[i].Status != 'pending' ? true : false;
         console.log(this.disable)
         // }
       }
