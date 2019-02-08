@@ -234,21 +234,23 @@ export class Add10thComponent implements OnInit {
         id: res.certificate[0].id,
         ecategory: res.certificate[0].ecategory,
         Startyear: res.certificate[0].Startyear,
-        Endyear: res.certificate[0].Endyear,
-
+        Endyear: res.certificate[0].Endyear  
       })
 
       for (let i = 0; i < res.certificate[0].addsubjects.length; i++) {
         console.log("res.certificate[0].addsubjects.length", i);
         console.log(res.certificate[0].addsubjects[i].subjectname);
-        
-        const addSub = <FormArray>this.add10th.controls['addsubjects'];
-        addSub.controls.forEach((field) => {
+        this.add10th.patchValue({
+        addsubjects:res.certificate[0].addsubjects
+        })
+        // const addSub = <FormArray>this.add10th.controls['addsubjects'];
+        // addSub.controls.forEach((field) => {
          
-          field.get('subjectname').patchValue(res.certificate[0].addsubjects[i].subjectname);
-          field.get('subjectmarks').patchValue(res.certificate[0].addsubjects[i].subjectmarks);
-        });
-        this.Add();
+        //   field.get('subjectname').patchValue(res.certificate[0].addsubjects[i].subjectname);
+        //   field.get('subjectmarks').patchValue(res.certificate[0].addsubjects[i].subjectmarks);
+        // });
+        if(i < res.certificate[0].addsubjects.length-1)
+         this.Add();
         // this.add10th.setValue({
         // addsubjects: res.certificate[0].addsubjects[i]
         // })
