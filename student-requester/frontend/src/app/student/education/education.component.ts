@@ -40,11 +40,11 @@ export class EducationComponent implements OnInit {
     this.session.userId = this.sessionValue;
     this.username = sessionStorage.getItem('name');
     this.locemail = localStorage.getItem('email');
-    console.log(this.session);
+    // console.log(this.session);
     this.service.getStudentProfile(this.session).subscribe((res: any) => {
         this.data = res.user;
         this.profileResponse = true;
-        console.log(this.data);
+        // console.log(this.data);
     }, err => {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
@@ -75,9 +75,9 @@ export class EducationComponent implements OnInit {
  
   onCreate() {
     this.showSpinner = true;
-    console.log(this.Create.value)
+    // console.log(this.Create.value)
     this.studentservice.commit(this.Create.value).subscribe((res) => {
-      console.log(this.account = res['message']);
+      // console.log(this.account = res['message']);
       if (res){
         this.showSpinner = false;
         this.resetForms();

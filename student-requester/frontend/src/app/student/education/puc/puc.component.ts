@@ -126,7 +126,7 @@ export class PucComponent implements OnInit {
     this.puc = this.fb.group({
       id: [''],
       studentid: ['', [ Validators.pattern('^[a-zA-Z0-9]+$')]],
-      ecategory: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')] ],
+      ecategory: ['', [Validators.required] ],
       Startyear: ['', Validators.required],
       Endyear: ['', [Validators.required, EndYearValidator]],
       Groupname:['', Validators.required],
@@ -140,7 +140,7 @@ export class PucComponent implements OnInit {
 
       // console.log(changedObj.addsubjects.length)
       for (let i = 0; i < changedObj.addsubjects.length; i++) {
-        console.log(changedObj.addsubjects[i])
+        // console.log(changedObj.addsubjects[i])
         if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
           this.isButtonDisabled = false;
         }else {
@@ -156,7 +156,7 @@ export class PucComponent implements OnInit {
     }
     edu.level = this.level;
     this.studentService.educationCategory(edu).subscribe((res: any) => {
-      console.log(res);
+      // console.log(res);
       this.categories = res.streams;
     })
   }
@@ -182,10 +182,11 @@ export class PucComponent implements OnInit {
 
   submit() {
     this.puc.value.studentid = this.id;
-    this.puc.value.level = this.level;
+    // this.puc.value.level = this.level;
     console.log("student id",this.puc.value.studentid);
      this.service.add(this.puc.value).subscribe((res)=>{
-       console.log(res); if(res == "Duplicate Found")
+      //  console.log(res); 
+       if(res == "Duplicate Found")
        swal("", "" + res, "error");
        else
        swal("", "" + res, "success");

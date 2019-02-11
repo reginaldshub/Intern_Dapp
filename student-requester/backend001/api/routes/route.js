@@ -334,15 +334,15 @@ router.post('/marks', (req, res) => {
             console.log(error)
         }
         else if (certres) {
-console.log(certres)
+            console.log(certres)
             // for(let i = 0; i < certres.addsubjects.length; i++){
-            certres.updateOne({ }, { $set: {certres: userData}}, function (err, updatedres) {
+            certres.updateOne({}, { $set: { certres: userData } }, function (err, updatedres) {
                 if (err) throw err;
                 else {
                     console.log(updatedres);
                 }
             });
-        // }
+            // }
         }
         else {
             console.log("Else")
@@ -627,30 +627,34 @@ router.post('/grantedlist', (req, res) => {
 //student self certificate details
 router.post('/studentSelfCertificate', (req, res) => {
     let searchData = req.body;
-    // console.log(searchData)
-    if ((searchData.level != "" && searchData.level != null && searchData.level != undefined) &&
-        (searchData.id != "" && searchData.id != null && searchData.id != undefined)) {
-        Certificates.find({ $and: [{ studentid: searchData.id }, { level: searchData.level }] }, (error, certi) => {
-            if (certi) {
-                // console.log(certi)
-                res.json({ certificate: certi })
-            } else {
-                res.json({ status: "noEntry Found" })
-            }
+    console.log(searchData)
+    if ( searchData.level != null ) {
+        if ((searchData.level != "" && searchData.level != null && searchData.level != undefined) &&
+            (searchData.id != "" && searchData.id != null && searchData.id != undefined)) {
+            Certificates.find({ $and: [{ studentid: searchData.id }, { level: searchData.level }] }, (error, certi) => {
+                if (certi.length > 0) {
+                    // console.log(certi)
+                    res.status(200).json({ certificate: certi})
+                } else {
+                    res.status(200).json({ status: "empty" })
+                }
 
-        })
-    }
-    if ((searchData.studentId != "" && searchData.studentId != null && searchData.studentId != undefined) &&
-        (searchData.name != "" && searchData.name != null && searchData.name != undefined)) {
-        Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
-            if (sslc) {
-                // console.log(sslc)
-                res.json({ certificate: sslc })
-            } else {
-                res.json({ status: "noEntry Found" })
-            }
+            })
+        }
+    } 
+    else {
+        if ((searchData.studentId != "" && searchData.studentId != null && searchData.studentId != undefined) &&
+            (searchData.name != "" && searchData.name != null && searchData.name != undefined)) {
+            Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
+                if (sslc) {
+                    // console.log(sslc)
+                    res.status(200).json({ certificate: sslc, status: "found" })
+                } else {
+                    res.status(200).json({ status: "empty" })
+                }
 
-        })
+            })
+        }
     }
 })
 

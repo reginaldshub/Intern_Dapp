@@ -163,7 +163,7 @@ export class Add10thComponent implements OnInit {
     }
     edu.level = this.level;
     this.studentService.educationCategory(edu).subscribe((res: any) => {
-      console.log(res);
+      // console.log(res);
       this.categories = res.streams;
     })
   }
@@ -207,8 +207,8 @@ export class Add10thComponent implements OnInit {
     this.isEditBtn = false;
     this.add10th.value.studentid = this.id;
     this.add10th.value.level = this.level;
-    console.log(this.add10th.value);
-    console.log("student id", this.add10th.value.studentid);
+    // console.log(this.add10th.value);
+    // console.log("student id", this.add10th.value.studentid);
     this.service.add(this.add10th.value).subscribe((res) => {
       console.log(res);
       // if (res == "Duplicate Found")
@@ -234,8 +234,9 @@ export class Add10thComponent implements OnInit {
     // debugger;
     this.studentService.getCertificate(data).subscribe((res: any) => {
       // console.log(res.certificate[0]);
-      // console.log(res);
-      if (res.status === "empty") {
+      console.log(res);
+      if (res.status == "empty") {
+        // debugger;
         this.isSaveBtn = true;
         this.isEditBtn = false;
       } else if (res) {

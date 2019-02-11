@@ -14,7 +14,8 @@ export class SelfcertificateComponent implements OnInit {
     name:String,
     studentId: String,
     Endyear: Number,
-    Startyear: Number
+    Startyear: Number,
+    level: Number
   };
   response: any;
   showSpinner: boolean = false;
@@ -26,6 +27,7 @@ export class SelfcertificateComponent implements OnInit {
     this.Name.Endyear = null;
     this.Name.Startyear = null;
     this.Name.studentId = null;
+    this.Name.level = null;
    this.getCertificate();
   }
 

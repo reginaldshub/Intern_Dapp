@@ -138,7 +138,7 @@ export class DegreeComponent implements OnInit {
 
       // console.log(changedObj.addsubjects.length)
       for (let i = 0; i < changedObj.addsubjects.length; i++) {
-        console.log(changedObj.addsubjects[i])
+        // console.log(changedObj.addsubjects[i])
         if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
           this.disableBtn = false;
         }else {
@@ -152,7 +152,7 @@ export class DegreeComponent implements OnInit {
     }
     edu.level = this.level;
     this.studentService.educationCategory(edu).subscribe((res: any) => {
-      console.log(res);
+      // console.log(res);
       this.categories = res.streams;
     })
   }
@@ -181,9 +181,10 @@ export class DegreeComponent implements OnInit {
   submit() {
     this.degree.value.studentid = this.id;
     this.degree.value.level = this.level;
-    console.log("student id",this.degree.value.studentid);
+    // console.log("student id",this.degree.value.studentid);
      this.service.add(this.degree.value).subscribe((res)=>{
-       console.log(res); if(res == "Duplicate Found")
+      //  console.log(res); 
+       if(res == "Duplicate Found")
        swal("", "" + res, "error");
        else
        swal("", "" + res, "success");
