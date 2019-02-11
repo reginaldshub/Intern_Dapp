@@ -214,9 +214,9 @@ export class Add10thComponent implements OnInit {
       // if (res == "Duplicate Found")
       //   swal("", "" + res, "error");
       // else
-      swal("", "" + res, "success");
+      swal("", "" + res['message'], "success");
       // this.add10th.reset();
-      this.getCertificates();
+      // this.getCertificates();
 
     })
   }
