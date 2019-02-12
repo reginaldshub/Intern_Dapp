@@ -114,6 +114,8 @@ export class DegreeComponent implements OnInit {
       { value: "2017", viewValue: "2017" },
       { value: "2018", viewValue: "2018" },
     ];
+    isEditBtn: boolean;
+    isSaveBtn: boolean;
   degree: FormGroup;
   level: any = "3";
   id: string;
@@ -134,11 +136,9 @@ export class DegreeComponent implements OnInit {
   }
   ngOnInit() {
     this.id = sessionStorage.getItem('_id');
+    this.getCertificates();
     this.degree.valueChanges.subscribe((changedObj: any) => {
-
-      // console.log(changedObj.addsubjects.length)
       for (let i = 0; i < changedObj.addsubjects.length; i++) {
-        // console.log(changedObj.addsubjects[i])
         if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
           this.disableBtn = false;
         }else {
@@ -152,18 +152,16 @@ export class DegreeComponent implements OnInit {
     }
     edu.level = this.level;
     this.studentService.educationCategory(edu).subscribe((res: any) => {
-      // console.log(res);
       this.categories = res.streams;
     })
   }
+
   addSubjectGroup() {
     return this.fb.group({
       subjectname: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
       subjectmarks: ['', [Validators.required,Validators.pattern('^[0-9]+$')]]
     });
   }
-
-
 
   get subjectArray() {
     return <FormArray>this.degree.get('addsubjects');
@@ -179,17 +177,54 @@ export class DegreeComponent implements OnInit {
   }
 
   submit() {
+    this.isEditBtn = false;
     this.degree.value.studentid = this.id;
     this.degree.value.level = this.level;
-    // console.log("student id",this.degree.value.studentid);
      this.service.add(this.degree.value).subscribe((res)=>{
-      //  console.log(res); 
-       if(res == "Duplicate Found")
-       swal("", "" + res, "error");
-       else
-       swal("", "" + res, "success");
-       this.degree.reset();
-     })
+      swal("", "" + res['message'], "success");
+    })
   }
 
+  getCertificates() {
+    let data = {
+      id: String,
+      level: String
+    }
+    var temp: any = sessionStorage.getItem('_id');
+    var temp1: any = "3";
+    data.id = temp;
+    data.level = temp1;
+    // debugger;
+    this.studentService.getCertificate(data).subscribe((res: any) => {
+      // console.log(res.certificate[0]);
+      // console.log(res);
+      if (res.status == "empty") {
+        // debugger;
+        this.isSaveBtn = true;
+        this.isEditBtn = false;
+      } else if (res) {
+        // this.isEditBtn=false;
+        this.isSaveBtn = false;
+        this.isEditBtn = false;
+        this.degree.patchValue({
+          id: res.certificate[0].id,
+          ecategory: res.certificate[0].ecategory,
+          Startyear: res.certificate[0].Startyear,
+          Endyear: res.certificate[0].Endyear,
+          Branchname: res.certificate[0].Branchname
+        })
+        for (var i = 0; i < res.certificate[0].addsubjects.length; i++) {
+          this.degree.patchValue({
+            addsubjects: res.certificate[0].addsubjects
+          })
+          this.Add();
+        }
+        this.Remove(i);
+      }
+    })
+  }
+
+  hideEditBtn() {
+    this.isEditBtn = !this.isEditBtn;
+  }
 }

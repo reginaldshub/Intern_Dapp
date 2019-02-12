@@ -42,7 +42,7 @@
           <input matInput placeholder="Branch Name" formControlName="Branchname">
         </mat-form-field>
         <br />
-      <div class="wrapper">
+      <div class="subjects-wrapper">
         <div formArrayName="addsubjects">
           <div *ngFor="let group of subjectArray.controls; let i= index;" [formGroupName]="i">
             <mat-form-field>
@@ -52,15 +52,19 @@
               <input matInput placeholder="Subject Marks" formControlName="subjectmarks">
             </mat-form-field>
 
-            <button mat-button color="primary" [disabled]="disableBtn" matTooltip="Add" (click)="Add()">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
+            <button mat-button color="primary" *ngIf="(i+1) == subjectArray.length" [disabled]="disableBtn" matTooltip="Add" (click)="Add()">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
               <button class="remove-btn" mat-button color="primary" matTooltip="Remove" (click)="Remove(i)">
                 <mat-icon>remove_circle_outline</mat-icon>
               </button>          </div>
         </div>
       </div>
-      <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="masters.invalid" color="primary">Save</button>
+      <div class="wrapper">
+        <button *ngIf="isSaveBtn" class="submit-button" mat-raised-button (click)="submit()" [disabled]="masters.invalid" color="primary">Save</button> 
+        <button *ngIf="isEditBtn" class="submit-button" mat-raised-button type="submit" (click)="submit()" [disabled]="masters.invalid" [disabled]="profileDetails.invalid" color="primary">Update</button>
+        <button *ngIf="isEditBtn" class="cancel-button" mat-raised-button type="button" color="warn" (click)="hideEditBtn()">Cancel</button>
+        <button *ngIf="!isSaveBtn && !isEditBtn" class="submit-button" mat-raised-button type="button" (click)="hideEditBtn()" color="primary">Edit</button>
+      </div>
     </form>
-  <!-- </mat-card> -->
 </div>

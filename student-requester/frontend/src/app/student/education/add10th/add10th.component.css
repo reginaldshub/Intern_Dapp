@@ -2,6 +2,12 @@
     text-align: center;
     overflow: auto;
     height: 70px;
+    display: inline
+}
+.subjects-wrapper{
+    text-align: center;
+    overflow: auto;
+    height: 70px;
 }
 
 mat-card{

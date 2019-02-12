@@ -6,7 +6,6 @@ import { EndYearValidator } from './../year.validator';
 import { StartYearValidator } from './../year.validator';
 
 import { NgForm } from "@angular/forms";
-import { stringify } from '@angular/core/src/util';
 
 export interface Year {
   value: string;
@@ -140,15 +139,7 @@ export class Add10thComponent implements OnInit {
     this.id = sessionStorage.getItem('_id');
     this.getCertificates();
     this.add10th.valueChanges.subscribe((changedObj: any) => {
-
-      // console.log(changedObj.addsubjects.length)
-      //   if(changedObj.Startyear && changedObj.Endyear)
-      //   if(changedObj.Startyear >= changedObj.Endyear){
-      //     this.add10th.invalid();
-      // }
-
       for (let i = 0; i < changedObj.addsubjects.length; i++) {
-        // console.log(changedObj)
         if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
           this.disableBtn = false;
         } else {
@@ -156,29 +147,15 @@ export class Add10thComponent implements OnInit {
           break;
         }
       }
-
     });
     let edu = {
       level: String
     }
     edu.level = this.level;
     this.studentService.educationCategory(edu).subscribe((res: any) => {
-      // console.log(res);
       this.categories = res.streams;
     })
   }
-
-  //   dateLessThan(Startyear: string, Endyear: string) {
-
-  //     return (group: FormGroup): {[key: string]: any} => {
-  //       let f = group.controls[Startyear];
-  //       let t = group.controls[Endyear];
-  //       if (f.value > t.value) {
-  //         return null
-  //       }
-  //       return true;
-  //     }
-  // }
 
   addSubjectGroup() {
     return this.fb.group({
@@ -187,14 +164,11 @@ export class Add10thComponent implements OnInit {
     });
   }
 
-
-
   get subjectArray() {
     return <FormArray>this.add10th.get('addsubjects');
   }
 
   Add() {
-    // debugger;
     this.subjectArray.push(this.addSubjectGroup())
   }
 
@@ -207,20 +181,10 @@ export class Add10thComponent implements OnInit {
     this.isEditBtn = false;
     this.add10th.value.studentid = this.id;
     this.add10th.value.level = this.level;
-    // console.log(this.add10th.value);
-    // console.log("student id", this.add10th.value.studentid);
     this.service.add(this.add10th.value).subscribe((res) => {
-      console.log(res);
-      // if (res == "Duplicate Found")
-      //   swal("", "" + res, "error");
-      // else
       swal("", "" + res['message'], "success");
-      // this.add10th.reset();
-      // this.getCertificates();
-
     })
   }
-
 
   getCertificates() {
     let data = {

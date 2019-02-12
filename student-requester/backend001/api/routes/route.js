@@ -322,75 +322,36 @@ router.post('/reqset', verifyToken, (req, res) => {
 
 // adding marks details(Certificates) of student to Certificates collection
 router.post('/marks', (req, res) => {
-    var userData = req.body;   
-    console.log("user",userData);
+    var userData = req.body;
+    console.log("user", userData);
     let certificates = new Certificates(userData);
     Certificates.findOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, (error, certres) => {
-                if (error) {
-                    console.log(error)
-                }
-                else if (certres) {
-                    Certificates.updateOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, { $set:userData }, { new: true },
-                        (err, doc) => {
-                            if (!err) { 
-                                // console.log(doc);
-                                res.status(200).json({ message: "updated success", doc: doc }) }
-                            else { console.log('error' + JSON.stringify(err, undefined, 2)); }
-                        });
-                }
-                else {
-                    console.log("Else")
-                    certificates.save((err, user) => {
-                        if (err) {
-                            console.log("not saved")
-                        } else {
-                            console.log("added sucessfully")
-                            res.status(200).json("added sucessfully");
-                        }
-                    })
+        if (error) {
+            console.log(error)
+        }
+        else if (certres) {
+            Certificates.updateOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, { $set: userData }, { new: true },
+                (err, doc) => {
+                    if (!err) {
+                        // console.log(doc);
+                        res.status(200).json({ message: "updated success", doc: doc })
+                    }
+                    else { console.log('error' + JSON.stringify(err, undefined, 2)); }
+                });
+        }
+        else {
+            // console.log("Else")
+            certificates.save((err, user) => {
+                if (err) {
+                    console.log("not saved")
+                } else {
+                    // console.log("added sucessfully")
+                    res.status(200).json({ message: "added sucessfully"});
                 }
             })
- 
- 
-   
- });
-// router.post('/marks', (req, res) => {
-//     let userData = req.body;
-//     // query = { $and: [studentEmail, studentName] };
-//     let certificates = new Certificates(userData);
-//     // console.log(certificates);
-
-//     // console.log(certificates.addsubjects);
-
-//     Certificates.findOne({ $and: [{ studentid: userData.studentid }, { level: userData.level }] }, (error, certres) => {
-//         if (error) {
-//             console.log(error)
-//         }
-//         else if (certres) {
-//             console.log(certres);
-//             Certificates.update({_id:certres},(error,res) => {
-//                 console.log(res);
-//             })
-//               //     Certificates.updateOne({}, { $set: { certres: userData } }, function (err, updatedres) {
-//             //     if (err) throw err;
-//             //     else {
-//             //         console.log(updatedres);
-//             //     }
-//             // });
-//         }
-//         else {
-//             console.log("Else")
-//             certificates.save((err, user) => {
-//                 if (err) {
-//                     console.log("not saved")
-//                 } else {
-//                     console.log("added sucessfully")
-//                     res.status(200).json("added sucessfully");
-//                 }
-//             })
-//         }
-//     })
-// })
+        }
+    })
+});
 
 //returns Requester profile details
 router.post('/getprofile', verifyToken, (req, res) => {
@@ -644,28 +605,29 @@ router.post('/grantedlist', (req, res) => {
 router.post('/studentSelfCertificate', (req, res) => {
     let searchData = req.body;
     console.log(searchData)
-    if ( searchData.level != null ) {
+    if (searchData.level != null) {
         if ((searchData.level != "" && searchData.level != null && searchData.level != undefined) &&
             (searchData.id != "" && searchData.id != null && searchData.id != undefined)) {
             Certificates.find({ $and: [{ studentid: searchData.id }, { level: searchData.level }] }, (error, certi) => {
                 if (certi.length > 0) {
                     // console.log(certi)
-                    res.status(200).json({ certificate: certi})
+                    res.status(200).json({ certificate: certi })
                 } else {
                     res.status(200).json({ status: "empty" })
                 }
 
             })
         }
-    } 
+    }
     else {
         if ((searchData.studentId != "" && searchData.studentId != null && searchData.studentId != undefined) &&
             (searchData.name != "" && searchData.name != null && searchData.name != undefined)) {
             Certificates.find({ studentid: searchData.studentId }, (error, sslc) => {
                 if (sslc) {
-                    // console.log(sslc)
+                    console.log(sslc)
                     res.status(200).json({ certificate: sslc, status: "found" })
                 } else {
+                    console.log("sslc")
                     res.status(200).json({ status: "empty" })
                 }
 
@@ -835,6 +797,7 @@ router.post('/checkstatus', (req, res) => {
 router.post('/grant', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
+    var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
     let status = req.body.Status;
     console.log(req.body);
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
@@ -843,8 +806,7 @@ router.post('/grant', (req, res) => {
         if (error) {
             console.log(error)
         } else {
-            console.log(requester);
-
+            // console.log(requester);
             studentProfile.findOne({ userId: studentID }, (error, student) => {
                 if (error) {
                     console.log(error)
@@ -859,9 +821,10 @@ router.post('/grant', (req, res) => {
                             console.log(e);
                             return;
                         }
-                        console.log(student.contract_address);
+                        // console.log(student.contract_address);
                         const tempContract = web3.eth.contract(HelloWorldABI);
                         var tempContractInstance = tempContract.at(student.contract_address);
+                        console.log(tempContractInstance)
                         tempContractInstance.grantPermission(requester.account_address, {
                             from: student.account_address,
                             gas: 4000000
@@ -872,19 +835,33 @@ router.post('/grant', (req, res) => {
                             //    getandUpdateStatus(transactionHash,myquery,requester.account_address,student.contract_address,student.account_address)
                             if (!error) {
                                 transaction.findOne(myquery, function (err, contract) {
-                                    contract.grantTransactionHash = transactionHash
-                                    console.log(contract.grantTransactionHash);
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        contract.save((err, transactiondata) => {
-                                            if (err) {
-                                                throw err;
-                                            } else {
-                                                console.log(transactiondata);
-                                                res.status(200).send("sucess");
-                                            }
-                                        })
+                                    if(contract){
+                                        contract.grantTransactionHash = transactionHash
+                                        console.log(contract.grantTransactionHash);
+                                        if (err) {
+                                            console.log("err")
+                                            throw err;
+                                        } else {
+                                            contract.save((err, transactiondata) => {
+                                                if (err) {
+                                                    throw err;
+                                                } else {    
+                                                    console.log("executed");
+                                                    console.log(transactiondata);
+                                                    var status = "Pending"
+                                                    var newvalues = { $set: { Status: status } };
+                                                    permission.updateOne(myquery, newvalues, function (err, user) {
+                                                        if (err) {
+                                                            throw err;
+                                                        } else {
+                                                            console.log(user);
+                                                            res.status(200).json({ status: "Pending" });
+                                                        }
+                                                    });
+                                                    // res.status(200).json({status:"grantHash"});
+                                                }
+                                            })
+                                        }
                                     }
                                 });
                             } else {
@@ -1004,7 +981,8 @@ router.post('/deny', (req, res) => {
                         }, function (error, transactionHash) {
                             if (!error) {
                                 transaction.findOne(myquery, function (err, contract) {
-                                    contract.denyTransactionHash = transactionHash
+                                    contract.denyTransactionHash = transactionHash;
+                                    console.log(contract);
                                     console.log(contract.grantTransactionHash);
                                     if (err) {
                                         throw err;
@@ -1014,7 +992,7 @@ router.post('/deny', (req, res) => {
                                                 throw err;
                                             } else {
                                                 console.log(transactiondata);
-                                                res.status(200).send("sucess");
+                                                res.status(200).json({status:"denyHash"});
                                             }
                                         })
                                     }

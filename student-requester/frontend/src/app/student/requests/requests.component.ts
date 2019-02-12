@@ -46,13 +46,15 @@ export class RequestsComponent implements OnInit {
     this.permissionReq.studentID = this.sessionValue;
     this.requesterService.getGrantedList(this.permissionReq).subscribe((res: any) => {
       let temp = res.students;
+      console.log(res)
       let array = [];
       for (var i = 0; i < temp.length; i++) {
         // if(temp[i].Status == 'pending'){
         array.push(temp[i]);
-        this.disable[i] = temp[i].Status != 'pending' ? false : true;
-        this.disablestatus[i]=temp[i].Status != 'pending' ? true : false;
-        console.log(this.disable)
+        console.log(temp[i].Status)
+        this.disable[i] = temp[i].Status !== "pending" ? false : true;
+        this.disablestatus[i]=(temp[i].Status !== "Pending") ? false : true;
+        // console.log(this.disable)
         // }
       }
 
@@ -62,23 +64,26 @@ export class RequestsComponent implements OnInit {
         this.dataSourceLength = true;
       else
         this.dataSourceLength = false;
-      console.log(this.dataSource)
+      // console.log(this.dataSource)
     })
   }
 
   grant(req, stu, i) {
     this.disable[i] = false;
-    console.log(i);
     let status: any = "granted";
     this.requester_status.studentID = stu;
     this.requester_status.requesterID = req;
     this.requester_status.Status = status;
     this.service.grant(this.requester_status).subscribe((res: any) => {
       console.log(res);
+      if(res.status == "grantHash"){ 
       this.disable[i] = false;
+      }
       this.search();
+    },
+    (error) => {
+      // swal("", "" + error.error.message, "error");
     })
-
   }
 
   deny(req, stu, i) {
@@ -89,6 +94,9 @@ export class RequestsComponent implements OnInit {
     this.requester_status.Status = status;
     this.service.deny(this.requester_status).subscribe((res: any) => {
       console.log(res)
+      if(res.status == "denyHash"){ 
+        this.disable[i] = false;
+        }
       this.disable[i] = false;
       this.search();
     })
@@ -100,7 +108,7 @@ export class RequestsComponent implements OnInit {
     this.requester_status.requesterID = req;
     this.service.checkstatus(this.requester_status).subscribe((res: any) => {
       console.log(res.res)
-      alert(res.res)
+      // alert(res.res)
       this.search();
     })
   }

@@ -115,12 +115,14 @@ export class PucComponent implements OnInit {
       { value: "2017", viewValue: "2017" },
       { value: "2018", viewValue: "2018" },
     ];
-
+    
+    isEditBtn: boolean;
+    isSaveBtn: boolean;
   puc: FormGroup;
   level: any = "2";
   id: string;
   categories: any;
-  isButtonDisabled: boolean = true;
+  disableBtn: boolean = true;
   constructor(private fb: FormBuilder, private service: StudentService,
     private studentService: ServiceService) {
     this.puc = this.fb.group({
@@ -136,15 +138,16 @@ export class PucComponent implements OnInit {
   }
   ngOnInit() {
     this.id = sessionStorage.getItem('_id');
+    this.getCertificates();
     this.puc.valueChanges.subscribe((changedObj: any) => {
 
       // console.log(changedObj.addsubjects.length)
       for (let i = 0; i < changedObj.addsubjects.length; i++) {
         // console.log(changedObj.addsubjects[i])
         if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
-          this.isButtonDisabled = false;
+          this.disableBtn = false;
         }else {
-          this.isButtonDisabled = true;
+          this.disableBtn = true;
           break;
         }
       }
@@ -185,15 +188,49 @@ export class PucComponent implements OnInit {
     // this.puc.value.level = this.level;
     console.log("student id",this.puc.value.studentid);
      this.service.add(this.puc.value).subscribe((res)=>{
-      //  console.log(res); 
-       if(res == "Duplicate Found")
-       swal("", "" + res, "error");
-       else
-       swal("", "" + res, "success");
-       
-     this.puc.reset();
+      swal("", "" + res['message'], "success");
      })
   }
+  getCertificates() {
+    let data = {
+      id: String,
+      level: String
+    }
+    var temp: any = sessionStorage.getItem('_id');
+    var temp1: any = "2";
+    data.id = temp;
+    data.level = temp1;
+    // debugger;
+    this.studentService.getCertificate(data).subscribe((res: any) => {
+      // console.log(res.certificate[0]);
+      console.log(res);
+      if (res.status == "empty") {
+        // debugger;
+        this.isSaveBtn = true;
+        this.isEditBtn = false;
+      } else if (res) {
+        // this.isEditBtn=false;
+        this.isSaveBtn = false;
+        this.isEditBtn = false;
+        this.puc.patchValue({
+          id: res.certificate[0].id,
+          ecategory: res.certificate[0].ecategory,
+          Startyear: res.certificate[0].Startyear,
+          Endyear: res.certificate[0].Endyear,
+        })
+        for (var i = 0; i < res.certificate[0].addsubjects.length; i++) {
+          this.puc.patchValue({
+            addsubjects: res.certificate[0].addsubjects
+          })
+          this.Add();
+        }
+        this.Remove(i);
+      }
+    })
+  }
 
+  hideEditBtn() {
+    this.isEditBtn = !this.isEditBtn;
+  }
 
 }

@@ -115,6 +115,9 @@ export class MastersComponent implements OnInit {
     { value: "2018", viewValue: "2018" },
   ];
 
+
+  isEditBtn: boolean;
+  isSaveBtn: boolean;
   categories: any;
   level: any = "4";
   masters: FormGroup;
@@ -126,7 +129,7 @@ export class MastersComponent implements OnInit {
     this.masters = this.fb.group({
       id: [''],
       studentid: ['', [Validators.pattern('^[a-zA-Z0-9]+$')]],
-      ecategory: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
+      ecategory: [''],
       Startyear: ['', Validators.required],
       Endyear: ['', [Validators.required, EndYearValidator]],
       Branchname: ['', Validators.required],
@@ -136,12 +139,9 @@ export class MastersComponent implements OnInit {
   }
   ngOnInit() {
     this.id = sessionStorage.getItem('_id');
-
+    this.getCertificates();
     this.masters.valueChanges.subscribe((changedObj: any) => {
-
-      // console.log(changedObj.addsubjects.length)
       for (let i = 0; i < changedObj.addsubjects.length; i++) {
-        // console.log(changedObj.addsubjects[i])
         if (changedObj.addsubjects[i].subjectname != "" && changedObj.addsubjects[i].subjectmarks != "") {
           this.disableBtn = false;
           this.isDisableBtn = false;
@@ -157,7 +157,6 @@ export class MastersComponent implements OnInit {
     }
     edu.level = this.level;
     this.studentService.educationCategory(edu).subscribe((res: any) => {
-      // console.log(res);
       this.categories = res.streams;
     })
   }
@@ -187,14 +186,50 @@ export class MastersComponent implements OnInit {
   submit() {
     this.masters.value.studentid = this.id;
     this.masters.value.level = this.level;
-    // console.log("student id", this.masters.value.studentid);
     this.service.add(this.masters.value).subscribe((res) => {
-      // console.log(res);
-       if (res == "Duplicate Found")
-        swal("", "" + res, "error");
-      else
-        swal("", "" + res, "success");
-      this.masters.reset();
+      swal("", "" + res['message'], "success");
     })
+  }
+  getCertificates() {
+    let data = {
+      id: String,
+      level: String
+    }
+    var temp: any = sessionStorage.getItem('_id');
+    var temp1: any = "4";
+    data.id = temp;
+    data.level = temp1;
+    // debugger;
+    this.studentService.getCertificate(data).subscribe((res: any) => {
+      // console.log(res.certificate[0]);
+      console.log(res);
+      if (res.status == "empty") {
+        // debugger;
+        this.isSaveBtn = true;
+        this.isEditBtn = false;
+      } else if (res) {
+        // this.isEditBtn=false;
+        this.isSaveBtn = false;
+        this.isEditBtn = false;
+        this.masters.patchValue({
+          id: res.certificate[0].id,
+          ecategory: res.certificate[0].ecategory,
+          Startyear: res.certificate[0].Startyear,
+          Endyear: res.certificate[0].Endyear,
+          Branchname: res.certificate[0].Branchname,
+        })
+        for (var i = 0; i < res.certificate[0].addsubjects.length; i++) {
+          this.masters.patchValue({
+            addsubjects: res.certificate[0].addsubjects
+          })
+          this.Add();
+        }
+        this.Remove(i);
+      }
+    })
+  }
+
+  hideEditBtn() {
+    this.isEditBtn = !this.isEditBtn;
   }
 }

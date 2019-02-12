@@ -43,7 +43,7 @@
       </mat-form-field>
       <br />
       
-      <div class="wrapper">
+      <div class="subjects-wrapper">
         <div formArrayName="addsubjects">
           <div *ngFor="let group of subjectArray.controls; let i= index;" [formGroupName]="i">
             <mat-form-field>
@@ -68,7 +68,5 @@
           <button *ngIf="isEditBtn" class="cancel-button" mat-raised-button type="button" color="warn" (click)="hideEditBtn()">Cancel</button>
           <button *ngIf="!isSaveBtn && !isEditBtn" class="submit-button" mat-raised-button type="button" (click)="hideEditBtn()" color="primary">Edit</button>
         </div>
-      <!-- <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="add10th.invalid" color="primary">Save</button> -->
     </form>
-  <!-- </mat-card> -->
 </div>

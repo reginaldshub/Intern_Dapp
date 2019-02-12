@@ -1,6 +1,6 @@
 <!-- <div class="sidenav">
   <button mat-button color="warn" [routerLink]="['/student/puc']">PUC</button>
-  <button mat-button color="warn" [routerLink]="['/student/add10th']">SSLC</button>
+  <button mat-button color="warn" [routerLink]="['/student/degree']">SSLC</button>
   <button mat-button color="warn" [routerLink]="['/student/degree']">DEGREE</button>
   <button mat-button color="warn" [routerLink]="['/student/masters']">MASTERS</button>
   </div> -->
@@ -49,7 +49,7 @@
       </mat-form-field>
       <br />
 
-      <div class="wrapper">
+      <div class="subjects-wrapper">
         <div formArrayName="addsubjects">
           <div *ngFor="let group of subjectArray.controls; let i= index;" [formGroupName]="i">
             <mat-form-field>
@@ -58,7 +58,7 @@
             <mat-form-field>
               <input matInput placeholder="Subject Marks" formControlName="subjectmarks">
             </mat-form-field>
-            <button mat-button color="primary" [disabled]="disableBtn" matTooltip="Add" (click)="Add()">
+            <button mat-button color="primary" *ngIf="(i+1) == subjectArray.length" [disabled]="disableBtn" matTooltip="Add" (click)="Add()">
               <mat-icon>add_circle_outline</mat-icon>
             </button>
             <button class="remove-btn" mat-button color="primary" matTooltip="Remove" (click)="Remove(i)">
@@ -67,7 +67,13 @@
           </div>
         </div>
       </div>
-      <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="degree.invalid" color="primary">Save</button>
+      <div class="wrapper">
+        <button *ngIf="isSaveBtn" class="submit-button" mat-raised-button (click)="submit()" [disabled]="degree.invalid" color="primary">Save</button> 
+        <button *ngIf="isEditBtn" class="submit-button" mat-raised-button type="submit" (click)="submit()" [disabled]="degree.invalid" [disabled]="profileDetails.invalid" color="primary">Update</button>
+        <button *ngIf="isEditBtn" class="cancel-button" mat-raised-button type="button" color="warn" (click)="hideEditBtn()">Cancel</button>
+        <button *ngIf="!isSaveBtn && !isEditBtn" class="submit-button" mat-raised-button type="button" (click)="hideEditBtn()" color="primary">Edit</button>
+      </div>
+      <!-- <button class="submit-button" mat-raised-button (click)="submit()" [disabled]="degree.invalid" color="primary">Save</button> -->
     </form>
   <!-- </mat-card> -->
 </div>

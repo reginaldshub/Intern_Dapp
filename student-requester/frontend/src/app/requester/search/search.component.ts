@@ -32,7 +32,7 @@ export interface UserData {
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-   disable= [];
+   disable = [];
   searchForm: FormGroup;
   status;
   searchResponse = {
@@ -163,6 +163,9 @@ export class SearchComponent implements OnInit {
       for (var i = 0; i < temp.length; i++) {
         array.push(temp[i]);
         console.log(res.students[i].Status)
+        if(res.students[i].Status == "pending" || res.students[i].Status == "Pending")
+        this.disable[i] = true;
+        else  this.disable[i] = false; 
       }
 
       this.dataSource = new MatTableDataSource(array);
@@ -179,7 +182,8 @@ export class SearchComponent implements OnInit {
     this.checkStatus.studentID=studentid
     console.log(this.checkStatus);
     this.requesterService.checkstatus(this.checkStatus).subscribe((res: any) => {
-      console.log(res)
+      console.log(res.res);
+      this.getRequests();
   })
 }
 }
