@@ -139,6 +139,7 @@ export class ProfileComponent implements OnInit {
         this.profileHider = true;
         this.isEditBtn = false;
       } else {
+    this.profileDetails.disable();
         this.profileHider = false;
         this.isEditBtn = true;
         this.data = res;
@@ -206,6 +207,12 @@ export class ProfileComponent implements OnInit {
     })
   }
   hideEditBtn(isEditBtn) {
+    this.profileDetails.enable();
     this.isEditBtn = !isEditBtn;
+  }
+  CancelBtn(){
+    this.isEditBtn = !this.isEditBtn;
+    this.getProfile();
+
   }
 }

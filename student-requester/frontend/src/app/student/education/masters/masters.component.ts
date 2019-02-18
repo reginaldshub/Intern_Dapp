@@ -209,6 +209,7 @@ export class MastersComponent implements OnInit {
         this.isEditBtn = false;
       } else if (res) {
         // this.isEditBtn=false;
+        this.masters.disable();
         this.isSaveBtn = false;
         this.isEditBtn = false;
         this.masters.patchValue({
@@ -230,6 +231,12 @@ export class MastersComponent implements OnInit {
   }
 
   hideEditBtn() {
+    this.masters.enable();
+    this.isEditBtn = !this.isEditBtn;
+  }
+
+  CancelBtn(){
+    this.getCertificates();
     this.isEditBtn = !this.isEditBtn;
   }
 }

@@ -205,6 +205,7 @@ export class Add10thComponent implements OnInit {
         this.isEditBtn = false;
       } else if (res) {
         // this.isEditBtn=false;
+        this.add10th.disable();
         this.isSaveBtn = false;
         this.isEditBtn = false;
         this.add10th.patchValue({
@@ -225,6 +226,13 @@ export class Add10thComponent implements OnInit {
   }
 
   hideEditBtn() {
+
+    this.add10th.enable();
+    this.isEditBtn = !this.isEditBtn;
+  }
+
+  CancelBtn(){
+    this.getCertificates();
     this.isEditBtn = !this.isEditBtn;
   }
 }

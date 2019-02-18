@@ -210,6 +210,7 @@ export class PucComponent implements OnInit {
         this.isEditBtn = false;
       } else if (res) {
         // this.isEditBtn=false;
+        this.puc.disable();
         this.isSaveBtn = false;
         this.isEditBtn = false;
         this.puc.patchValue({
@@ -230,6 +231,13 @@ export class PucComponent implements OnInit {
   }
 
   hideEditBtn() {
+
+    this.puc.enable();
+    this.isEditBtn = !this.isEditBtn;
+  }
+
+  CancelBtn(){
+    this.getCertificates();
     this.isEditBtn = !this.isEditBtn;
   }
 

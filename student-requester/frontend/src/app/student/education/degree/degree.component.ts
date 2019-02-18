@@ -204,6 +204,7 @@ export class DegreeComponent implements OnInit {
         this.isEditBtn = false;
       } else if (res) {
         // this.isEditBtn=false;
+        this.degree.disable();
         this.isSaveBtn = false;
         this.isEditBtn = false;
         this.degree.patchValue({
@@ -225,6 +226,12 @@ export class DegreeComponent implements OnInit {
   }
 
   hideEditBtn() {
+    this.degree.enable();
+    this.isEditBtn = !this.isEditBtn;
+  }
+
+  CancelBtn(){
+    this.getCertificates();
     this.isEditBtn = !this.isEditBtn;
   }
 }

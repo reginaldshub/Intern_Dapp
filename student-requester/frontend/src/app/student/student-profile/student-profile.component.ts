@@ -145,6 +145,8 @@ export class StudentProfileComponent implements OnInit {
         this.profileHider = true;
         this.isEditBtn = false;
       } else {
+
+        this.profileDetails.disable();
         this.profileHider = false;
         this.isEditBtn = true;
         this.data = res;
@@ -212,8 +214,15 @@ export class StudentProfileComponent implements OnInit {
   }
 
 
-  hideEditBtn(isEditBtn){
-    this.isEditBtn = !isEditBtn;
+  hideEditBtn() {
+    this.profileDetails.enable();
+    this.isEditBtn = !this.isEditBtn;
   }
+
+  CancelBtn(){
+    this.getProfile();
+    this.isEditBtn = !this.isEditBtn;
+  }
+  
 
 }

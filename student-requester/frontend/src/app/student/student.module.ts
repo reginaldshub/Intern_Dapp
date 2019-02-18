@@ -7,7 +7,7 @@ import { EducationComponent } from './education/education.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RequestsComponent } from './requests/requests.component';
 import { StudentProfileComponent } from './student-profile/student-profile.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Add10thComponent } from './education/add10th/add10th.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PucComponent } from './education/puc/puc.component';
@@ -30,7 +30,8 @@ import { AccountComponent } from './account/account.component';
     MaterialModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    FormsModule
   //  CommonbothModule
   ],
   declarations: [ 

@@ -63,7 +63,7 @@
     <div class="wrapper">
       <button *ngIf="isSaveBtn" class="submit-button" mat-raised-button (click)="submit()" [disabled]="puc.invalid" color="primary">Save</button> 
       <button *ngIf="isEditBtn" class="submit-button" mat-raised-button type="submit" (click)="submit()" [disabled]="puc.invalid" [disabled]="profileDetails.invalid" color="primary">Update</button>
-      <button *ngIf="isEditBtn" class="cancel-button" mat-raised-button type="button" color="warn" (click)="hideEditBtn()">Cancel</button>
+      <button *ngIf="isEditBtn" class="cancel-button" mat-raised-button type="button" color="warn" (click)="CancelBtn()">Cancel</button>
       <button *ngIf="!isSaveBtn && !isEditBtn" class="submit-button" mat-raised-button type="button" (click)="hideEditBtn()" color="primary">Edit</button>
     </div>
   </form>
