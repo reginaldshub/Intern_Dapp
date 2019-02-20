@@ -346,7 +346,7 @@ router.post('/marks', (req, res) => {
                     console.log("not saved")
                 } else {
                     // console.log("added sucessfully")
-                    res.status(200).json({ message: "added sucessfully"});
+                    res.status(200).json({ message: "added sucessfully" });
                 }
             })
         }
@@ -677,9 +677,9 @@ router.post('/commit', (req, response) => {
         if (error) {
             console.log(error);
         }
-        else if (student.contract_address) {
-            response.status(200).json({ message: student.contract_address });
-        }
+        // else if (student.contract_address) {
+        //     response.status(200).json({ message: student.contract_address });
+        // }
         else {
             console.log(student.name);
             console.log('Compiling Contract...');
@@ -794,6 +794,81 @@ router.post('/checkstatus', (req, res) => {
 })
 
 //to grant access(smart contract)
+// router.post('/grant', (req, res) => {
+//     let requesterID = req.body.requesterID;
+//     let studentID = req.body.studentID;
+//     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
+//     let status = req.body.Status;
+//     console.log(req.body);
+//     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
+//     // var newvalues = { $set: { Status: status } };
+//     Profile.findOne({ userId: requesterID }, (error, requester) => {
+//         if (error) {
+//             console.log(error)
+//         } else {
+//             studentProfile.findOne({ userId: studentID }, (error, student) => {
+//                 if (error) {
+//                     console.log(error)
+//                 } else {
+//                     if (!web3.isConnected()) {
+//                         console.log("please run the node")
+//                     } else {
+//                         console.log('unlocking the geth account')
+//                         try {
+//                             web3.personal.unlockAccount(student.account_address, "password");
+//                         } catch (e) {
+//                             console.log(e);
+//                             return;
+//                         }
+//                         const tempContract = web3.eth.contract(HelloWorldABI);
+//                         var tempContractInstance = tempContract.at(student.contract_address);
+
+//                         tempContractInstance.grantPermission(requester.account_address, {
+//                             from: student.account_address,
+//                             gas: 4000000
+//                         }, function (error, transactionHash) {
+//                             if (!error) {
+//                                 transaction.findOne(myquery, function (err, contract) {
+//                                     if (contract) {
+//                                         contract.grantTransactionHash = transactionHash
+//                                         console.log(contract.grantTransactionHash);
+//                                         if (err) {
+//                                             console.log("err")
+//                                             throw err;
+//                                         } else {
+//                                             contract.save((err, transactiondata) => {
+//                                                 if (err) {
+//                                                     throw err;
+//                                                 } else {
+//                                                     console.log("executed");
+//                                                     console.log(transactiondata);
+//                                                     var status = "Pending"
+//                                                     var newvalues = { $set: { Status: status } };
+//                                                     permission.updateOne(myquery, newvalues, function (err, user) {
+//                                                         if (err) {
+//                                                             throw err;
+//                                                         } else {
+//                                                             console.log(user);
+//                                                             res.status(200).json({ status: "Pending" });
+//                                                         }
+//                                                     });
+//                                                 }
+//                                             })
+//                                         }
+//                                     }
+//                                 });
+//                             } else {
+//                                 console.log(error);
+//                             }
+//                         });
+//                     }
+//                 }
+//             })
+//         }
+//     })
+// })
+
+//for testing grant
 router.post('/grant', (req, res) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
@@ -806,7 +881,6 @@ router.post('/grant', (req, res) => {
         if (error) {
             console.log(error)
         } else {
-            // console.log(requester);
             studentProfile.findOne({ userId: studentID }, (error, student) => {
                 if (error) {
                     console.log(error)
@@ -821,23 +895,44 @@ router.post('/grant', (req, res) => {
                             console.log(e);
                             return;
                         }
-                        // console.log(student.contract_address);
                         const tempContract = web3.eth.contract(HelloWorldABI);
                         var tempContractInstance = tempContract.at(student.contract_address);
-                        console.log(tempContractInstance)
+
+                        // event
+                        var events = tempContractInstance.allEvents({ fromBlock: 0, toBlock: 'latest' });
+                        events.watch((error, result) => {
+                            console.log("Requester    " +result.args._requester);
+
+
+                            console.log("Status   "+result.args._status.toString());
+                            var _status = result.args._status.toString();
+                            permission_status.find({ ID: _status }, (err, result1) => {
+                                console.log(statusName = result1['0'].Name);
+                                var newvalues = { $set: { Status: statusName } };
+                                console.log(newvalues);
+                                permission.updateOne(myquery, newvalues, function (err, user) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        res.status(200).json({ res: status });
+                                    }
+                                });
+                            })
+                        })
+                        // would get all past logs again.
+                        // var myResults = events.get(function(error, logs){                            
+                        //     console.log(logs);
+                        //  });
+
                         tempContractInstance.grantPermission(requester.account_address, {
                             from: student.account_address,
                             gas: 4000000
                         }, function (error, transactionHash) {
-                            // let studentaccount=student.account_address;
-                            // let requestaccount=requester.account_address;
-                            // let contractaddress=student.contract_address;
-                            //    getandUpdateStatus(transactionHash,myquery,requester.account_address,student.contract_address,student.account_address)
                             if (!error) {
                                 transaction.findOne(myquery, function (err, contract) {
-                                    if(contract){
+                                    if (contract) {
                                         contract.grantTransactionHash = transactionHash
-                                        console.log(contract.grantTransactionHash);
+                                        // console.log(contract.grantTransactionHash);
                                         if (err) {
                                             console.log("err")
                                             throw err;
@@ -845,20 +940,19 @@ router.post('/grant', (req, res) => {
                                             contract.save((err, transactiondata) => {
                                                 if (err) {
                                                     throw err;
-                                                } else {    
-                                                    console.log("executed");
-                                                    console.log(transactiondata);
+                                                } else {
+                                                    // console.log("executed");
+                                                    // console.log(transactiondata);
                                                     var status = "Pending"
                                                     var newvalues = { $set: { Status: status } };
-                                                    permission.updateOne(myquery, newvalues, function (err, user) {
-                                                        if (err) {
-                                                            throw err;
-                                                        } else {
-                                                            console.log(user);
-                                                            res.status(200).json({ status: "Pending" });
-                                                        }
-                                                    });
-                                                    // res.status(200).json({status:"grantHash"});
+                                                    // permission.updateOne(myquery, newvalues, function (err, user) {
+                                                    //     if (err) {
+                                                    //         throw err;
+                                                    //     } else {
+                                                    //         console.log(user);
+                                                    //         res.status(200).json({ status: "Pending" });
+                                                    //     }
+                                                    // });
                                                 }
                                             })
                                         }
@@ -868,12 +962,20 @@ router.post('/grant', (req, res) => {
                                 console.log(error);
                             }
                         });
+                        // watch for an event with {some: 'args'}
+                        // var events = tempContractInstance.GrantEvent({}, { fromBlock: 15800, toBlock: 'latest' });
+                        // events.watch(function (error, result) {
+                        //     if(!error)
+                        //     console.log("result" + result);
+                        // });
                     }
                 }
             })
         }
     })
 })
+
+
 
 //to request access(smart contract)
 router.post('/request', verifyToken, (req, res) => {
@@ -992,7 +1094,7 @@ router.post('/deny', (req, res) => {
                                                 throw err;
                                             } else {
                                                 console.log(transactiondata);
-                                                res.status(200).json({status:"denyHash"});
+                                                res.status(200).json({ status: "denyHash" });
                                             }
                                         })
                                     }

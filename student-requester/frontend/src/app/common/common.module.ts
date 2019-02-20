@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AccountComponent } from './account/account.component';
 import { CommonComponent } from '../common/common.component';
+import { CoverComponent } from './cover/cover.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { CommonComponent } from '../common/common.component';
     LoginComponent,
     RegisterComponent,
     AccountComponent,
-    CommonComponent
+    CommonComponent,
+    CoverComponent
   ]
 })
 export class CommonbothModule { }

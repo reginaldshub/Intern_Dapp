@@ -131,7 +131,7 @@ export class SearchComponent implements OnInit {
     })
   }
 
-  sendData(name) {
+  request(name) {
     this.searchDataSourceValue = false;
     let sessionValue: any = sessionStorage.getItem('_id');
     let sessionNameValue: any = sessionStorage.getItem('name');

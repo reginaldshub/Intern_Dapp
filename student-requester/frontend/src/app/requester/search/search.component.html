@@ -20,7 +20,7 @@
 <div class="search-results" *ngIf="searchDataSourceValue">
   <p style="padding-right: 20px">{{searchDataSourceName}}</p>
   <p style="padding-right: 20px">{{searchDataSourceEmail}}</p>
-  <button style="padding-left: 20px" *ngIf="searchDataSourceStatus == 'request'" class="request-btn" (click)="sendData(searchDataSourceName)"
+  <button style="padding-left: 20px" *ngIf="searchDataSourceStatus == 'request'" class="request-btn" (click)="request(searchDataSourceName)"
     mat-raised-button matTooltip="request">{{searchDataSourceStatus}}</button>
   <p *ngIf="searchDataSourceStatus != 'request'">{{searchDataSourceStatus}}</p>
 

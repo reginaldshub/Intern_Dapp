@@ -1,4 +1,4 @@
-pragma solidity ^0.4.25;
+pragma solidity ^0.4.18;
 contract PermissionList {  
     event addressregistered(address addy);
     address public deployer; // deployer is student
@@ -18,6 +18,8 @@ contract PermissionList {
         name = _name;
     }
     
+    event GrantEvent(address _requester, State _status);
+    
     function requestPermission(string _name, uint32 _id) public { 
         require(msg.sender!= deployer); // works only for requester
         requesterAddresses.push(msg.sender); 
@@ -33,8 +35,10 @@ contract PermissionList {
     }
     function grantPermission(address _tempAddress) public { 
         require(msg.sender== deployer); // works only for student
-        if(requesters[_tempAddress].status == State.Pending)
-           requesters[_tempAddress].status = State.Grant;
+        if(requesters[_tempAddress].status == State.Pending){
+         requesters[_tempAddress].status = State.Grant;
+            emit GrantEvent(_tempAddress, State.Grant);
+        }
     }
     function denyPermission(address _tempAddress) public { 
         require(msg.sender== deployer); // works only for student

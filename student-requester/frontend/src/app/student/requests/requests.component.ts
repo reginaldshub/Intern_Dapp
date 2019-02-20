@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material';
 
 import { Component, OnInit } from '@angular/core';
 import { RequesterService } from 'src/app/requester/service/service.service';
@@ -31,7 +32,7 @@ export class RequestsComponent implements OnInit {
 
   constructor(private requesterService: RequesterService,
     private service: ServiceService, private router: Router,
-    private bottomSheet: MaterialModule) { }
+    private bottomSheet: MaterialModule, private snackBar: MatSnackBar) { }
   public disable = [];
   public disablestatus = [];
 
@@ -76,9 +77,9 @@ export class RequestsComponent implements OnInit {
     this.requester_status.Status = status;
     this.service.grant(this.requester_status).subscribe((res: any) => {
       console.log(res);
-      if(res.status == "grantHash"){ 
-      this.disable[i] = false;
-      }
+      this.snackBar.openFromComponent(StatusComponent, {
+        duration: 1000,
+      });
       this.search();
     },
     (error) => {
@@ -102,16 +103,30 @@ export class RequestsComponent implements OnInit {
     })
     this.search();
   }
-  checkstatus(req, stu, i) {
-    console.log(i);
-    this.requester_status.studentID = stu;
-    this.requester_status.requesterID = req;
-    this.service.checkstatus(this.requester_status).subscribe((res: any) => {
-      console.log(res.res)
-      // alert(res.res)
-      this.search();
-    })
+  // checkstatus(req, stu, i) {
+  //   console.log(i);
+  //   this.requester_status.studentID = stu;
+  //   this.requester_status.requesterID = req;
+  //   this.service.checkstatus(this.requester_status).subscribe((res: any) => {
+  //     console.log(res.res)
+  //     // alert(res.res)
+  //     this.search();
+  //   })
+  // }
+  openSnackBar() {
+    this.snackBar.openFromComponent(StatusComponent, {
+      duration: 500,
+    });
   }
 
-
 }
+@Component({
+  selector: 'snack-bar-component-example-snack',
+  templateUrl: 'snack-bar-component-example-snack.html',
+  styles: [`
+    .example-pizza-party {
+      color: hotpink;
+    }
+  `],
+})
+export class StatusComponent {}

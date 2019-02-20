@@ -1,0 +1,18 @@
+.header {
+background-color: bisque;
+height: 5vh;
+
+background-image: linear-gradient(45deg, rgba(124, 105, 105, 0.6), rgb(7, 6, 6)),  url(../../../assets/cover1.jpg);
+}
+.body {
+background-color: antiquewhite;
+background-size: cover;
+background-position: top;
+/* margin-top: 100px; */
+/* background-image: linear-gradient(45deg, rgba(124, 105, 105, 0.6), rgb(7, 6, 6)),  url(../../../assets/cover1.jpg); */
+height: 90vh;
+}
+.footer {
+    background-color: bisque;
+    height: 5vh;
+}

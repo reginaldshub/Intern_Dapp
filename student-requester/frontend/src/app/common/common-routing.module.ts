@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from '../auth.guard';
 import { CommonComponent } from './common.component';
+import { CoverComponent } from './cover/cover.component';
 
 const routes: Routes = [
 
@@ -12,6 +13,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'account', component: AccountComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'cover', component: CoverComponent },
+  
 
 ];
 

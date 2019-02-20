@@ -5,7 +5,7 @@ import { MaterialModule } from '../material/material.module';
 import { StudentRoutingModule } from './student-routing.module';
 import { EducationComponent } from './education/education.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { RequestsComponent } from './requests/requests.component';
+import { RequestsComponent, StatusComponent } from './requests/requests.component';
 import { StudentProfileComponent } from './student-profile/student-profile.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Add10thComponent } from './education/add10th/add10th.component';
@@ -39,6 +39,7 @@ import { AccountComponent } from './account/account.component';
   EducationComponent, 
   DashboardComponent, 
   RequestsComponent, 
+  StatusComponent,
   StudentProfileComponent, 
   PucComponent, 
   DegreeComponent, 
@@ -48,6 +49,6 @@ import { AccountComponent } from './account/account.component';
   HeaderComponent,
   SidenavListComponent,
   AccountComponent
-]
+],entryComponents: [StatusComponent],
 })
 export class StudentModule { }
