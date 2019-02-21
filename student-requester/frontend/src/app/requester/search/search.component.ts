@@ -88,7 +88,7 @@ export class SearchComponent implements OnInit {
     this.getRequests();
   }
 
-  displayedColumns: string[] = ['name', 'status','checkstatus'];
+  displayedColumns: string[] = ['name', 'status'];
 
   search() {
     this.showSpinner = true;
@@ -177,13 +177,13 @@ export class SearchComponent implements OnInit {
     })
   }
 
-  Checkstatus(requestid,studentid){
-    this.checkStatus.requesterID=requestid;
-    this.checkStatus.studentID=studentid
-    console.log(this.checkStatus);
-    this.requesterService.checkstatus(this.checkStatus).subscribe((res: any) => {
-      console.log(res.res);
-      this.getRequests();
-  })
-}
+//   Checkstatus(requestid,studentid){
+//     this.checkStatus.requesterID=requestid;
+//     this.checkStatus.studentID=studentid
+//     console.log(this.checkStatus);
+//     this.requesterService.checkstatus(this.checkStatus).subscribe((res: any) => {
+//       console.log(res.res);
+//       this.getRequests();
+//   })
+// }
 }

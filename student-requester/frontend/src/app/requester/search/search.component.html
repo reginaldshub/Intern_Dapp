@@ -46,12 +46,12 @@
         {{element.Status}}
       </td>
     </ng-container>
-    <ng-container class="status" matColumnDef="checkstatus">
+    <!-- <ng-container class="status" matColumnDef="checkstatus">
       <th mat-header-cell *matHeaderCellDef> checkstatus </th>
       <td mat-cell *matCellDef="let element; let i = index;">
           <button color="warn" *ngIf=disable[i] (click) = "Checkstatus(element.requesterID,element.studentID)" mat-raised-button>checkstatus</button>
       </td>
-    </ng-container>
+    </ng-container> -->
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

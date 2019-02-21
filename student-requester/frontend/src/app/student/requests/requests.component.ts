@@ -40,7 +40,7 @@ export class RequestsComponent implements OnInit {
     this.showSpinner = true;
     this.search();
   }
-  displayedColumns: string[] = ['name', 'Created_time', 'status', 'accept', 'reject', 'checkstatus'];
+  displayedColumns: string[] = ['name', 'Created_time', 'status', 'accept', 'reject'];
   search() {
 
     this.sessionValue = sessionStorage.getItem('_id');

@@ -900,24 +900,26 @@ router.post('/grant', (req, res) => {
 
                         // event
                         var events = tempContractInstance.allEvents({ fromBlock: 0, toBlock: 'latest' });
-                        events.watch((error, result) => {
-                            console.log("Requester    " +result.args._requester);
+                        events.watch( async (error, result) => {
+                            if (result) {
+                                
+                               await console.log("Requester    " + result.args._requester);
 
-
-                            console.log("Status   "+result.args._status.toString());
-                            var _status = result.args._status.toString();
-                            permission_status.find({ ID: _status }, (err, result1) => {
-                                console.log(statusName = result1['0'].Name);
-                                var newvalues = { $set: { Status: statusName } };
-                                console.log(newvalues);
-                                permission.updateOne(myquery, newvalues, function (err, user) {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        res.status(200).json({ res: status });
-                                    }
-                                });
-                            })
+                               await console.log("Status   "+result.args._status);
+                                var _status = await result.args._status;
+                               permission_status.find({ ID: _status }, async (err, result1) => {
+                                 var statusName = await result1['0'].Name;
+                                    var newvalues = { $set: { Status: statusName } };
+                                    await console.log("db    "+statusName);
+                                    permission.updateOne(myquery, newvalues, function (err, user) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            res.status(200).json({ res: status });
+                                        }
+                                    });
+                                })
+                            }
                         })
                         // would get all past logs again.
                         // var myResults = events.get(function(error, logs){                            
