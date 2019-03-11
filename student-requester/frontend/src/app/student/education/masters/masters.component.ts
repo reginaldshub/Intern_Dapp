@@ -115,7 +115,7 @@ export class MastersComponent implements OnInit {
     { value: "2018", viewValue: "2018" },
   ];
 
-
+file: any;
   isEditBtn: boolean;
   isSaveBtn: boolean;
   categories: any;
@@ -188,6 +188,11 @@ export class MastersComponent implements OnInit {
     this.masters.value.level = this.level;
     this.service.add(this.masters.value).subscribe((res) => {
       swal("", "" + res['message'], "success");
+      if(res){
+        this.service.upload(this.masters.value, this.file).subscribe((res) => {
+
+        })
+      }
     })
   }
   getCertificates() {
@@ -238,5 +243,17 @@ export class MastersComponent implements OnInit {
   CancelBtn(){
     this.getCertificates();
     this.isEditBtn = !this.isEditBtn;
+  }
+
+  onFileChanged(event) {
+    console.log(event);
+    if (event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg') {
+      this.file = event.target.files[0];
+    }
+    else {
+      this.file = "";
+      alert("only jpg png and jpeg");
+    }
+
   }
 }

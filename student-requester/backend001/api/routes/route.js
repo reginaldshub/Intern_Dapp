@@ -19,6 +19,30 @@ const permission_status = require('../models/Permission_status');
 const Education = require('../models/education');
 const EducationStreams = require('../models/educationStreams');
 
+// IPFS Imports and env
+
+const path = require('path');
+const multer = require('multer');
+const ipfsAPI = require('ipfs-api');
+const MAX_SIZE = 52428800;
+const storage = multer.diskStorage({
+    destination(req, file, cb) {
+        cb(null, path.join(__dirname, './../../uploads'));
+    },
+    filename(req, file, cb) {
+        cb(null, `${Date.now()}.${file.mimetype.split('/')[1]}`);
+    },
+});
+
+const upload = multer({ storage });
+
+const ipfs = ipfsAPI({
+    host: '127.0.0.1',
+    port: 5001,
+    protocol: 'http'
+});
+// End of ipfs
+
 // const PUC = require('../models/puc.js')
 // const DEGREE = require('../models/degree.js')
 
@@ -38,6 +62,13 @@ const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester" 
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if (err) {
         console.log("the error" + err)
+        mongoose.connect('mongodb://localhost:27017/StudentRequesterApp', { useNewUrlParser: true });
+        mongoose.connection.on('connected', () => {
+            console.log('connected to database StudentRequesterApp')
+        })
+        mongoose.connection.on('error', (err) => {
+            console.log('Database error' + err)
+        })
     } else {
         console.log("connected to mongodb")
     }
@@ -340,8 +371,9 @@ router.post('/marks', (req, res) => {
                 });
         }
         else {
-            // console.log("Else")
+            console.log("Else")
             certificates.save((err, user) => {
+                console.log(user)
                 if (err) {
                     console.log("not saved")
                 } else {
@@ -900,17 +932,17 @@ router.post('/grant', (req, res) => {
 
                         // event
                         var events = tempContractInstance.allEvents({ fromBlock: 0, toBlock: 'latest' });
-                        events.watch( async (error, result) => {
+                        events.watch(async (error, result) => {
                             if (result) {
-                                
-                               await console.log("Requester    " + result.args._requester);
 
-                               await console.log("Status   "+result.args._status);
+                                await console.log("Requester    " + result.args._requester);
+
+                                await console.log("Status   " + result.args._status);
                                 var _status = await result.args._status;
-                               permission_status.find({ ID: _status }, async (err, result1) => {
-                                 var statusName = await result1['0'].Name;
+                                permission_status.find({ ID: _status }, async (err, result1) => {
+                                    var statusName = await result1['0'].Name;
                                     var newvalues = { $set: { Status: statusName } };
-                                    await console.log("db    "+statusName);
+                                    await console.log("db    " + statusName);
                                     permission.updateOne(myquery, newvalues, function (err, user) {
                                         if (err) {
                                             throw err;
@@ -1176,5 +1208,65 @@ function getandUpdateStatus(transactionHash, myquery, requesteraccount, contract
     }
     Receipt(transactionHash);
 }
+
+
+// Image Upload
+router.post('/upload', upload.single('image'), (req, res) => {
+    console.log(req)
+    let studentid = req.body.studentid;
+    console.log(req.body)
+    if (!req.file) {
+        return res.status(422).json({
+            error: 'File needs to be provided.',
+        });
+    }
+
+    const mime = req.file.mimetype;
+    if (mime.split('/')[0] !== 'image') {
+        fs.unlink(req.file.path);
+
+        return res.status(422).json({
+            error: 'File needs to be an image.',
+        });
+    }
+
+    const fileSize = req.file.size;
+    if (fileSize > MAX_SIZE) {
+        fs.unlink(req.file.path);
+
+        return res.status(422).json({
+            error: `Image needs to be smaller than ${MAX_SIZE} bytes.`,
+        });
+    }
+    const data = fs.readFileSync(req.file.path);
+    // return ipfs.add(data, (err, files) => {
+    //     fs.unlink(req.file.path);
+    //     if (files) {
+    //         var hash = 'http://localhost:8080/ipfs/';
+    //         hash += files[0].hash;
+    //         console.log(req.body.level+"Level"+ req.body.studentid)
+    //         Certificates.updateOne({ $and: [{ studentid: req.body.studentid }, { level: req.body.level }] }, { $set: { ImageHash: hash } }, (error, present) => {
+    //             if (error) {
+    //                 console.log(error)
+    //             }
+    //             else {
+    //                 // // res.status(200).json({
+    //                 // //    hash: files[0].hash
+    //                 // })
+    //                 console.log("updated Hash")
+    //             }
+    //         })
+    //         console.log(files[0].hash)
+    //         return res.json({
+    //             hash: files[0].hash,
+    //         });
+    //     }
+
+    //     return res.status(500).json({
+    //         error: err,
+    //     });
+    // });
+
+});
 
 module.exports = router;

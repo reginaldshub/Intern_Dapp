@@ -9,7 +9,6 @@ export class StudentService {
 
   add(sslc) {
     console.log(sslc);
-    // debugger;
     return this.http.post("http://localhost:3000/products/marks", sslc);
   }
   add1(puc) {
@@ -20,15 +19,27 @@ export class StudentService {
     console.log(degree);
     return this.http.post("http://localhost:3000/products/degree", degree);
   }
-  grantc(data){
+  grantc(data) {
     console.log(data)
     // debugger;
-    return this.http.put('http://localhost:3000/products/grant',data);
+    return this.http.put('http://localhost:3000/products/grant', data);
   }
-  commit(data){
-    data._id= sessionStorage.getItem('_id');
+  commit(data) {
+    data._id = sessionStorage.getItem('_id');
     console.log(data);
     // debugger;
-    return this.http.post('http://localhost:3000/products/commit',data);
+    return this.http.post('http://localhost:3000/products/commit', data);
+  }
+
+  upload(data, file) {
+    console.log(data)
+    // debugger;
+    let uploadData = new FormData;
+    uploadData.append('studentid', data.studentid);
+    uploadData.append('level', data.level);
+    uploadData.append('image', file, file.name);
+
+
+    return this.http.post("http://localhost:3000/products/upload", uploadData);
   }
 }

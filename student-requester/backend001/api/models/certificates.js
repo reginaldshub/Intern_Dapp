@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    id:{type: Number},
+    id:{type: String},
     studentid: { type: String },
     ecategory: { type: String },
     Startyear: { type: String },
@@ -11,6 +11,7 @@ const userSchema = new Schema({
     Groupname: { type: String },
     Branchname: { type: String },
     level: { type: String },
+    ImageHash: { type: String },
     addsubjects: [{
         subjectname: { type: String },
         subjectmarks: { type: String }

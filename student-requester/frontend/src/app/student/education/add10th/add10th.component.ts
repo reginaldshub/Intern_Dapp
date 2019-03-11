@@ -116,6 +116,7 @@ export class Add10thComponent implements OnInit {
   ];
   isEditBtn: boolean;
   isSaveBtn: boolean;
+  file:any;
   disableBtn: boolean = true;
   level: any = "1";
   add10th: FormGroup
@@ -183,6 +184,11 @@ export class Add10thComponent implements OnInit {
     this.add10th.value.level = this.level;
     this.service.add(this.add10th.value).subscribe((res) => {
       swal("", "" + res['message'], "success");
+      if(res){
+        this.service.upload(this.add10th.value, this.file).subscribe((res) => {
+
+        })
+      }
     })
   }
 
@@ -221,6 +227,9 @@ export class Add10thComponent implements OnInit {
           this.Add();
         }
         this.Remove(i);
+      }else{
+        this.isSaveBtn = true;
+        this.isEditBtn = false;
       }
     })
   }
@@ -235,4 +244,17 @@ export class Add10thComponent implements OnInit {
     this.getCertificates();
     this.isEditBtn = !this.isEditBtn;
   }
+
+  onFileChanged(event) {
+    console.log(event);
+    if (event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg') {
+      this.file = event.target.files[0];
+    }
+    else {
+      this.file = "";
+      alert("only jpg png and jpeg");
+    }
+
+  }
+
 }

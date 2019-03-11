@@ -115,6 +115,7 @@ export class DegreeComponent implements OnInit {
       { value: "2018", viewValue: "2018" },
     ];
     isEditBtn: boolean;
+    file: any;
     isSaveBtn: boolean;
   degree: FormGroup;
   level: any = "3";
@@ -181,7 +182,12 @@ export class DegreeComponent implements OnInit {
     this.degree.value.studentid = this.id;
     this.degree.value.level = this.level;
      this.service.add(this.degree.value).subscribe((res)=>{
-      swal("", "" + res['message'], "success");
+       if(res){
+        this.service.upload(this.degree.value, this.file).subscribe((response) => {
+
+          swal("", "" + res['message'], "success");
+        })
+      }
     })
   }
 
@@ -233,5 +239,17 @@ export class DegreeComponent implements OnInit {
   CancelBtn(){
     this.getCertificates();
     this.isEditBtn = !this.isEditBtn;
+  }
+
+  onFileChanged(event) {
+    console.log(event);
+    if (event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg') {
+      this.file = event.target.files[0];
+    }
+    else {
+      this.file = "";
+      alert("only jpg png and jpeg");
+    }
+
   }
 }

@@ -19,6 +19,7 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { AccountComponent } from './account/account.component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 // import { CommonbothModule } from '../common/common.module';
 //  import { AccountComponent } from '../common/account/account.component';
@@ -31,7 +32,8 @@ import { AccountComponent } from './account/account.component';
     ReactiveFormsModule,
     HttpClientModule,
     FlexLayoutModule,
-    FormsModule
+    FormsModule,
+    NgxChartsModule
   //  CommonbothModule
   ],
   declarations: [ 

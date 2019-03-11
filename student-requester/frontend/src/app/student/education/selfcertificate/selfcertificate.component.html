@@ -1,5 +1,17 @@
 <h2>Certificates</h2>
-<h3 >Name: <i>{{Name.name}}</i></h3>
+<h3>Name: <i>{{Name.name}}</i></h3>
+<!-- Chart -->
+<!-- <ngx-charts-pie-chart *ngIf = "chartdata"
+      [view]="view"
+      [scheme]="colorScheme"
+      [results]="countryData"
+      [legend]="showLegend"
+      [explodeSlices]="explodeSlices"
+      [labels]="showLabels"
+      [doughnut]="doughnut"
+      (select)="onSelect($event)">
+    </ngx-charts-pie-chart>
+    <br> -->
 <hr />
 <div *ngIf="response" class="container">
     <div class="card-element" *ngFor="let data of response">
@@ -39,19 +51,33 @@
                         </ng-container>
 
 
+
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
+                    </table>&nbsp;&nbsp;&nbsp;&nbsp;
+<!-- 
+                    <table mat-table [dataSource]="data.addsubjects" class="mat-elevation-z8">
+                        <ng-container matColumnDef="Image">
+                            <th mat-header-cell *matHeaderCellDef> Image </th>
+                            <td mat-cell *matCellDef="let element"> -->
+                                <a href="{{data.ImageHash}}"><img src="{{data.ImageHash}}" width="63em"></a>
+                            <!-- </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+                    </table> -->
+
                 </div>
 
             </mat-card-content>
 
-        </mat-card><br/><br/>
+        </mat-card><br /><br />
     </div>
 </div>
 
 <div *ngIf="!response" class="granted-list">
-    <h3 style="color:red">Education Details Empty.</h3><br/>
-    <br/>
+    <h3 style="color:red">Education Details Empty.</h3><br />
+    <br />
 </div>
 <mat-spinner *ngIf="showSpinner"></mat-spinner>
+

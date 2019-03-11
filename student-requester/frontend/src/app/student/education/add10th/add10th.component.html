@@ -41,6 +41,8 @@
         </mat-select>
         <mat-error>Endyear less than Startyear</mat-error>
       </mat-form-field>
+
+      <input type="file" *ngIf="isSaveBtn" (change)="onFileChanged($event)">
       <br />
       
       <div class="subjects-wrapper">

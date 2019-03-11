@@ -41,7 +41,10 @@
       <mat-form-field class="input-textfield">
           <input matInput placeholder="Branch Name" formControlName="Branchname">
         </mat-form-field>
-        <br />
+        
+        <input type="file" *ngIf="isSaveBtn" (change)="onFileChanged($event)">
+      <br />
+
       <div class="subjects-wrapper">
         <div formArrayName="addsubjects">
           <div *ngFor="let group of subjectArray.controls; let i= index;" [formGroupName]="i">
