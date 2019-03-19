@@ -3,16 +3,19 @@ import { InteractionService } from './../interactionService/interaction.service'
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { RequesterService } from '../service/service.service';
 import { ActivatedRoute } from '@angular/router';
+import { SplitLastPipe } from 'src/app/common/split-last.pipe';
 
 @Component({
   selector: 'app-edudetails',
   templateUrl: './edudetails.component.html',
-  styleUrls: ['./edudetails.component.css']
+  styleUrls: ['./edudetails.component.css'],
+  providers: [ SplitLastPipe ]
 })
 export class EdudetailsComponent implements OnInit {
   constructor(private _interactionsrvice: InteractionService,
     private service: RequesterService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private splitlast: SplitLastPipe) { }
   public dataSource: any = null;
   public pucdataSource: any = null;
   public degreedataSource: any = null;

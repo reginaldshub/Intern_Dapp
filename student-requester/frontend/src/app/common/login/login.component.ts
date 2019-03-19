@@ -29,12 +29,17 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('_id', res['_id']);
         sessionStorage.setItem('name', res['name']);
         localStorage.setItem('token', res['token']);
+        console.log(res);
+        if (res['account'])
+          sessionStorage.setItem('account', res['account']);
         this.router.navigate(['/student'])
       } else if (res['role'] == "requester") {
         // swal("", "" + res['message'], "success");
         sessionStorage.setItem('_id', res['_id']);
         sessionStorage.setItem('name', res['name']);
         localStorage.setItem('token', res['token']);
+        if (res['account'])
+          sessionStorage.setItem('account', res['account']);
         this.router.navigate(['/requester'])
       } else {
         swal("", "" + res['message'], "error");

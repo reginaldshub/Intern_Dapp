@@ -4,8 +4,11 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class StudentService {
+  account: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.account = sessionStorage.getItem('account')
+  }
 
   add(sslc) {
     console.log(sslc);
@@ -32,14 +35,31 @@ export class StudentService {
   }
 
   upload(data, file) {
-    console.log(data)
-    // debugger;
+    console.log("ACcount SErvice"+this.account)
+    console.log("file"+file)
     let uploadData = new FormData;
     uploadData.append('studentid', data.studentid);
     uploadData.append('level', data.level);
-    uploadData.append('image', file, file.name);
-
+    uploadData.append('account', this.account);
+    uploadData.append('class', data.class);
+    // uploadData.append('files', file);
+      for(let i =0; i < file.length; i++){
+        console.log(file[i])
+        uploadData.append("uploads[]", file[i], file[i].name);
+    }
 
     return this.http.post("http://localhost:3000/products/upload", uploadData);
   }
+
+  uploadsingle(data, file) {
+    let uploadData = new FormData;
+    uploadData.append('studentid', data.studentid);
+    uploadData.append('level', data.level);
+    uploadData.append('account', this.account);
+    uploadData.append('class', data.class);
+        uploadData.append("image", file, file.name);
+
+    return this.http.post("http://localhost:3000/products/uploadsingle", uploadData);
+  }
+
 }

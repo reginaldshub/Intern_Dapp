@@ -33,7 +33,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
     HttpClientModule,
     FlexLayoutModule,
     FormsModule,
-    NgxChartsModule
+    NgxChartsModule,
   //  CommonbothModule
   ],
   declarations: [ 

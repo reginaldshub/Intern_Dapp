@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServiceService } from '../../service/service.service';
+import { SplitLastPipe } from '../../../common/split-last.pipe';
 
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-selfcertificate',
   templateUrl: './selfcertificate.component.html',
-  styleUrls: ['./selfcertificate.component.css']
+  styleUrls: ['./selfcertificate.component.css'],
+  providers: [ SplitLastPipe ]
 })
+
 export class SelfcertificateComponent implements OnInit {
   imgpath:string = 'http://localhost:8080/ipfs/';
   public dataSource: any = null;
@@ -36,8 +39,9 @@ export class SelfcertificateComponent implements OnInit {
   countryCount: any[];
   countryData: any[];
   chartdata: boolean = false;
+  account: string;
   
-  constructor(private service: ServiceService, private router: Router) { }
+  constructor(private service: ServiceService, private router: Router,private splitlast: SplitLastPipe) { }
 
   ngOnInit() {
     this.showSpinner = true;
@@ -45,6 +49,8 @@ export class SelfcertificateComponent implements OnInit {
     this.Name.Startyear = null;
     this.Name.studentId = null;
     this.Name.level = null;
+
+    this.account = sessionStorage.getItem('account');
    this.getCertificate();
   }
 

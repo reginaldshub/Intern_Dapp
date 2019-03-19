@@ -134,6 +134,7 @@ file: any;
       Endyear: ['', [Validators.required, EndYearValidator]],
       Branchname: ['', Validators.required],
       level: [''],
+      class: [''],
       addsubjects: this.fb.array([this.addSubjectGroup()])
     });
   }
@@ -186,6 +187,7 @@ file: any;
   submit() {
     this.masters.value.studentid = this.id;
     this.masters.value.level = this.level;
+    this.masters.value.class = 'masters';
     this.service.add(this.masters.value).subscribe((res) => {
       swal("", "" + res['message'], "success");
       if(res){

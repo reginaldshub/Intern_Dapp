@@ -21,6 +21,7 @@ export class EducationComponent implements OnInit {
   username: string;
   locemail: string;
   profileResponse: boolean = false;
+  Account: any;
   
   constructor(private service : ServiceService,
     private router: Router,
@@ -28,12 +29,14 @@ export class EducationComponent implements OnInit {
 
   ngOnInit() {
     this.getProfile();
+    this.Account = sessionStorage.getItem('account');
   }
 
   account;
 
   Create: FormGroup = new FormGroup({
-    password: new FormControl('', Validators.required)
+    password: new FormControl('', Validators.required),
+    account: new FormControl('')
   })
   getProfile() {
     this.sessionValue = sessionStorage.getItem('_id');
@@ -74,8 +77,10 @@ export class EducationComponent implements OnInit {
 
  
   onCreate() {
+
+    this.Create.value.account = this.Account;
     this.showSpinner = true;
-    // console.log(this.Create.value)
+    console.log(this.Create.value)
     this.studentservice.commit(this.Create.value).subscribe((res) => {
       // console.log(this.account = res['message']);
       if (res){

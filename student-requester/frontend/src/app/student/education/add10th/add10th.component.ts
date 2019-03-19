@@ -130,6 +130,7 @@ export class Add10thComponent implements OnInit {
       Startyear: ['', [Validators.required]],
       Endyear: ['', [Validators.required, EndYearValidator]],
       level: [''],
+      class: [''],
       addsubjects: this.fb.array([this.addSubjectGroup()])
     });
   }
@@ -182,10 +183,11 @@ export class Add10thComponent implements OnInit {
     this.isEditBtn = false;
     this.add10th.value.studentid = this.id;
     this.add10th.value.level = this.level;
+    this.add10th.value.class = 'tenth';
     this.service.add(this.add10th.value).subscribe((res) => {
       swal("", "" + res['message'], "success");
       if(res){
-        this.service.upload(this.add10th.value, this.file).subscribe((res) => {
+        this.service.uploadsingle(this.add10th.value, this.file).subscribe((res) => {
 
         })
       }

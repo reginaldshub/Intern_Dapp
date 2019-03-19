@@ -134,6 +134,7 @@ export class PucComponent implements OnInit {
       Endyear: ['', [Validators.required, EndYearValidator]],
       Groupname: ['', Validators.required],
       level: [''],
+      class: [''],
       addsubjects: this.fb.array([this.addSubjectGroup()])
     });
   }
@@ -187,11 +188,12 @@ export class PucComponent implements OnInit {
   submit() {
     this.puc.value.studentid = this.id;
     this.puc.value.level = this.level;
+    this.puc.value.class = 'puc';
     console.log("student id", this.puc.value.studentid);
     this.service.add(this.puc.value).subscribe((res) => {
       // debugger;
       if (res) {
-        this.service.upload(this.puc.value, this.file).subscribe((response) => {
+        this.service.uploadsingle(this.puc.value, this.file).subscribe((response) => {
           if(response)
           swal("", "" + res['message'], "success");
         })

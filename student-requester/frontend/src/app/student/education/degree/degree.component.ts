@@ -115,13 +115,14 @@ export class DegreeComponent implements OnInit {
       { value: "2018", viewValue: "2018" },
     ];
     isEditBtn: boolean;
-    file: any;
+    file: any = [];
     isSaveBtn: boolean;
   degree: FormGroup;
   level: any = "3";
   id: string;
   categories: any;
   disableBtn: boolean = true;
+  account: string;
   constructor(private fb: FormBuilder, private service: StudentService,
     private studentService: ServiceService) {
     this.degree = this.fb.group({
@@ -132,11 +133,13 @@ export class DegreeComponent implements OnInit {
       Endyear: ['', [Validators.required, EndYearValidator]],
       Branchname:['', Validators.required],
       level: [''],
+      class: [''],
       addsubjects: this.fb.array([this.addSubjectGroup()])
     });
   }
   ngOnInit() {
     this.id = sessionStorage.getItem('_id');
+    this.account = sessionStorage.getItem('account');
     this.getCertificates();
     this.degree.valueChanges.subscribe((changedObj: any) => {
       for (let i = 0; i < changedObj.addsubjects.length; i++) {
@@ -181,10 +184,11 @@ export class DegreeComponent implements OnInit {
     this.isEditBtn = false;
     this.degree.value.studentid = this.id;
     this.degree.value.level = this.level;
+    this.degree.value.class = 'degree';
      this.service.add(this.degree.value).subscribe((res)=>{
        if(res){
         this.service.upload(this.degree.value, this.file).subscribe((response) => {
-
+          console.log(response);
           swal("", "" + res['message'], "success");
         })
       }
@@ -243,13 +247,16 @@ export class DegreeComponent implements OnInit {
 
   onFileChanged(event) {
     console.log(event);
-    if (event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg') {
-      this.file = event.target.files[0];
+    for(var i = 0; i < event.target.files.length; i++){
+    if (event.target.files[i].type == 'image/png' || event.target.files[i].type == 'image/jpg' || event.target.files[i].type == 'image/jpeg') {
+      this.file[i] = event.target.files[i];
     }
     else {
-      this.file = "";
+      this.file[i] = "";
       alert("only jpg png and jpeg");
     }
+  }
 
+      console.log(this.file)
   }
 }

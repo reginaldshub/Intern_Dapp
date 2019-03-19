@@ -44,7 +44,19 @@
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
+                    </table>&nbsp;&nbsp;&nbsp;&nbsp;
+
+                    <div *ngIf = "data.imageArray.length <= 1">
+                        <a target="_blank" href="http://localhost:3000/products/{{data.imageArray[0]}}"><img src="http://localhost:3000/products/{{data.imageArray[0]}}" width="63em"></a>
+                    </div>
+                    <span *ngIf = "data.imageArray.length > 1" >
+                        <span *ngFor = "let pics of data.imageArray;">
+                            {{this.splitlast.transform(pics)}}
+                        <a target="_blank" href="http://localhost:3000/products/{{pics}}"><img src="http://localhost:3000/products/{{pics}}" width="63em"></a>
+                    </span>
+                    </span>
+
+
                 </div>
 
             </mat-card-content>

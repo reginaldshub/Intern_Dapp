@@ -1,5 +1,6 @@
 const express = require('express')
 const fs = require('fs');
+var FS = require('fs-extra')
 const solc = require('solc');
 const router = express.Router();
 
@@ -30,11 +31,15 @@ const storage = multer.diskStorage({
         cb(null, path.join(__dirname, './../../uploads'));
     },
     filename(req, file, cb) {
-        cb(null, `${Date.now()}.${file.mimetype.split('/')[1]}`);
+        cb(null, `${file.originalname}`);
     },
+    // filename(req, file, cb) {
+    //     cb(null, `${Date.now()}.${file.mimetype.split('/')[1]}`);
+    // },
 });
 
 const upload = multer({ storage });
+// var upload = multer({ storage: storage }).array('image', 5);
 
 const ipfs = ipfsAPI({
     host: '127.0.0.1',
@@ -48,7 +53,7 @@ const ipfs = ipfsAPI({
 
 const Web3 = require('web3')
 console.log('Reading Contract...');
-const input = fs.readFileSync('api/routes/PermissionList.sol');
+const input = fs.readFileSync('/home/reginaldanthony/code/Intern_Dapp/student-requester/backend001/api/routes/PermissionList.sol');
 
 // console.log(input);
 // console.log('Compiling Contract...');
@@ -117,22 +122,52 @@ router.post('/login', (req, res) => {
             } else if (user.password !== userData.password) {
                 res.status(401).send({ message: "invalid password" })
             } else {
+                let payload = { subject: user._id }
+                let token = jwt.sign(payload, 'secretKey')
+                if (user.Roles == "student") {
+                    studentProfile.findOne({ name: user.name }, (error, profile) => {
+                        if (error) {
+                            console.log(error)
+                        } else {
+                            console.log(profile)
+                            res.status(200).json({
+                                token: token,
+                                role: user.Roles,
+                                name: user.name,
+                                _id: user._id,
+                                name: user.name,
+                                account: profile.account_address,
+                                message: 'logged in sucessfully'
+                            })
+
+                        }
+                    })
+                } else {
+                    Profile.findOne({ name: user.name }, (error, profile) => {
+                        if (error) {
+                            console.log(error)
+                        }
+                        else {
+                            // console.log("success"+ user.name)
+                            res.status(200).json({
+                                token: token,
+                                role: user.Roles,
+                                name: user.name,
+                                _id: user._id,
+                                name: user.name,
+                                account: profile.account_address,
+                                message: 'logged in sucessfully'
+                            })
+
+                        }
+                    })
+                }
                 // console.log(user.Roles);
                 // res.json({
                 //     message: "logged in sucessfully",
                 //     role: user.Roles
                 // })
 
-                let payload = { subject: user._id }
-                let token = jwt.sign(payload, 'secretKey')
-                res.status(200).json({
-                    token: token,
-                    role: user.Roles,
-                    name: user.name,
-                    _id: user._id,
-                    name: user.name,
-                    message: 'logged in sucessfully'
-                })
 
             }
 
@@ -720,7 +755,7 @@ router.post('/commit', (req, response) => {
                 const bytecode = output.contracts[contractName].bytecode;
                 console.log(bytecode);
                 const abi = output.contracts[contractName].interface;
-                fs.writeFile("./HelloWorldABI.JSON", abi, function (err) {
+                fs.writeFileSync("./HelloWorldABI.JSON", abi, function (err) {
 
                     if (err) {
                         return console.log(err);
@@ -747,7 +782,6 @@ router.post('/commit', (req, response) => {
                     }
                     // If we have an address property, the contract was deployed
                     if (res.address) {
-                        console.log("contract addres");
                         console.log('Contract address: ' + res.address);
                         student.contract_address = res.address;
                         student.State = "committed";
@@ -757,8 +791,153 @@ router.post('/commit', (req, response) => {
                                 console.log(error);
                                 response.json({ message: "deployed and but contract_address is not saved" })
                             } else {
-                                console.log(data)
 
+                                const fileFolder = `./uploads/${userData.account}`;
+
+                                fs.readdirSync(fileFolder).forEach(file => {
+
+                                    let data = fs.readFileSync(`${fileFolder}/${file}`);
+                                    ipfs.add(data, (err, files) => {
+                                        console.log(file);
+                                        // fs.unlink(req.file.path);
+                                        // fs.unlink(req.file.path, err => { if (err) console.log(err) });
+                                        if (files) {
+                                            console.log(files)
+                                            var hash = 'http://localhost:8080/ipfs/';
+                                            hash += files[0].hash;
+                                            // console.log(hash);
+                                            studentProfile.findOne({ account_address: userData.account }, (error, student) => {
+                                                if (error) {
+                                                    console.log(error)
+                                                } else {
+
+                                                    Certificates.find({ $and: [{ studentid: student.userId }, { imageArray: file }] }, (error, certiresponse) => {
+                                                        if (error) {
+                                                            console.log(error)
+                                                        } else {
+
+                                                            const studentContract = web3.eth.contract(HelloWorldABI);
+                                                            var studentContractInstance = studentContract.at(res.address);
+                                                            
+                                                            if(certiresponse.class == "tenth"){
+                                                            studentContractInstance.add10thFile(file, hash, {
+                                                                from: userData.account,
+                                                                gas: 4000000
+                                                            }, function (error, transactionHash) {
+                                                                if (!error) {
+                                                                    console.log(transactionHash);
+                                                                    if (certiresponse.ImageHash != undefined) {
+                                                                        Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
+                                                                            (err, doc) => {
+                                                                                if (!err) {
+                                                                                    console.log("updated Degree")
+                                                                                }
+                                                                            })
+                                                                    } else {
+                                                                        Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                                            (err, doc) => {
+                                                                                if (!err) {
+                                                                                    console.log("updated")
+                                                                                }
+                                                                            })
+                                                                    }
+                                                                } else {
+                                                                    console.log(error);
+                                                                }
+                                                            });
+                                                        }
+                                                        // else if(certiresponse.class == "puc") {
+                                                        //     studentContractInstance.add12thFile(file, hash, {
+                                                        //         from: userData.account,
+                                                        //         gas: 4000000
+                                                        //     }, function (error, transactionHash) {
+                                                        //         if (!error) {
+                                                        //             console.log(transactionHash);
+                                                        //             if (certiresponse.ImageHash != undefined) {
+                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
+                                                        //                     (err, doc) => {
+                                                        //                         if (!err) {
+                                                        //                             console.log("updated Degree")
+                                                        //                         }
+                                                        //                     })
+                                                        //             } else {
+                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                        //                     (err, doc) => {
+                                                        //                         if (!err) {
+                                                        //                             console.log("updated")
+                                                        //                         }
+                                                        //                     })
+                                                        //             }
+                                                        //         } else {
+                                                        //             console.log(error);
+                                                        //         }
+                                                        //     });
+                                                        // }
+                                                        // else if(certiresponse.class == "degree"){
+                                                        //     studentContractInstance.addGradFile(file, hash, {
+                                                        //         from: userData.account,
+                                                        //         gas: 4000000
+                                                        //     }, function (error, transactionHash) {
+                                                        //         if (!error) {
+                                                        //             console.log(transactionHash);
+                                                        //             if (certiresponse.ImageHash != undefined) {
+                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
+                                                        //                     (err, doc) => {
+                                                        //                         if (!err) {
+                                                        //                             console.log("updated Degree")
+                                                        //                         }
+                                                        //                     })
+                                                        //             } else {
+                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                        //                     (err, doc) => {
+                                                        //                         if (!err) {
+                                                        //                             console.log("updated")
+                                                        //                         }
+                                                        //                     })
+                                                        //             }
+                                                        //         } else {
+                                                        //             console.log(error);
+                                                        //         }
+                                                        //     });
+
+                                                        // } 
+                                                        // else{
+                                                        //     studentContractInstance.addPostGradFile(file, hash, {
+                                                        //         from: userData.account,
+                                                        //         gas: 4000000
+                                                        //     }, function (error, transactionHash) {
+                                                        //         if (!error) {
+                                                        //             console.log(transactionHash);
+                                                        //             if (certiresponse.ImageHash != undefined) {
+                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
+                                                        //                     (err, doc) => {
+                                                        //                         if (!err) {
+                                                        //                             console.log("updated Degree")
+                                                        //                         }
+                                                        //                     })
+                                                        //             } else {
+                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                        //                     (err, doc) => {
+                                                        //                         if (!err) {
+                                                        //                             console.log("updated")
+                                                        //                         }
+                                                        //                     })
+                                                        //             }
+                                                        //         } else {
+                                                        //             console.log(error);
+                                                        //         }
+                                                        //     });
+                                                        // }
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                        }
+                                        else {
+                                            console.log("run ipfs")
+                                        }
+                                    });
+                                })
                                 response.status(200).json({ message: "deployed contract" });
                             }
                         })
@@ -1210,63 +1389,417 @@ function getandUpdateStatus(transactionHash, myquery, requesteraccount, contract
 }
 
 
-// Image Upload
-router.post('/upload', upload.single('image'), (req, res) => {
-    console.log(req)
-    let studentid = req.body.studentid;
-    console.log(req.body)
-    if (!req.file) {
-        return res.status(422).json({
-            error: 'File needs to be provided.',
-        });
+// Image Upload to IPFS
+// router.post('/upload', upload.single('image'), (req, res) => {
+//     // console.log(req)
+//     let studentid = req.body.studentid;
+//     console.log(req.body)
+//     if (!req.file) {
+//         return res.status(422).json({
+//             error: 'File needs to be provided.',
+//         });
+//     }
+
+//     const mime = req.file.mimetype;
+//     if (mime.split('/')[0] !== 'image') {
+//         fs.unlink(req.file.path);
+
+//         return res.status(422).json({
+//             error: 'File needs to be an image.',
+//         });
+//     }
+
+//     console.log("ENtered")
+//     const fileSize = req.file.size;
+//     if (fileSize > MAX_SIZE) {
+//         fs.unlink(req.file.path);
+
+//         return res.status(422).json({
+//             error: `Image needs to be smaller than ${MAX_SIZE} bytes.`,
+//         });
+//     }
+//     const data = fs.readFileSync(req.file.path);
+//     return ipfs.add(data, (err, files) => {
+//         // fs.unlink(req.file.path);
+//         fs.unlink(req.file.path, err => { if (err) console.log(err) });
+//         if (files) {
+//             var hash = 'http://localhost:8080/ipfs/';
+//             hash += files[0].hash;
+//             console.log(req.body.level+"Level"+ req.body.studentid)
+//             Certificates.updateOne({ $and: [{ studentid: req.body.studentid }, { level: req.body.level }] }, { $set: { ImageHash: hash } }, (error, present) => {
+//                 if (error) {
+//                     console.log(error)
+//                 }
+//                 else {
+//                     // // res.status(200).json({
+//                     // //    hash: files[0].hash
+//                     // })
+//                     console.log("updated Hash")
+//                 }
+//             })
+//             console.log(files[0].hash)
+//             return res.json({
+//                 hash: files[0].hash,
+//             });
+//         }
+
+//         return res.status(500).json({
+//             error: err,
+//         });
+//     });
+
+// });
+
+
+// Image Upload to FS (uploads Folder)
+router.post('/upload', upload.array("uploads[]", 12), (req, res) => {
+
+    // console.log(req.files);
+    var files = [];
+    files = req.files;
+
+    try {
+        if (!fs.existsSync('./uploads/' + req.body.account)) {
+            fs.mkdir('./uploads/' + req.body.account)
+        }
+        else {
+            console.log("DIR EXISTS")
+        }
+    } catch (err) {
+        console.error(err);
     }
 
-    const mime = req.file.mimetype;
-    if (mime.split('/')[0] !== 'image') {
-        fs.unlink(req.file.path);
 
-        return res.status(422).json({
-            error: 'File needs to be an image.',
-        });
+    let imageArray = [];
+
+    function Move() {
+        return new Promise((resolve, reject) => {
+            // req.files.forEach(function (item, index, arr) {
+            for (let i = 0; i < files.length; i++) {
+                // console.log(files[i].originalname);
+                FS.move('./uploads/' + files[i].originalname, './uploads/' + req.body.account + '/' + files[i].originalname, (err, abc) => {
+                    if (err) reject(console.error(err))
+                    else {
+                        console.log("rename");
+                        fs.rename(`./uploads/${req.body.account}/${files[i].originalname}`, `./uploads/${req.body.account}/${req.body.class}_${i + 1}.${files[i].mimetype.split('/')[1]}`, function (err) {
+                            if (err) reject(err);
+                            imageArray[i] = `${req.body.account}&${req.body.class}_${i + 1}.${files[i].mimetype.split('/')[1]}`;
+                            if (i == files.length - 1) {
+                                console.log("resolve");
+                                resolve("moved");
+                            }
+                        });
+
+                    }
+                })
+            }
+
+        })
+    }
+    // // })
+
+
+    function UpdateDB() {
+        return new Promise((resolve, reject) => {
+            console.log("ImageArray" + imageArray)
+            Certificates.updateOne({ $and: [{ studentid: req.body.studentid }, { level: req.body.level }] }, { $set: { imageArray: imageArray } }, (error, present) => {
+                if (error) {
+                    reject(console.log(error))
+                }
+                else {
+
+                    console.log("updated ImageArray" + imageArray)
+                    resolve(res.status(200).json({
+                        imageArray: imageArray
+                    }))
+                }
+            })
+        })
     }
 
-    const fileSize = req.file.size;
-    if (fileSize > MAX_SIZE) {
-        fs.unlink(req.file.path);
+    async function synchronousCall() {
+        try {
+            var move = await Move();
+            var updateDB = await UpdateDB();
 
-        return res.status(422).json({
-            error: `Image needs to be smaller than ${MAX_SIZE} bytes.`,
-        });
+            console.log("DB" + updateDB);
+        }
+        catch (err) {
+            console.log("catch");
+        }
     }
-    const data = fs.readFileSync(req.file.path);
-    // return ipfs.add(data, (err, files) => {
-    //     fs.unlink(req.file.path);
-    //     if (files) {
-    //         var hash = 'http://localhost:8080/ipfs/';
-    //         hash += files[0].hash;
-    //         console.log(req.body.level+"Level"+ req.body.studentid)
-    //         Certificates.updateOne({ $and: [{ studentid: req.body.studentid }, { level: req.body.level }] }, { $set: { ImageHash: hash } }, (error, present) => {
-    //             if (error) {
-    //                 console.log(error)
-    //             }
-    //             else {
-    //                 // // res.status(200).json({
-    //                 // //    hash: files[0].hash
-    //                 // })
-    //                 console.log("updated Hash")
-    //             }
-    //         })
-    //         console.log(files[0].hash)
-    //         return res.json({
-    //             hash: files[0].hash,
-    //         });
-    //     }
+    synchronousCall();
 
-    //     return res.status(500).json({
-    //         error: err,
+
+    // console.log(req.files[0]);
+    // for (var i = 0; i < req.files.length; i++) {
+    //     const data = fs.readFileSync(req.files[i].path);
+    //     ipfs.add(data, (err, files) => {
+    //         // fs.unlink(req.file.path);
+    //         // fs.unlink(req.file.path, err => { if (err) console.log(err) });
+    //         if (files) {
+    //             var hash = 'http://localhost:8080/ipfs/';
+    //             hash += files[0].hash;
+    //             array.push(hash);
+    //         }
     //     });
+    // }
+    // return res.json({
+    //     hash: array,
+    // });
+    // });
+});
+
+// Image Upload to FS (uploads Single Image)
+router.post('/uploadsingle', upload.single('image'), function (req, res) {
+    let imageArray = [];
+    try {
+        if (!fs.existsSync('./uploads/' + req.body.account)) {
+            fs.mkdirSync('./uploads/' + req.body.account)
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+    function Move() {
+        return new Promise((resolve, reject) => {
+            FS.move('./uploads/' + req.file.originalname, './uploads/' + req.body.account + '/' + req.file.originalname, function (err) {
+                if (err) reject(console.error(err));
+                else {
+                    fs.rename(`./uploads/${req.body.account}/${req.file.originalname}`, `./uploads/${req.body.account}/${req.body.class}.${req.file.mimetype.split('/')[1]}`, function (err) {
+                        if (err) { reject(console.log(err)); }
+                        else {
+                            resolve(console.log("renamed"));
+                            imageArray[0] = `${req.body.account}&${req.body.class}.${req.file.mimetype.split('/')[1]}`;
+                        }
+                    });
+                }
+            });
+        })
+    }
+
+
+    function UpdateDB() {
+        return new Promise((resolve, reject) => {
+            Certificates.updateOne({ $and: [{ studentid: req.body.studentid }, { level: req.body.level }] }, { $set: { imageArray: imageArray } }, (error, present) => {
+                if (error) {
+                    reject(console.log(error))
+                }
+                else {
+                    resolve(res.status(200).json({
+                        imageArray: imageArray
+                    }))
+                }
+            })
+        })
+    }
+
+    async function synchronousCall() {
+        try {
+            var move = await Move();
+            var updateDB = await UpdateDB();
+
+            console.log("DB" + updateDB);
+        }
+        catch (err) {
+            console.log("catch");
+        }
+    }
+    synchronousCall();
+
+
+
+
+    // let imageArray = [];
+
+
+    // setTimeout(() => {
+    // Certificates.updateOne({ $and: [{ studentid: req.body.studentid }, { level: req.body.level }] }, { $set: { imageArray: imageArray } }, (error, present) => {
+    //     if (error) {
+    //         console.log(error)
+    //     }
+    //     else {
+    //         res.status(200).json({
+    //             imageArray: imageArray[0]
+    //         })
+    //         console.log("updated ImageArray" + imageArray[0])
+    //     }
+    // })
+    // }, 700)
+
+    // console.log(req.files[0]);
+    // for (var i = 0; i < req.files.length; i++) {
+    //     const data = fs.readFileSync(req.files[i].path);
+    //     ipfs.add(data, (err, files) => {
+    //         // fs.unlink(req.file.path);
+    //         // fs.unlink(req.file.path, err => { if (err) console.log(err) });
+    //         if (files) {
+    //             var hash = 'http://localhost:8080/ipfs/';
+    //             hash += files[0].hash;
+    //             array.push(hash);
+    //         }
+    //     });
+    // }
+    // return res.json({
+    //     hash: array,
+    // });
     // });
 
+})
+
+router.get("/:id", (req, res) => {
+
+    console.log(req.params);
+    var sp = req.params.id.split('&');
+    res.sendFile(path.join(__dirname, `./../../uploads/${sp[0]}/${sp[1]}`));
 });
+
+
+router.post("/test", (req, res) => {
+// var name = "foo";
+// var func = new Function(
+//      "return function " + name + "(){ console.log('sweet!')}"
+// )();
+
+// func();
+
+    studentProfile.findOne({ userId: '5c4da4850dcc9d3293913132' }, (error, student) => {
+        if (error) {
+            console.log(error)
+        } else {
+            if (!web3.isConnected()) {
+                console.log("please run the node");
+            } else {
+                console.log('unlocking the geth account');
+                try {
+                    console.log(student.account_address);
+                    web3.personal.unlockAccount(student.account_address, "password");
+                } catch (e) {
+                    console.log(e);
+                    return;
+                }
+                // console.log(student);
+                const tempContract = web3.eth.contract(HelloWorldABI);
+                var tempContractInstance = tempContract.at(student.contract_address);               
+                // console.log(tempContractInstance)
+                tempContractInstance.getsecFiles( function (error, transactionHash) {
+                    if (!error) {
+                        console.log("secFiles"+transactionHash)
+                    } else {
+                        console.log(error);
+                    }
+                })
+            }
+        }
+    })
+})
+// router.post("/testingipfs", async (req, res) => {
+//     const fileFolder = `./uploads/${req.body.account}`;
+
+//     await fs.readdirSync(fileFolder).forEach(file => {
+
+//         let data = fs.readFileSync(`${fileFolder}/${file}`);
+//         ipfs.add(data, (err, files) => {
+//             console.log(file);
+//             // fs.unlink(req.file.path);
+//             // fs.unlink(req.file.path, err => { if (err) console.log(err) });
+//             if (files) {
+//                 console.log(files)
+//                 var hash = 'http://localhost:8080/ipfs/';
+//                 hash += files[0].hash;
+//                 // console.log(hash);
+//                 studentProfile.findOne({ account_address: req.body.account }, (error, student) => {
+//                     if (error) {
+//                         console.log(error)
+//                     } else {
+
+//                         Certificates.find({ $and: [{ studentid: student.userId }, { imageArray: file }] }, (error, certiresponse) => {
+//                             if (error) {
+//                                 console.log(error)
+//                             } else {
+
+//                                 const studentContract = web3.eth.contract(HelloWorldABI);
+//                                 var studentContractInstance = studentContract.at(res.address);
+//                                 studentContractInstance.add10thFile(filename, ipfsHAsh, {
+//                                     from: userData.account,
+//                                     gas: 4000000
+//                                 }, function (error, transactionHash) {
+//                                     if (!error) {
+//                                         console.log(transactionHash);
+//                                         if (certiresponse.ImageHash != undefined) {
+//                                             Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
+//                                                 (err, doc) => {
+//                                                     if (!err) {
+//                                                         console.log("updated Degree")
+//                                                     }
+//                                                 })
+//                                         } else {
+//                                             Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+//                                                 (err, doc) => {
+//                                                     if (!err) {
+//                                                         console.log("updated")
+//                                                     }
+//                                                 })
+//                                         }
+//                                     } else {
+//                                         console.log(error);
+//                                     }
+//                                 });
+//                             }
+//                         })
+//                     }
+//                 })
+//             }
+//             else {
+//                 console.log("run ipfs")
+//             }
+//         });
+//     })
+
+//     // studentProfile.findOne({ userId: '5c4da4850dcc9d3293913132' }, (error, student) => {
+//     //     if (error) {
+//     //         console.log(error)
+//     //     } else {
+//     //         if (!web3.isConnected()) {
+//     //             console.log("please run the node");
+//     //         } else {
+//     //             console.log('unlocking the geth account');
+//     //             try {
+//     //                 web3.personal.unlockAccount(student.account_address, "password");
+//     //             } catch (e) {
+//     //                 console.log(e);
+//     //                 return;
+//     //             }
+//     //             // console.log(student);
+//     //             const tempContract = web3.eth.contract(HelloWorldABI);
+//     //             var tempContractInstance = tempContract.at(student.contract_address);               
+//     //             // console.log(tempContractInstance)
+//     //             tempContractInstance.getsecFiles( function (error, transactionHash) {
+//     //                 if (!error) {
+//     //                     console.log("secFiles"+transactionHash)
+//     //                 } else {
+//     //                     console.log(error);
+//     //                 }
+//     //             });
+
+//     //             // let filename = 'tenth.jpeg';
+//     //             // let ipfsHAsh = '0x0112nsdfd1213e'
+//     //             // tempContractInstance.add10thFile(filename, ipfsHAsh,{
+//     //             //     from: student.account_address,
+//     //             //     gas: 4000000
+//     //             // }, function (error, transactionHash) {
+//     //             //     if (!error) {
+//     //             //         console.log(transactionHash)
+//     //             //     } else {
+//     //             //         console.log(error);
+//     //             //     }
+//     //             // });
+
+//     //         }
+//     //     }
+//     // })
+
+// })
 
 module.exports = router;

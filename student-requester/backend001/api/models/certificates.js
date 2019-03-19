@@ -11,7 +11,9 @@ const userSchema = new Schema({
     Groupname: { type: String },
     Branchname: { type: String },
     level: { type: String },
-    ImageHash: { type: String },
+    class: { type: String },
+    ImageHash: [{ type: String }],
+    imageArray: [ { type: String } ],
     addsubjects: [{
         subjectname: { type: String },
         subjectmarks: { type: String }

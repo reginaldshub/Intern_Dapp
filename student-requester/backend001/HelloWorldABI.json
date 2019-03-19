@@ -1,5 +1,27 @@
 [
     {
+        "constant": true,
+        "inputs": [],
+        "name": "postgradFiles",
+        "outputs": [
+            {
+                "name": "folderName",
+                "type": "string"
+            },
+            {
+                "name": "fileName",
+                "type": "string"
+            },
+            {
+                "name": "iPFSHash",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "constant": false,
         "inputs": [
             {
@@ -15,6 +37,56 @@
     },
     {
         "constant": true,
+        "inputs": [],
+        "name": "gradFiles",
+        "outputs": [
+            {
+                "name": "folderName",
+                "type": "string"
+            },
+            {
+                "name": "fileName",
+                "type": "string"
+            },
+            {
+                "name": "iPFSHash",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "gethsecFiles",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getgradFiles",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
         "inputs": [
             {
                 "name": "_tempAddress",
@@ -26,6 +98,104 @@
             {
                 "name": "",
                 "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "fileName",
+                "type": "string"
+            },
+            {
+                "name": "hash",
+                "type": "string"
+            }
+        ],
+        "name": "add12thFile",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "hsecFiles",
+        "outputs": [
+            {
+                "name": "folderName",
+                "type": "string"
+            },
+            {
+                "name": "fileName",
+                "type": "string"
+            },
+            {
+                "name": "iPFSHash",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "fileName",
+                "type": "string"
+            },
+            {
+                "name": "hash",
+                "type": "string"
+            }
+        ],
+        "name": "add10thFile",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "fileName",
+                "type": "string"
+            },
+            {
+                "name": "hash",
+                "type": "string"
+            }
+        ],
+        "name": "addGradFile",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "secFiles",
+        "outputs": [
+            {
+                "name": "folderName",
+                "type": "string"
+            },
+            {
+                "name": "fileName",
+                "type": "string"
+            },
+            {
+                "name": "iPFSHash",
+                "type": "string"
             }
         ],
         "payable": false,
@@ -54,6 +224,34 @@
             {
                 "name": "",
                 "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "gethpostgradFiles",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "getsecFiles",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
             }
         ],
         "payable": false,
@@ -123,6 +321,24 @@
         "constant": false,
         "inputs": [
             {
+                "name": "fileName",
+                "type": "string"
+            },
+            {
+                "name": "hash",
+                "type": "string"
+            }
+        ],
+        "name": "addPostGradFile",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
                 "name": "_name",
                 "type": "string"
             },
@@ -177,23 +393,6 @@
             }
         ],
         "name": "addressregistered",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": false,
-                "name": "_requester",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "name": "_status",
-                "type": "uint8"
-            }
-        ],
-        "name": "GrantEvent",
         "type": "event"
     }
 ]
