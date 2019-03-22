@@ -42,7 +42,7 @@
           <input matInput placeholder="Branch Name" formControlName="Branchname">
         </mat-form-field>
         
-        <input type="file" *ngIf="isSaveBtn" (change)="onFileChanged($event)">
+        <input type="file" *ngIf="isSaveBtn" (change)="onFileChanged($event)" multiple>
       <br />
 
       <div class="subjects-wrapper">

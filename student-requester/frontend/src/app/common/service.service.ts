@@ -27,11 +27,12 @@ export class ServiceService {
   }
 
   logoutUser() {
-    let email = localStorage.getItem('email');
+    // let email = localStorage.getItem('email');
     localStorage.removeItem('email');
     localStorage.removeItem('token');
     sessionStorage.removeItem('_id');
     sessionStorage.removeItem('name');
+    sessionStorage.removeItem('account');
   }
 
   loggedIn() {

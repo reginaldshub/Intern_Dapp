@@ -115,7 +115,7 @@ export class MastersComponent implements OnInit {
     { value: "2018", viewValue: "2018" },
   ];
 
-file: any;
+  file: any = [];
   isEditBtn: boolean;
   isSaveBtn: boolean;
   categories: any;
@@ -185,14 +185,15 @@ file: any;
   }
 
   submit() {
+    this.isEditBtn = false;
     this.masters.value.studentid = this.id;
     this.masters.value.level = this.level;
     this.masters.value.class = 'masters';
     this.service.add(this.masters.value).subscribe((res) => {
-      swal("", "" + res['message'], "success");
-      if(res){
-        this.service.upload(this.masters.value, this.file).subscribe((res) => {
-
+      if (res) {
+        this.service.upload(this.masters.value, this.file).subscribe((response) => {
+          console.log(response);
+          swal("", "" + res['message'], "success");
         })
       }
     })
@@ -242,20 +243,25 @@ file: any;
     this.isEditBtn = !this.isEditBtn;
   }
 
-  CancelBtn(){
+  CancelBtn() {
     this.getCertificates();
     this.isEditBtn = !this.isEditBtn;
   }
 
+
   onFileChanged(event) {
-    console.log(event);
-    if (event.target.files[0].type == 'image/png' || event.target.files[0].type == 'image/jpg' || event.target.files[0].type == 'image/jpeg') {
-      this.file = event.target.files[0];
+    console.log(event.target.files[0]);
+    for(var i = 0; i < event.target.files.length; i++){
+    if (event.target.files[i].type == 'image/png' || event.target.files[i].type == 'image/jpg' || event.target.files[i].type == 'image/jpeg') {
+      this.file[i] = event.target.files[i];
     }
     else {
-      this.file = "";
+      this.file[i] = "";
       alert("only jpg png and jpeg");
     }
-
   }
+
+      console.log(this.file)
+  }
+
 }

@@ -67,13 +67,13 @@ const db = "mongodb://admin:admin123@ds247944.mlab.com:47944/student-requester" 
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if (err) {
         console.log("the error" + err)
-        mongoose.connect('mongodb://localhost:27017/StudentRequesterApp', { useNewUrlParser: true });
-        mongoose.connection.on('connected', () => {
-            console.log('connected to database StudentRequesterApp')
-        })
-        mongoose.connection.on('error', (err) => {
-            console.log('Database error' + err)
-        })
+        // mongoose.connect('mongodb://localhost:27017/StudentRequesterApp', { useNewUrlParser: true });
+        // mongoose.connection.on('connected', () => {
+        //     console.log('connected to database StudentRequesterApp')
+        // })
+        // mongoose.connection.on('error', (err) => {
+        //     console.log('Database error' + err)
+        // })
     } else {
         console.log("connected to mongodb")
     }
@@ -113,6 +113,7 @@ web3.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'))
 
 router.post('/login', (req, res) => {
     let userData = req.body;
+    console.log(userData);
     Register.findOne({ email: userData.email }, (error, user) => {
         if (error) {
             console.log(error)
@@ -130,15 +131,26 @@ router.post('/login', (req, res) => {
                             console.log(error)
                         } else {
                             console.log(profile)
-                            res.status(200).json({
-                                token: token,
-                                role: user.Roles,
-                                name: user.name,
-                                _id: user._id,
-                                name: user.name,
-                                account: profile.account_address,
-                                message: 'logged in sucessfully'
-                            })
+                            if (profile != null && profile.account_address) {
+                                res.status(200).json({
+                                    token: token,
+                                    role: user.Roles,
+                                    name: user.name,
+                                    _id: user._id,
+                                    name: user.name,
+                                    account: profile.account_address,
+                                    message: 'logged in sucessfully'
+                                })
+                            } else {
+                                res.status(200).json({
+                                    token: token,
+                                    role: user.Roles,
+                                    name: user.name,
+                                    _id: user._id,
+                                    name: user.name,
+                                    message: 'logged in sucessfully'
+                                })
+                            }
 
                         }
                     })
@@ -149,15 +161,26 @@ router.post('/login', (req, res) => {
                         }
                         else {
                             // console.log("success"+ user.name)
-                            res.status(200).json({
-                                token: token,
-                                role: user.Roles,
-                                name: user.name,
-                                _id: user._id,
-                                name: user.name,
-                                account: profile.account_address,
-                                message: 'logged in sucessfully'
-                            })
+                            if (profile != null && profile.account_address) {
+                                res.status(200).json({
+                                    token: token,
+                                    role: user.Roles,
+                                    name: user.name,
+                                    _id: user._id,
+                                    name: user.name,
+                                    account: profile.account_address,
+                                    message: 'logged in sucessfully'
+                                })
+                            } else {
+                                res.status(200).json({
+                                    token: token,
+                                    role: user.Roles,
+                                    name: user.name,
+                                    _id: user._id,
+                                    name: user.name,
+                                    message: 'logged in sucessfully'
+                                })
+                            }
 
                         }
                     })
@@ -243,14 +266,14 @@ router.post('/reqcreate', verifyToken, (req, res) => {
                         requester.State = "saved";
 
                         try {
-                            web3.personal.unlockAccount("0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d", "password")
+                            web3.personal.unlockAccount("0xf10caa74888f217c718ec6d8aa16d0a36f4ddb9e", "password")
                         }
                         catch (e) {
                             console.log(e);
                             return;
                         }
                         web3.eth.sendTransaction({
-                            from: "0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d",
+                            from: "0xf10caa74888f217c718ec6d8aa16d0a36f4ddb9e",
                             to: result,
                             value: web3.toWei("25", 'ether')
                         }, (error, res) => {
@@ -286,39 +309,38 @@ router.post('/create', verifyToken, (req, res) => {
         if (error) {
             console.log(error)
         }
-        else if (user.account_address) {
-            console.log('you have an account');
-            res.status(200).json({ accountNo: user.account_address });
-        }
+        // else if (user.account_address) {
+        //     console.log('you have an account');
+        //     res.status(200).json({ accountNo: user.account_address });
+        // }
         else {
-            console.log('create');
             if (!web3.isConnected()) {
-                // res.json({
-                //     message: "geth is not running please run the geth"
-                // })
-                console.log('not running');
+                res.json({
+                    message: "geth is not running please run the geth"
+                })
+                console.log('geth not running');
             } else {
-                console.log('running');
+                console.log('geth running');
 
                 web3.personal.newAccount(userData.password, (err, result) => {
                     if (err) {
                         console.log('error');
                     } else {
-                        // console.log(result);
+                        console.log(result);
                         user.account_address = result;
                         user.State = "saved";
 
                         try {
-                            web3.personal.unlockAccount("0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d", "password")
+                            web3.personal.unlockAccount("0xf10caa74888f217c718ec6d8aa16d0a36f4ddb9e", "password")
                         }
                         catch (e) {
                             console.log(e);
                             return;
                         }
                         web3.eth.sendTransaction({
-                            from: "0x80f38b4db9e910bb1dd3019ab44aa947180ccb3d",
+                            from: "0xf10caa74888f217c718ec6d8aa16d0a36f4ddb9e",
                             to: result,
-                            value: web3.toWei("25", 'ether')
+                            value: web3.toWei("3", 'ether')
                         }, (error, res) => {
                             if (error) {
                                 console.log(error)
@@ -333,7 +355,9 @@ router.post('/create', verifyToken, (req, res) => {
                             if (error) {
                                 console.log(error);
                             } else {
-                                res.status(200).json({ accountNo: result });
+                                res.status(200).json({
+                                    accountNo: result
+                                });
                             }
                         })
                     }
@@ -774,7 +798,7 @@ router.post('/commit', (req, response) => {
                 const helloWorldContractInstance = helloWorldContract.new(student.name, {
                     data: '0x' + bytecode,
                     from: student.account_address,
-                    gas: 2000000
+                    gas: 4382070
                 }, (err, res) => {
                     if (err) {
                         console.log(err);
@@ -795,139 +819,195 @@ router.post('/commit', (req, response) => {
                                 const fileFolder = `./uploads/${userData.account}`;
 
                                 fs.readdirSync(fileFolder).forEach(file => {
-
+                                    console.log(file)
                                     let data = fs.readFileSync(`${fileFolder}/${file}`);
                                     ipfs.add(data, (err, files) => {
-                                        console.log(file);
+                                        // console.log(file);
                                         // fs.unlink(req.file.path);
                                         // fs.unlink(req.file.path, err => { if (err) console.log(err) });
                                         if (files) {
                                             console.log(files)
                                             var hash = 'http://localhost:8080/ipfs/';
                                             hash += files[0].hash;
-                                            // console.log(hash);
-                                            studentProfile.findOne({ account_address: userData.account }, (error, student) => {
+                                            console.log(hash);
+                                            studentProfile.findOne({ account_address: userData.account }, (error, studentProfileRes) => {
                                                 if (error) {
                                                     console.log(error)
                                                 } else {
-
-                                                    Certificates.find({ $and: [{ studentid: student.userId }, { imageArray: file }] }, (error, certiresponse) => {
+                                                    let img = '';
+                                                    img = `${userData.account}&${file}`;
+                                                    console.log("img" + img)
+                                                    Certificates.find({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, (error, certiresponse) => {
                                                         if (error) {
                                                             console.log(error)
                                                         } else {
-
+                                                            console.log("inside Certificates")
+                                                            console.log(certiresponse)
                                                             const studentContract = web3.eth.contract(HelloWorldABI);
                                                             var studentContractInstance = studentContract.at(res.address);
-                                                            
-                                                            if(certiresponse.class == "tenth"){
-                                                            studentContractInstance.add10thFile(file, hash, {
-                                                                from: userData.account,
-                                                                gas: 4000000
-                                                            }, function (error, transactionHash) {
-                                                                if (!error) {
-                                                                    console.log(transactionHash);
-                                                                    if (certiresponse.ImageHash != undefined) {
-                                                                        Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
-                                                                            (err, doc) => {
-                                                                                if (!err) {
-                                                                                    console.log("updated Degree")
-                                                                                }
-                                                                            })
-                                                                    } else {
-                                                                        Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
-                                                                            (err, doc) => {
-                                                                                if (!err) {
-                                                                                    console.log("updated")
-                                                                                }
-                                                                            })
-                                                                    }
-                                                                } else {
-                                                                    console.log(error);
-                                                                }
-                                                            });
-                                                        }
-                                                        // else if(certiresponse.class == "puc") {
-                                                        //     studentContractInstance.add12thFile(file, hash, {
-                                                        //         from: userData.account,
-                                                        //         gas: 4000000
-                                                        //     }, function (error, transactionHash) {
-                                                        //         if (!error) {
-                                                        //             console.log(transactionHash);
-                                                        //             if (certiresponse.ImageHash != undefined) {
-                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
-                                                        //                     (err, doc) => {
-                                                        //                         if (!err) {
-                                                        //                             console.log("updated Degree")
-                                                        //                         }
-                                                        //                     })
-                                                        //             } else {
-                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
-                                                        //                     (err, doc) => {
-                                                        //                         if (!err) {
-                                                        //                             console.log("updated")
-                                                        //                         }
-                                                        //                     })
-                                                        //             }
-                                                        //         } else {
-                                                        //             console.log(error);
-                                                        //         }
-                                                        //     });
-                                                        // }
-                                                        // else if(certiresponse.class == "degree"){
-                                                        //     studentContractInstance.addGradFile(file, hash, {
-                                                        //         from: userData.account,
-                                                        //         gas: 4000000
-                                                        //     }, function (error, transactionHash) {
-                                                        //         if (!error) {
-                                                        //             console.log(transactionHash);
-                                                        //             if (certiresponse.ImageHash != undefined) {
-                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
-                                                        //                     (err, doc) => {
-                                                        //                         if (!err) {
-                                                        //                             console.log("updated Degree")
-                                                        //                         }
-                                                        //                     })
-                                                        //             } else {
-                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
-                                                        //                     (err, doc) => {
-                                                        //                         if (!err) {
-                                                        //                             console.log("updated")
-                                                        //                         }
-                                                        //                     })
-                                                        //             }
-                                                        //         } else {
-                                                        //             console.log(error);
-                                                        //         }
-                                                        //     });
+                                                            // console.log(certiresponse[0].class);
 
-                                                        // } 
-                                                        // else{
-                                                        //     studentContractInstance.addPostGradFile(file, hash, {
-                                                        //         from: userData.account,
-                                                        //         gas: 4000000
-                                                        //     }, function (error, transactionHash) {
-                                                        //         if (!error) {
-                                                        //             console.log(transactionHash);
-                                                        //             if (certiresponse.ImageHash != undefined) {
-                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $push: { ImageHash: hash } }, { new: true },
-                                                        //                     (err, doc) => {
-                                                        //                         if (!err) {
-                                                        //                             console.log("updated Degree")
-                                                        //                         }
-                                                        //                     })
-                                                        //             } else {
-                                                        //                 Certificates.updateOne({ $and: [{ studentid: student.userId }, { imageArray: file }] }, { $addToSet: { ImageHash: hash } }, { new: true },
-                                                        //                     (err, doc) => {
-                                                        //                         if (!err) {
-                                                        //                             console.log("updated")
-                                                        //                         }
-                                                        //                     })
-                                                        //             }
-                                                        //         } else {
-                                                        //             console.log(error);
-                                                        //         }
-                                                        //     });
-                                                        // }
+                                                            // if (certiresponse[0].class == 'tenth') {
+
+                                                            function tenth() {
+                                                                return new Promise((resolve, reject) => {
+                                                                    console.log("tenth")
+                                                                    studentContractInstance.add10thFile(file, hash, {
+                                                                        from: userData.account,
+                                                                        gas: 4000000
+                                                                    }, function (error, transactionHash) {
+                                                                        if (transactionHash) {
+                                                                            console.log("tenth" + transactionHash);
+
+                                                                            console.log(certiresponse.ImageHash)
+                                                                            if (certiresponse.ImageHash != undefined) {
+                                                                                Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $push: { ImageHash: hash } }, { new: true },
+                                                                                    (err, doc) => {
+                                                                                        if (!err) {
+                                                                                            resolve(console.log("updated TEnth"))
+                                                                                        }
+                                                                                    })
+                                                                            } else {
+                                                                                Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                                                    (err, doc) => {
+                                                                                        if (!err) {
+                                                                                            resolve(console.log("added tenth"))
+                                                                                        }
+                                                                                    })
+                                                                            }
+                                                                        } else {
+                                                                            reject(console.log("outside" + error));
+                                                                        }
+                                                                    });
+                                                                })
+                                                            }
+                                                            // else if (certiresponse[0].class == 'puc') {
+                                                            function puc() {
+                                                                return new Promise((resolve, reject) => {
+                                                                    console.log("Puc")
+                                                                    studentContractInstance.add12thFile(file, hash, {
+                                                                        from: userData.account,
+                                                                        gas: 4000000
+                                                                    }, function (error, transactionHash) {
+                                                                        if (transactionHash) {
+                                                                            console.log("puc" + transactionHash);
+
+                                                                            console.log(certiresponse.ImageHash)
+                                                                            if (certiresponse.ImageHash != undefined) {
+                                                                                Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $push: { ImageHash: hash } }, { new: true },
+                                                                                    (err, doc) => {
+                                                                                        if (!err) {
+                                                                                            resolve(console.log("updated PUC"))
+                                                                                        }
+                                                                                    })
+                                                                            } else {
+                                                                                Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                                                    (err, doc) => {
+                                                                                        if (!err) {
+                                                                                            resolve(console.log("added Puc"))
+                                                                                        }
+                                                                                    })
+                                                                                // Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                                                //     (err, doc) => {
+                                                                                //         if (!err) {
+                                                                                //             console.log("updated PUC")
+                                                                                //         }
+                                                                                //     })
+                                                                            }
+                                                                        } else {
+                                                                            reject(console.log(error));
+                                                                        }
+                                                                    });
+                                                                })
+                                                            }
+                                                            // else if (certiresponse[0].class == 'degree') {
+                                                            function degree() {
+                                                                return new Promise((resolve, reject) => {
+                                                                    console.log("degree")
+                                                                    studentContractInstance.addGradFile(file, hash, {
+                                                                        from: userData.account,
+                                                                        gas: 4000000
+                                                                    }, function (error, transactionHash) {
+                                                                        if (transactionHash) {
+                                                                            console.log("degreee" + transactionHash);
+                                                                            console.log(certiresponse.ImageHash)
+                                                                            if (certiresponse.ImageHash != undefined) {
+                                                                                Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $push: { ImageHash: hash } }, { new: true },
+                                                                                    (err, doc) => {
+                                                                                        if (!err) {
+                                                                                            resolve(console.log("updated Degree"))
+                                                                                        }
+                                                                                    })
+                                                                            } else {
+                                                                                Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                                                    (err, doc) => {
+                                                                                        if (!err) {
+                                                                                            resolve(console.log("add degree"))
+                                                                                        }
+                                                                                    })
+                                                                            }
+                                                                        } else {
+                                                                            reject(console.log(error));
+                                                                        }
+                                                                    });
+
+                                                                })
+                                                            }
+                                                            // else if (certiresponse[0].class == 'masters') {
+                                                            function masters() {
+                                                                return new Promise((resolve, reject) => {
+                                                                    studentContractInstance.addPostGradFile(file, hash, {
+                                                                        from: userData.account,
+                                                                        gas: 4000000
+                                                                    }, function (error, transactionHash) {
+                                                                        if (transactionHash) {
+                                                                            console.log(transactionHash);
+                                                                            if (certiresponse.ImageHash != undefined) {
+                                                                                Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $push: { ImageHash: hash } }, { new: true },
+                                                                                    (err, doc) => {
+                                                                                        if (!err) {
+                                                                                            resolve(console.log("updated MAsters"))
+                                                                                        }
+                                                                                    })
+                                                                            } else {
+                                                                                Certificates.updateOne({ $and: [{ studentid: studentProfileRes.userId }, { imageArray: img }] }, { $addToSet: { ImageHash: hash } }, { new: true },
+                                                                                    (err, doc) => {
+                                                                                        if (!err) {
+                                                                                            resolve(console.log("updated Masters"))
+                                                                                        }
+                                                                                    })
+                                                                            }
+                                                                        } else {
+                                                                            reject(console.log(error));
+                                                                        }
+                                                                    });
+                                                                })
+                                                            }
+
+                                                            async function synchronousCall() {
+                                                                try {
+                                                                    if (certiresponse[0].class == 'tenth')
+                                                                        var ten = await tenth();
+                                                                    else if (certiresponse[0].class == 'puc')
+                                                                        var pu = await puc();
+                                                                    else if (certiresponse[0].class == 'degree')
+                                                                        var degre = await degree();
+                                                                    else if (certiresponse[0].class == 'masters')
+                                                                        var master = await masters();
+                                                                    else
+                                                                        console.log("Failed")
+
+                                                                    console.log("DB" + updateDB);
+                                                                }
+                                                                catch (err) {
+                                                                    console.log("catch");
+                                                                }
+                                                            }
+                                                            synchronousCall();
+
+                                                            // else {
+                                                            //     console.log(certiresponse)
+                                                            // }
                                                         }
                                                     })
                                                 }
@@ -1080,7 +1160,7 @@ router.post('/checkstatus', (req, res) => {
 // })
 
 //for testing grant
-router.post('/grant', (req, res) => {
+router.post('/grant', (req, res, next) => {
     let requesterID = req.body.requesterID;
     let studentID = req.body.studentID;
     var myquery = { $and: [{ requesterID: requesterID }, { studentID: studentID }] };
@@ -1110,18 +1190,20 @@ router.post('/grant', (req, res) => {
                         var tempContractInstance = tempContract.at(student.contract_address);
 
                         // event
-                        var events = tempContractInstance.allEvents({ fromBlock: 0, toBlock: 'latest' });
-                        events.watch(async (error, result) => {
+                        var events = tempContractInstance.GrantEvent({ fromBlock: 0, toBlock: 'latest' });
+                        events.watch((error, result) => {
                             if (result) {
+                                console.log(result);
+                                console.log("Requester    " + result.args._requester);
 
-                                await console.log("Requester    " + result.args._requester);
-
-                                await console.log("Status   " + result.args._status);
-                                var _status = await result.args._status;
-                                permission_status.find({ ID: _status }, async (err, result1) => {
-                                    var statusName = await result1['0'].Name;
+                                console.log("Status   " + result.args._status);
+                                var _status = result.args._status;
+                                if (result.args._status) {
+                                permission_status.find({ ID: _status }, (err, result1) => {
+                                    console.log(result1);
+                                    var statusName = result1['0'].Name;
                                     var newvalues = { $set: { Status: statusName } };
-                                    await console.log("db    " + statusName);
+                                    console.log("db    " + statusName);
                                     permission.updateOne(myquery, newvalues, function (err, user) {
                                         if (err) {
                                             throw err;
@@ -1130,6 +1212,9 @@ router.post('/grant', (req, res) => {
                                         }
                                     });
                                 })
+                            }
+                            } else {
+                                res.status(400).json({ res: status });
                             }
                         })
                         // would get all past logs again.
@@ -1454,7 +1539,7 @@ function getandUpdateStatus(transactionHash, myquery, requesteraccount, contract
 // Image Upload to FS (uploads Folder)
 router.post('/upload', upload.array("uploads[]", 12), (req, res) => {
 
-    // console.log(req.files);
+    console.log(req.files);
     var files = [];
     files = req.files;
 
@@ -1463,7 +1548,7 @@ router.post('/upload', upload.array("uploads[]", 12), (req, res) => {
             fs.mkdir('./uploads/' + req.body.account)
         }
         else {
-            console.log("DIR EXISTS")
+            console.log("DIR EXISTS");
         }
     } catch (err) {
         console.error(err);
@@ -1552,6 +1637,7 @@ router.post('/upload', upload.array("uploads[]", 12), (req, res) => {
 
 // Image Upload to FS (uploads Single Image)
 router.post('/uploadsingle', upload.single('image'), function (req, res) {
+    console.log(req.body)
     let imageArray = [];
     try {
         if (!fs.existsSync('./uploads/' + req.body.account)) {
@@ -1656,44 +1742,48 @@ router.get("/:id", (req, res) => {
 });
 
 
-router.post("/test", (req, res) => {
-// var name = "foo";
-// var func = new Function(
-//      "return function " + name + "(){ console.log('sweet!')}"
-// )();
+router.post("/testinn", (req, res) => {
+    // var name = "foo";
+    // var func = new Function(
+    //      "return function " + name + "(){ console.log('sweet!')}"
+    // )();
 
-// func();
+    // func();
 
-    studentProfile.findOne({ userId: '5c4da4850dcc9d3293913132' }, (error, student) => {
-        if (error) {
-            console.log(error)
-        } else {
-            if (!web3.isConnected()) {
-                console.log("please run the node");
-            } else {
-                console.log('unlocking the geth account');
-                try {
-                    console.log(student.account_address);
-                    web3.personal.unlockAccount(student.account_address, "password");
-                } catch (e) {
-                    console.log(e);
-                    return;
-                }
-                // console.log(student);
-                const tempContract = web3.eth.contract(HelloWorldABI);
-                var tempContractInstance = tempContract.at(student.contract_address);               
-                // console.log(tempContractInstance)
-                tempContractInstance.getsecFiles( function (error, transactionHash) {
-                    if (!error) {
-                        console.log("secFiles"+transactionHash)
-                    } else {
-                        console.log(error);
-                    }
-                })
-            }
+
+
+    if (!web3.isConnected()) {
+        console.log("please run the node");
+    } else {
+        console.log('unlocking the geth account');
+        try {
+            web3.personal.unlockAccount('0x2fba3f7ecd8de3eba2a31a4fa2322d6202fc4246', "password");
+        } catch (e) {
+            console.log(e);
+            return;
         }
-    })
+        const tempContract = web3.eth.contract(HelloWorldABI);
+        var tempContractInstance = tempContract.at('0xe8123bddcd3a1eb245567f7113ac04367d70679c');
+        // console.log(tempContractInstance)
+        tempContractInstance.gethpostgradFiles(function (error, transactionHash) {
+            if (transactionHash) {
+                console.log("secFiles" + transactionHash)
+            } else {
+                console.log(error);
+            }
+        })
+        // tempContractInstance.addGradFile("file", "hash", {
+        //     from: '0x2fba3f7ecd8de3eba2a31a4fa2322d6202fc4246',
+        //     gas: 4000000
+        // }, function (error, transactionHash) {
+        //     if (transactionHash) {
+        //         console.log("tenth" + transactionHash);
+        //     }
+        //     else console.log("error")
+        // })
+    }
 })
+
 // router.post("/testingipfs", async (req, res) => {
 //     const fileFolder = `./uploads/${req.body.account}`;
 

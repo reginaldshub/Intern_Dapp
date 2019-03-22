@@ -28,7 +28,7 @@
         <ng-container class="status" matColumnDef="accept">
             <th mat-header-cell *matHeaderCellDef></th>
             <td  mat-cell *matCellDef="let element; let i = index;">
-           <button  *ngIf="disable[i]" color="primary" (click) = "grant(element.requesterID,element.studentID, i)" mat-raised-button>Grant</button>
+           <button  *ngIf="disable[i]" color="primary" (click) = "grant(element.requesterID,element.studentID, i,element.requesterName)" mat-raised-button>Grant</button>
             </td>
         </ng-container>
         <ng-container class="status" matColumnDef="reject">

@@ -394,5 +394,22 @@
         ],
         "name": "addressregistered",
         "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "_requester",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "_status",
+                "type": "uint8"
+            }
+        ],
+        "name": "GrantEvent",
+        "type": "event"
     }
 ]

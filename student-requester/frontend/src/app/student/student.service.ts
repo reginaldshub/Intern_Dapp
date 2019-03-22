@@ -52,6 +52,7 @@ export class StudentService {
   }
 
   uploadsingle(data, file) {
+    console.log("ACcount SErvice"+this.account)
     let uploadData = new FormData;
     uploadData.append('studentid', data.studentid);
     uploadData.append('level', data.level);

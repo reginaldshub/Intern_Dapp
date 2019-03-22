@@ -71,9 +71,11 @@ export class AccountComponent implements OnInit {
     this.service.newaccount(this.Create.value).subscribe((res: any) => {
       console.log(res)
       this.account = res.accountNo;
-      if (res)
+      if (res){
         this.showSpinner = false;
+        sessionStorage.setItem('account', res.accountNo);
       this.resetForms();
+    }
     },
       err => {
         if (err instanceof HttpErrorResponse) {

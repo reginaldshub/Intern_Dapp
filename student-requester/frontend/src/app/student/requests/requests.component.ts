@@ -9,7 +9,7 @@ import { MaterialModule } from '../../material/material.module';
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.component.html',
-  styleUrls: ['./requests.component.css']
+  styleUrls: ['./requests.component.css'],
 })
 export class RequestsComponent implements OnInit {
   sessionValue;
@@ -29,6 +29,7 @@ export class RequestsComponent implements OnInit {
   }]
   showSpinner: boolean = false;
   dataSourceLength: boolean = false;
+  public message: string;
 
   constructor(private requesterService: RequesterService,
     private service: ServiceService, private router: Router,
@@ -37,8 +38,10 @@ export class RequestsComponent implements OnInit {
   public disablestatus = [];
 
   ngOnInit() {
+    this.message = "testing";
     this.showSpinner = true;
     this.search();
+    this.openSnackBar();
   }
   displayedColumns: string[] = ['name', 'Created_time', 'status', 'accept', 'reject'];
   search() {
@@ -69,7 +72,7 @@ export class RequestsComponent implements OnInit {
     })
   }
 
-  grant(req, stu, i) {
+  grant(req, stu, i, requesterName) {
     this.disable[i] = false;
     let status: any = "granted";
     this.requester_status.studentID = stu;
@@ -77,6 +80,7 @@ export class RequestsComponent implements OnInit {
     this.requester_status.Status = status;
     this.service.grant(this.requester_status).subscribe((res: any) => {
       console.log(res);
+      this.message = `Access Granted to ${requesterName}`;
       this.snackBar.openFromComponent(StatusComponent, {
         duration: 1000,
       });
@@ -129,4 +133,10 @@ export class RequestsComponent implements OnInit {
     }
   `],
 })
-export class StatusComponent {}
+export class StatusComponent {
+  // printmessage: string;
+  // constructor(_req: RequestsComponent){
+  //   this.printmessage = _req.message;
+  //   console.log(_req.message)
+  // }
+}

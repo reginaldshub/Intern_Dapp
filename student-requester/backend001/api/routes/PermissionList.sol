@@ -30,7 +30,7 @@ contract PermissionList {
         deployer = msg.sender;
         name = _name;
     }
-    
+    event GrantEvent(address _requester, State _status);
     function requestPermission(string _name, uint32 _id) public { 
         require(msg.sender!= deployer); // works only for requester
         requesterAddresses.push(msg.sender); 
@@ -47,8 +47,10 @@ contract PermissionList {
     }
     function grantPermission(address _tempAddress) public { 
         require(msg.sender== deployer); // works only for student
-        if(requesters[_tempAddress].status == State.Pending)
+        if(requesters[_tempAddress].status == State.Pending){
            requesters[_tempAddress].status = State.Grant;
+            emit GrantEvent(_tempAddress, State.Grant);
+        }
     }
     function denyPermission(address _tempAddress) public { 
         require(msg.sender== deployer); // works only for student
@@ -72,17 +74,17 @@ contract PermissionList {
     function add12thFile(string fileName, string hash) public{
         require(msg.sender== deployer); // works only for student
         hsecFiles.fileName = fileName;
-        secFiles.iPFSHash = hash;
+        hsecFiles.iPFSHash = hash;
     }
     function addGradFile(string fileName, string hash) public{
         require(msg.sender== deployer); // works only for student
         gradFiles.fileName = fileName;
-        secFiles.iPFSHash = hash;
+        gradFiles.iPFSHash = hash;
     }
     function addPostGradFile(string fileName, string hash) public{
         require(msg.sender== deployer); // works only for student
         postgradFiles.fileName = fileName;
-        secFiles.iPFSHash = hash;
+        postgradFiles.iPFSHash = hash;
     }
     function getsecFiles() public view returns(string){
             // require(msg.sender!= deployer); // called by requester to check status of his/her request

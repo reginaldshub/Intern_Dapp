@@ -124,8 +124,9 @@ export class AccountComponent implements OnInit{
     this.showSpinner = true;
     this.Service.newaccount(this.CreateForm.value).subscribe((res:any) => {
         this.account = res.accountNo;
-        if(res){
-        this.showSpinner = false;
+        if (res){
+          this.showSpinner = false;
+          sessionStorage.setItem('account', res.accountNo);
         this.resetForms();
       }
     },
