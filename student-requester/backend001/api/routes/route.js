@@ -3,6 +3,8 @@ const fs = require('fs');
 var FS = require('fs-extra')
 const solc = require('solc');
 const router = express.Router();
+const { createContext, CryptoFactory } = require('sawtooth-sdk/signing');
+const createHash = require('crypto')
 
 const jwt = require('jsonwebtoken');
 const Register = require('../models/register.js')
@@ -1891,5 +1893,38 @@ router.post("/testinn", (req, res) => {
 //     // })
 
 // })
+
+router.post("/encryption", (req, res) => {
+    console.log("enetred")
+const context = createContext('secp256k1');
+console.log("context"+context)
+const makeKeyPair = () => {
+   const privateKey = context.newRandomPrivateKey();
+   const signer = new CryptoFactory(context).newSigner(privateKey)
+   
+    //  public: signer.getPublicKey(privateKey).asHex();
+    //  private: privateKey.asHex();
+     console.log("public"+signer.getPublicKey(privateKey).asHex());
+     console.log("private"+privateKey.asHex());
+     var hash = createHash('sha512').update("tony").digest('hex');
+     console.log("hash"+hash)
+ }
+ makeKeyPair();
+//  function hash(v) {
+//     return createHash('sha512').update(v).digest('hex');
+//    }
+})
+
+
+router.post("/symmetricencryption", (req, res) => {
+    console.log("enetred")
+var key = "TheKey%%123";
+var text = "Reginald Anthony";
+var enc = createHash.createCipher("des3",key).update(text,"utf-8","hex");
+console.log("ENC"+enc);
+var dec = createHash.createDecipher("des3",key).update(enc,"hex","utf-8");
+console.log("DEC"+dec);
+   
+})
 
 module.exports = router;
